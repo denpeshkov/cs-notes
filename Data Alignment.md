@@ -44,5 +44,5 @@ Compiler must ensure (by adding **paddings**) that:
 # References
 
 - [Data structure alignment - Wikipedia](https://en.wikipedia.org/wiki/Data_structure_alignment)
-- [[References#Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron]]
-- [[References#Caltech CS24-Sp18 Introduction-To-Computing-System - YouTube]]
+- [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)
+- [Caltech CS24-Sp18 Introduction-To-Computing-System - YouTube](References.md#Caltech%20CS24-Sp18%20Introduction-To-Computing-System%20-%20YouTube)

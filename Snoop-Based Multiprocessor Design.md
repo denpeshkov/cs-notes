@@ -8,17 +8,17 @@ tags:
 
 # Overview
 
-This document explores techniques for implementing the basic [[Snooping Cache Coherence Protocols|snooping protocol]] using [[Memory Hierarchy and Locality|single-level and multi-level]] caches and shared atomic and non-atomic [[Random Access Memory|buses]]
+This document explores techniques for implementing the basic [snooping protocol](Snooping%20Cache%20Coherence%20Protocols.md) using [single-level and multi-level](Memory%20Hierarchy%20and%20Locality.md) caches and shared atomic and non-atomic [buses](Random%20Access%20Memory.md)
 
 # Single-Level Cache with Atomic Bus
 
-1. A single level of a [[Cache Memory#Write-Back|write-back]] cache per CPU
+1. A single level of a [write-back](Cache%20Memory.md#Write-Back) cache per CPU
 2. Bus transactions are **atomic**, with only one transaction in progress at a time
 3. Operations within a process are **atomic** with respect to one another - the cache can stall the CPU while it performs the series of steps involved in a memory operation
 
 ## Tag Design
 
-Both requests from the bus and CPU require [[Cache Memory|tags]] lookup, which can cause contention
+Both requests from the bus and CPU require [tags](Cache%20Memory.md) lookup, which can cause contention
 
 We cannot prioritize the CPU or bus:
 
@@ -33,10 +33,10 @@ Another approach is **dual-ported** RAM for the state and tags
 
 ## Reporting Snoop Results
 
-[[Snooping Cache Coherence Protocols#MESI|MESI]] relies on information from other caches:
+[MESI](Snooping%20Cache%20Coherence%20Protocols.md#MESI) relies on information from other caches:
 
 - If a line is in other CPUs caches, the line should transition to **S** state instead of **E**
-- If a line is in **M** state in any cache, [[Random Access Memory|memory]] should not respond
+- If a line is in **M** state in any cache, [memory](Random%20Access%20Memory.md) should not respond
 
 Three additional bus OR-lines are added:
 
@@ -48,7 +48,7 @@ All the lines are essentially `OR` of results from all the CPUs
 
 ## Dealing with Write Backs
 
-A common optimization in [[Cache Memory#Write-Back|write-back cache]] is the use of a [[Cache Memory#Write Buffer|write-back buffer]]
+A common optimization in [write-back cache](Cache%20Memory.md#Write-Back) is the use of a [write-back buffer](Cache%20Memory.md#Write%20Buffer)
 
 Because data can be in a write-back buffer, the snoop controller (not the cache) must check the write-back buffer in addition to a cache
 
@@ -59,7 +59,7 @@ If there is a write-back buffer match:
 
 ## Non-Atomic State Transitions
 
-In [[Snooping Cache Coherence Protocols|cache coherency protocols]], state transitions and their associated actions are assumed to be atomic
+In [cache coherency protocols](Snooping%20Cache%20Coherence%20Protocols.md), state transitions and their associated actions are assumed to be atomic
 
 In reality, request processing takes multiple steps: looking up the cache tags, arbitrating for the bus, actions taken by other controllers at their caches, and the action taken by the issuing CPU at the end of the bus transaction
 
@@ -70,7 +70,7 @@ The cache must be able to handle requests while waiting to acquire the bus and b
 The solution is:
 
 - Arbitrate for the bus first (before changing the cache state) and not release the bus until all actions are complete (**snoop-pending line** is 0)
-- Add intermediate **transient states** to the [[Snooping Cache Coherence Protocols|protocol state diagram]], for example: **S->M**, **I->M**, **I->S,E**, which allow revising (converting) requests and actions
+- Add intermediate **transient states** to the [protocol state diagram](Snooping%20Cache%20Coherence%20Protocols.md), for example: **S->M**, **I->M**, **I->S,E**, which allow revising (converting) requests and actions
 
 ## Write Serialization
 
@@ -79,9 +79,9 @@ Because request processing takes multiple steps we need to define when the write
 - The position of the write in the serial bus order is completely determined, regardless of further actions
 - All future reads will return the new or later value (even if the value has not yet been written to the cache line or memory)
 
-The write is **committed** when a [[Snooping Cache Coherence Protocols|read-exclusive]] (write-miss or invalidate) transaction is placed on the bus. The bus doesn't wait for the transaction to reach the destination and return a reply
+The write is **committed** when a [read-exclusive](Snooping%20Cache%20Coherence%20Protocols.md) (write-miss or invalidate) transaction is placed on the bus. The bus doesn't wait for the transaction to reach the destination and return a reply
 
-Thus, [[Cache Coherency|write serialization]] is defined by the order of transactions on the bus
+Thus, [write serialization](Cache%20Coherency.md) is defined by the order of transactions on the bus
 
 The write is **completed** when the updated value is actually placed in each cache physical memory
 
@@ -111,7 +111,7 @@ In our example, the cache must respond to a read-miss request (which does not re
 
 ## Livelock
 
-**Livelock** can occur in an [[Cache Coherency#Coherence Mechanisms|invalidation-based]] cache-coherent system if all CPUs attempt to write to the same memory location at about the same time
+**Livelock** can occur in an [invalidation-based](Cache%20Coherency.md#Coherence%20Mechanisms) cache-coherent system if all CPUs attempt to write to the same memory location at about the same time
 
 CPU write requires the following nonatomic set of events:
 
@@ -143,36 +143,36 @@ Starvation can be avoided by using fair (e.g. FIFO) serve policies at the bus ar
 
 # Multi-Level Cache with Atomic Bus
 
-A typical CPU has private [[Cache Memory#Cache Hierarchy|L1 and L2 caches for each core and one shared L3 cache]]
+A typical CPU has private [L1 and L2 caches for each core and one shared L3 cache](Cache%20Memory.md#Cache%20Hierarchy)
 
 Changes made to the L1 cache must be visible to the lower-level cache controller responsible for interconnect operations, and snooping interconnect transactions must be visible to the L1 cache
 
-![[multi-level cache hierarchy.png|400]]
+![multi-level cache hierarchy.png|400](multi-level%20cache%20hierarchy.png)
 
 ---
 
 We can't have independent snooping hardware for each level because it's inefficient and causes high interconnect traffic
 
-The solution is to ensure [[Cache Memory#Cache Inclusion Policy|inclusion policy]] between caches:
+The solution is to ensure [inclusion policy](Cache%20Memory.md#Cache%20Inclusion%20Policy) between caches:
 
 - If a block is in L1, it must also be in L2. Contents of L1 are a subset of L2
 - If a block is in a modified state (**M** in MESI, **M,O** in MOESI) in L1, it must also be in a modified state in L2
 
 ## Inclusion Policy Violation
 
-There are a couple of cache **configurations** that **violate** the [[Cache Memory#Cache Inclusion Policy|inclusion policy]]
+There are a couple of cache **configurations** that **violate** the [inclusion policy](Cache%20Memory.md#Cache%20Inclusion%20Policy)
 
 ### Set-Associative L1 Cache with History-Based Replacement Policy
 
-Because the L1 cache is [[Cache Memory#Set Associative Cache Request Processing|set-associative]], it must use a [[Cache Memory#Line Replacement (Eviction)|replacement policy]] to choose which line to evict
+Because the L1 cache is [set-associative](Cache%20Memory.md#Set%20Associative%20Cache%20Request%20Processing), it must use a [replacement policy](Cache%20Memory.md#Line%20Replacement%20(Eviction)) to choose which line to evict
 
-The problem with history-based [[Cache Memory#Line Replacement (Eviction)|replacement policies]] (e.g., **LRU**) is that the L1 cache sees different access history from lower-level caches because all requests go to L1 but not all go to lower caches
+The problem with history-based [replacement policies](Cache%20Memory.md#Line%20Replacement%20(Eviction)) (e.g., **LRU**) is that the L1 cache sees different access history from lower-level caches because all requests go to L1 but not all go to lower caches
 
 Thus, the L1 cache and L2 cache can evict different lines, even if L2 is direct-mapped or set-associative as well
 
 ### Multiple Caches at a Level
 
-The L1 cache is often split into [[Cache Memory#Data and Instruction Caches|L1d and L1i caches]]. This can lead to inclusion violation
+The L1 cache is often split into [L1d and L1i caches](Cache%20Memory.md#Data%20and%20Instruction%20Caches). This can lead to inclusion violation
 
 For example, an *instruction* block `m1` and a *data* block `m2` that conflict in the L2 cache do not conflict in the L1 caches since they go into different caches
 
@@ -180,12 +180,12 @@ If `m2` resides in the L2 cache and `m1` is referenced, `m2` will be replaced fr
 
 ### Different Cache Block Sizes
 
-If caches at different levels have different [[Cache Memory|block sizes]], they can violate the inclusion property
+If caches at different levels have different [block sizes](Cache%20Memory.md), they can violate the inclusion property
 
 For example:
 
-- [[Cache Memory#Direct-Mapped Cache Request Processing|Direct-mapped]] L1 cache with a *1-word* block size and *4 sets*
-- [[Cache Memory#Direct-Mapped Cache Request Processing|Direct-mapped]] L2 cache with a *2-word* block size and *8 sets*
+- [Direct-mapped](Cache%20Memory.md#Direct-Mapped%20Cache%20Request%20Processing) L1 cache with a *1-word* block size and *4 sets*
+- [Direct-mapped](Cache%20Memory.md#Direct-Mapped%20Cache%20Request%20Processing) L2 cache with a *2-word* block size and *8 sets*
 
 L1 can contain both words at location 0 and 17 (set 0 and 1), but L2 can't because they map to the same set (set 0) and are not consecutive words. Thus, inclusion is violated
 
@@ -211,11 +211,11 @@ This bit tells L2 that a transaction for this line must be propagated to L1
 
 On an L1 **write hit**, the modification needs to be communicated to the L2 cache so it can supply the most recent data to the bus if necessary
 
-We could make the L1 cache [[Cache Memory#Write-Through|write-through]], but it would consume L2 cache bandwidth, and we would also need a buffer between L1 and L2 to avoid CPU stalls
+We could make the L1 cache [write-through](Cache%20Memory.md#Write-Through), but it would consume L2 cache bandwidth, and we would also need a buffer between L1 and L2 to avoid CPU stalls
 
 ---
 
-The solution for [[Cache Memory#Write-Back|write-back]] L1 cache is to add an additional **modified-by-stale** state bit for each L2 line indicating if the line is dirty in L1
+The solution for [write-back](Cache%20Memory.md#Write-Back) L1 cache is to add an additional **modified-by-stale** state bit for each L2 line indicating if the line is dirty in L1
 
 The block in the L2 cache behaves as a modified block for the coherence protocol, but data is fetched from the L1 cache when it needs to be flushed to the bus
 
@@ -281,7 +281,7 @@ The tag value associated with that request is reassigned by the bus arbiter only
 
 ## Request Processing
 
-![[split-transaction bus request processing.png|700]]
+![split-transaction bus request processing.png|700](split-transaction%20bus%20request%20processing.png)
 
 Request processing consists of a minimum of three phases:
 
@@ -314,7 +314,7 @@ The snoop response is held in the **request table** from the time the snoop resu
 
 ## Flow Control
 
-The cache has a data buffer for responses from the bus in addition to the [[Cache Memory#Write Buffer|write-back buffer]] to allow multiple transactions to be outstanding on the bus waiting for snoop and/or data responses from the controllers
+The cache has a data buffer for responses from the bus in addition to the [write-back buffer](Cache%20Memory.md#Write%20Buffer) to allow multiple transactions to be outstanding on the bus waiting for snoop and/or data responses from the controllers
 
 **Flow control** is used to handle buffers filling up and is implemented using **NACK** (negative acknowledgment) lines on the bus
 
@@ -381,7 +381,7 @@ Because a response cannot be blocked by another request (cache services respond 
 
 # References
 
-- [[References#CMU 15-418/15-618 Parallel Computer Architecture and Programming]]
-- [[References#Parallel Computer Architecture A Hardware/Software Approach (1st ed). David Culler, Jaswinder Pal Singh, Anoop Gupta]]
-- [[References#Computer Organization and Design RISC-V Edition The Hardware Software Interface (2nd ed). David A. Patterson, John L. Hennessy]]
+- [CMU 15-418/15-618 Parallel Computer Architecture and Programming](References.md#CMU%2015-418/15-618%20Parallel%20Computer%20Architecture%20and%20Programming)
+- [Parallel Computer Architecture A Hardware/Software Approach (1st ed). David Culler, Jaswinder Pal Singh, Anoop Gupta](References.md#Parallel%20Computer%20Architecture%20A%20Hardware/Software%20Approach%20(1st%20ed).%20David%20Culler,%20Jaswinder%20Pal%20Singh,%20Anoop%20Gupta)
+- [Computer Organization and Design RISC-V Edition The Hardware Software Interface (2nd ed). David A. Patterson, John L. Hennessy](References.md#Computer%20Organization%20and%20Design%20RISC-V%20Edition%20The%20Hardware%20Software%20Interface%20(2nd%20ed).%20David%20A.%20Patterson,%20John%20L.%20Hennessy)
 - [Cache inclusion policy - Wikipedia](https://en.wikipedia.org/wiki/Cache_inclusion_policy)

@@ -22,11 +22,11 @@ To achieve this, each core has multiple copies of registers, `PC`, but a single 
 A context switch involves saving and restoring the process control block (**PCB**), including:
 
 - Registers
-- [[Stack and Subroutine Calling|Stack pointer]]
+- [Stack pointer](Stack%20and%20Subroutine%20Calling.md)
 - Program counter
-- [[Virtual Memory|Page table info]]
+- [Page table info](Virtual%20Memory.md)
 
-Imagine a single-threaded program being relocated from one core to another; from a programmer's perspective, the program should behave as if nothing changed (program order). Because registers are saved in [[Random Access Memory|RAM]], [[Cache Coherency|cache coherency]] ensures that another core will see all changes (even to registers), so the program behaves as expected
+Imagine a single-threaded program being relocated from one core to another; from a programmer's perspective, the program should behave as if nothing changed (program order). Because registers are saved in [RAM](Random%20Access%20Memory.md), [cache coherency](Cache%20Coherency.md) ensures that another core will see all changes (even to registers), so the program behaves as expected
 
 # References
 

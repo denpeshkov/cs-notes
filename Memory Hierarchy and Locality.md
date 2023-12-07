@@ -12,21 +12,21 @@ tags:
 
 # Memory Hierarchy And Cache Management
 
-Upper layers [[Cache Memory#Cache Inclusion Policy|typically]] store smaller subsets of data from lower layers but have faster access. Due to locality, accesses are often satisfied by upper layers
+Upper layers [typically](Cache%20Memory.md#Cache%20Inclusion%20Policy) store smaller subsets of data from lower layers but have faster access. Due to locality, accesses are often satisfied by upper layers
 
 Memory management:
 
-![[memory hierarchy and cache management.png|700]]
+![memory hierarchy and cache management.png|700](memory%20hierarchy%20and%20cache%20management.png)
 
 # Data Transfer Units
 
 Data is always copied back and forth between level $k$ and level $k + 1$ in block-size transfer units:
 
-- From [[Cache Memory|cache]] to register in words
-- From lower [[Cache Memory|cache]] to higher cache in cache lines
-- From [[Random Access Memory|RAM]] to cache in cache lines
-- From [[Input-Output Devices|disk]] to [[Random Access Memory|RAM]] in disk blocks
+- From [cache](Cache%20Memory.md) to register in words
+- From lower [cache](Cache%20Memory.md) to higher cache in cache lines
+- From [RAM](Random%20Access%20Memory.md) to cache in cache lines
+- From [disk](Input-Output%20Devices.md) to [RAM](Random%20Access%20Memory.md) in disk blocks
 
 # References
 
-- [[References#Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron]]
+- [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)

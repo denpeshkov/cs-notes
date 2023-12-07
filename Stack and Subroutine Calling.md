@@ -13,11 +13,11 @@ The stack is implemented by the CPU and is used to save the **return address**, 
 - On `x86-64`, up to 6 arguments are passed by registers; others are passed on the stack
 - Local variables are saved on the stack if no registers are left or if the address of the variable needs to be taken
 
-The stack grows toward lower addresses, and the [[Heap|heap]] grows towards higher addresses, allowing the use of as much space as possible before a collision occurs
+The stack grows toward lower addresses, and the [heap](Heap.md) grows towards higher addresses, allowing the use of as much space as possible before a collision occurs
 
 The stack allows abstracting the subroutine implementation from the caller. Registers can be mutated by the subroutine, so without the stack, the caller has to prepare and be aware of subroutine interworking
 
-![[stack frame pointer.png|300]]
+![stack frame pointer.png|300](stack%20frame%20pointer.png)
 
 # `push` And `pop`
 
@@ -38,7 +38,7 @@ On `x86-64`, `BP` is used only when the stack frame can be of variable size. On 
 
 `BP` is used to have a fixed point to reference variables on the stack. The old `BP` is saved because it's a **callee-saved** register
 
-![[stack frame pointer.png|300]]
+![stack frame pointer.png|300](stack%20frame%20pointer.png)
 
 ---
 
@@ -69,7 +69,7 @@ Describe the interface of the called code:
 - Which registers the called function must preserve for the caller (also known as: callee-saved registers or non-volatile registers)
 - How the task of preparing the stack for, and restoring after, a function call is divided between the caller and the callee
 
-Most Unix systems use the [System V ABI](https://wiki.osdev.org/System_V_ABI), which specifies calling conventions, object file formats, executable file formats ([[Executable File Format (ELF)|ELF]]), and more
+Most Unix systems use the [System V ABI](https://wiki.osdev.org/System_V_ABI), which specifies calling conventions, object file formats, executable file formats ([ELF](Executable%20File%20Format%20(ELF))), and more
 
 The calling convention of a program's language may differ from the calling convention of the underlying platform, OS, or library being linked to. The function declarations will include additional platform-specific keywords that indicate the calling convention to be used
 
@@ -77,8 +77,8 @@ The calling convention of a program's language may differ from the calling conve
 
 - [Calling Conventions - OSDev Wiki](https://wiki.osdev.org/Calling_Conventions)
 - [Calling convention - Wikipedia](https://en.wikipedia.org/wiki/Calling_convention)
-- [Dive Into Systems](https://diveintosystems.org/book/C7-x86_64/functions.html)
-- [[References#Caltech CS24-Sp18 Introduction-To-Computing-System - YouTube]]
+- [Caltech CS24-Sp18 Introduction-To-Computing-System - YouTube](References.md#Caltech%20CS24-Sp18%20Introduction-To-Computing-System%20-%20YouTube)
 - [Web Aside ASM:IA32](http://csapp.cs.cmu.edu/3e/waside/waside-ia32.pdf)
-- [[References#Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron]]
+- [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)
 - [Is BP register really necessary to support Variable-Size Stack Frames? - Stack Overflow](https://stackoverflow.com/a/37584112/15600693)
+- [Dive Into Systems A Gentle Introduction to Computer Systems. Suzanne J. Matthews, Tia Newhall, Kevin C. Webb](References.md#Dive%20Into%20Systems%20A%20Gentle%20Introduction%20to%20Computer%20Systems.%20Suzanne%20J.%20Matthews,%20Tia%20Newhall,%20Kevin%20C.%20Webb)

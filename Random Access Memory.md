@@ -8,7 +8,7 @@ aliases:
 
 # DRAM Chip Access
 
-![[DRAM chip architecture.png|700]]
+![DRAM chip architecture.png|700](DRAM%20chip%20architecture.png)
 
 The **memory controller** reads and writes data from each DRAM chip
 
@@ -19,7 +19,7 @@ RAS and CAS use the same address pins - so RAS request occurs before the CAS req
 
 # Main Memory Access
 
-![[RAM access architecture.png|400]]
+![RAM access architecture.png|400](RAM%20access%20architecture.png)
 
 - The **system bus** connects the CPU to the I/O bridge
 - The **memory bus** connects the I/O bridge to RAM
@@ -43,4 +43,4 @@ RAS and CAS use the same address pins - so RAS request occurs before the CAS req
 
 # References
 
-- [[References#Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron]]
+- [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)

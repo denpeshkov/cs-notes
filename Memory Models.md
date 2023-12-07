@@ -8,7 +8,7 @@ tags:
 # Overview
 
 A **memory consistency model** for a shared address space specifies constraints on the order in which memory operations must appear to be performed (to become visible to the CPU) with respect to one another
-This includes operations to the same locations or to different locations and by the same process or different processes. In this sense, memory consistency subsumes [[Cache Coherency|coherence]].
+This includes operations to the same locations or to different locations and by the same process or different processes. In this sense, memory consistency subsumes [coherence](Cache%20Coherency.md).
 
 # Sequential Consistency (SC)
 
@@ -35,7 +35,7 @@ FIXME #TODO
 
 # References
 
-- [[References#Computer Organization and Design RISC-V Edition The Hardware Software Interface (2nd ed). David A. Patterson, John L. Hennessy]]
-- [[References#Parallel Computer Architecture A Hardware/Software Approach (1st ed). David Culler, Jaswinder Pal Singh, Anoop Gupta]]
+- [Computer Organization and Design RISC-V Edition The Hardware Software Interface (2nd ed). David A. Patterson, John L. Hennessy](References.md#Computer%20Organization%20and%20Design%20RISC-V%20Edition%20The%20Hardware%20Software%20Interface%20(2nd%20ed).%20David%20A.%20Patterson,%20John%20L.%20Hennessy)
+- [Parallel Computer Architecture A Hardware/Software Approach (1st ed). David Culler, Jaswinder Pal Singh, Anoop Gupta](References.md#Parallel%20Computer%20Architecture%20A%20Hardware/Software%20Approach%20(1st%20ed).%20David%20Culler,%20Jaswinder%20Pal%20Singh,%20Anoop%20Gupta)
 - [volatile (computer programming) - Wikipedia](https://en.wikipedia.org/wiki/Volatile_(computer_programming))
 - [research!rsc: Memory Models](https://research.swtch.com/mm)

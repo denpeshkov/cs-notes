@@ -76,7 +76,7 @@ This is why we use $Bias$ to represent negative $E$ instead of two's-complement
 
 - [Exponent bias - Wikipedia](https://en.wikipedia.org/wiki/Exponent_bias)
 - [The Floating-Point Guide - What Every Programmer Should Know About Floating-Point Arithmetic](https://floating-point-gui.de)
-- [[References#Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron]]
+- [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)
 - [IEEE floating-point standard - Wikipedia, the free encyclopedia](http://www.kramirez.net/Discretas/Material/Internet/IEEE_754.htm)
 - [Single-precision floating-point format - Wikipedia](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 - [Floating-point arithmetic - Wikipedia](https://en.wikipedia.org/wiki/Floating-point_arithmetic)
