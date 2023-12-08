@@ -35,8 +35,8 @@ objdump -d prog.o
 
 # Linking
 
-Links the `.o` files together along with `.a` and `.so` library files to create a `.out` executable file
-The `.o` files inside the `.a` **static library** archive get embedded inside the resulting `.out` file
+Links the `.o` files together along with `.a` and `.so` library files to create a `.out` executable file  
+The `.o` files inside the `.a` **static library** archive get embedded inside the resulting `.out` file  
 The `.so` files are not embedded but information about **dynamically loaded libs** is stored inside the resulting `.out` file
 
 ``` shell
@@ -52,7 +52,7 @@ gcc -o prog prog.c -lmylib
 
 # Runtime Linking
 
-Performs dynamic linking of `.so` library files during the execution of `.out` file
+Performs dynamic linking of `.so` library files during the execution of `.out` file  
 The `ldd` utility lists an executable file's shared object dependencies:
 
 ``` shell

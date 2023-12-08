@@ -18,6 +18,8 @@
 
 #### Algorithms (4th ed). Robert Sedgewick, Kevin Wayne
 
+#### 100 Go Mistakes and How to Avoid Them. Teiva Harsanyi
+
 # Web
 
 #### CMU 15-418/15-618: Parallel Computer Architecture and Programming
