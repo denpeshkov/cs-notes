@@ -10,11 +10,15 @@ In Go, slicing with three indexes is done using `s[i:j:k]`
 - Length: `j - i`
 - Capacity: `k - i`
 
-## Usage
+# Usage
 
 This slicing technique is useful for preventing access to elements beyond a specified range in the backing array
 
 When using a slice without the third index (`s[i:j]`), the `append` operation may reuse the backing array, modifying its content. By setting the capacity to 1 (e.g., `s[2:3:3]`), `append` allocates a new backing array, ensuring that the initial array remains unmodified
+
+# Memory Usage
+
+The inaccessible space (elements in the backing array with indices larger than capacity) is not reclaimed by GC
 
 # References
 

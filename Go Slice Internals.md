@@ -1,0 +1,60 @@
+---
+tags: Go
+---
+
+# Representation
+
+Slice is represented in Go as the following struct value (*slice header*):
+
+```go
+type slice struct {
+	array unsafe.Pointer
+	len   int
+	cap   int
+}
+```
+
+Note that, slice is *not* a pointer to a struct
+
+## `nil` Slice
+
+`nil` slice is actually a zero value of the slice header:
+
+```go
+slice {
+	array: nil,
+	len:   0,
+	cap:   0,
+}
+```
+
+## Empty Slice
+
+Empty slice is just a slice with `len` equal to 0:
+
+```go
+slice {
+	array: addr,
+	len:   0,
+	cap:   0,
+}
+```
+
+# Invariance and Conversion
+
+Slices are invariant. This is one of the reasons why we can't convert `[]T` to an `[]interface{}`
+
+Another, is that memory layout of these two slices is different:
+
+- Each `interface{}` takes up [two words](Go%20Interface%20Internals.md). As a consequence, a slice with length `N` and with type `[]interface{}` is backed by a chunk of data that is `N*2` words long
+- This is different than the chunk of data backing a slice with type `[]MyType` and the same length. Its chunk of data will be `N*sizeof(MyType)` words long
+
+# References
+
+- [null - nil slices vs non-nil slices vs empty slices in Go language - Stack Overflow](https://stackoverflow.com/questions/44305170/nil-slices-vs-non-nil-slices-vs-empty-slices-in-go-language)
+- [Slices from the ground up | Dave Cheney](https://dave.cheney.net/2018/07/12/slices-from-the-ground-up)
+- [Go Slices: usage and internals - The Go Programming Language](https://go.dev/blog/slices-intro)
+- [research!rsc: Go Data Structures](https://research.swtch.com/godata)
+- [InterfaceSlice · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/InterfaceSlice)
+- [Arrays, slices (and strings): The mechanics of 'append' - The Go Programming Language](https://go.dev/blog/slices)
+- [Go internals: invariance and memory layout of slices - Eli Bendersky's website](https://eli.thegreenplace.net/2021/go-internals-invariance-and-memory-layout-of-slices/)
