@@ -4,13 +4,15 @@ tags: Go TODO
 
 # Range Loops
 
+## Before Go 1.22
+
 This range loop:
 
 ```go
 for i, v := range exp {...}
 ```
 
-after compilation is similar to:
+after compilation is semantically equivalent to:
 
 ```go
 var i Type
@@ -18,7 +20,7 @@ var v Type
 
 expT := exp
 lenT := len(exp)
-for iT := 0; iT < leT; iT++ {
+for iT := 0; iT < lenT; iT++ {
 	i = iT
 	vT := expT[iT]
 	v = vT
@@ -34,11 +36,105 @@ From this, we can note a couple of important details:
 - The variable `i` is a single variable that takes different values in each loop iteration
 - The variable `i` is a copy of the loop index's value
 
-## Loopvar Experiment
+## After Go 1.22 (Loopvar Experiment)
 
-#TODO
+This 3-clause for loop:
+
+```go
+for i := 0; i < N; i++ {...}
+```
+
+after compilation is semantically equivalent to:
+
+```go
+iT := 0
+first := true
+for {
+	i := iT
+	if first {
+		first = false
+	} else {
+		i++
+	}
+	if !(i < N) {
+		break
+	}
+	// original body
+	iT = i
+}
+```
+
+This range loop:
+
+```go
+for _, s := range exp {...}
+```
+
+after compilation is semantically equivalent to:
+
+```go
+var iT Type
+var vT Type
+
+for iT, vT = range exp {
+	i := iT
+	v := vT
+	// original body
+}
+```
+
+From this, we can note a couple of important details:
+
+- The range loop expression `exp` is evaluated only once and is assigned to a temporary variable (a copy of the original)
+- The variable `v` is a newly declared variable at each iteration
+- The variable `v` is a copy of the loop element's value
+- The variable `i` is a newly declared variable at each iteration
+- The variable `i` is a copy of the loop index's value
 
 # Defer in Loops
+
+The `defer` statement delays a call's execution until the surrounding function returns
+
+For example, in this code:
+
+```go
+func f(ch <-chan string) error {
+    for path := range ch {
+        file, err := os.Open(path)
+        if err != nil {
+            return err
+        }
+
+        defer file.Close()
+
+        // Do something with file
+    }
+    return nil
+}
+```
+
+The `defer` calls are executed not during each loop iteration but when the `readFiles` function returns  
+If `readFiles` doesn't return, the file descriptors will be kept open forever, causing leaks
+
+The solution is to add another surrounding function to execute the `defer` calls during each iteration
+
+For example, using closure:
+
+```go
+func readFiles(ch <-chan string) error {
+    for path := range ch {
+        err := func() error {
+            // ...
+            defer file.Close()
+            // ...
+        }()
+        if err != nil {
+	        return err
+	    }
+	}
+	return nil
+}
+```
 
 # References
 
