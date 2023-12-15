@@ -46,7 +46,7 @@ Slices are invariant. This is one of the reasons why we can't convert `[]T` to 
 
 Another, is that memory layout of these two slices is different:
 
-- Each `interface{}` takes up [two words](Go%20Interface%20Internals.md). As a consequence, a slice with length `N` and with type `[]interface{}` is backed by a chunk of data that is `N*2` words long
+- Each `interface{}` takes up [two words](Go%20Interfaces%20Internals.md). As a consequence, a slice with length `N` and with type `[]interface{}` is backed by a chunk of data that is `N*2` words long
 - This is different than the chunk of data backing a slice with type `[]MyType` and the same length. Its chunk of data will be `N*sizeof(MyType)` words long
 
 # References

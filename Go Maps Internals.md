@@ -88,6 +88,10 @@ type Type struct {
 
 These structures allow the Go runtime to implement a generic map. For example, `Hasher` and `Equal` allow hashing and comparing types
 
+# Addressability
+
+We can't take an address of the map element, because if the map grows, the address is of the stale value
+
 # References
 
 - [If a map isn’t a reference variable, what is it? | Dave Cheney](https://dave.cheney.net/2017/04/30/if-a-map-isnt-a-reference-variable-what-is-it)

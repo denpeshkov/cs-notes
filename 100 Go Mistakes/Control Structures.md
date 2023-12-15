@@ -7,15 +7,18 @@ tags: Go TODO
 This range loop:
 
 ```go
-for i,v := range exp {...}
+for i, v := range exp {...}
 ```
 
 after compilation is similar to:
 
 ```go
+var i Type
+var v Type
+
 expT := exp
 lenT := len(exp)
-for iT = 0; iT < leT; iT++ {
+for iT := 0; iT < leT; iT++ {
 	i = iT
 	vT := expT[iT]
 	v = vT
@@ -31,6 +34,12 @@ From this, we can note a couple of important details:
 - The variable `i` is a single variable that takes different values in each loop iteration
 - The variable `i` is a copy of the loop index's value
 
+## Loopvar Experiment
+
+#TODO
+
+# Defer in Loops
+
 # References
 
  - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
@@ -38,3 +47,8 @@ From this, we can note a couple of important details:
  - [The Go Programming Language Specification - Range Clause](https://go.dev/ref/spec#RangeClause)
  - [Range · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/Range)
  - [CommonMistakes · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/CommonMistakes)
+ - [LoopvarExperiment · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/LoopvarExperiment)
+ - [Fixing For Loops in Go 1.22 - The Go Programming Language](https://go.dev/blog/loopvar-preview)
+ - [CommonMistakes · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/CommonMistakes)
+ - [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec#For_statements)
+ - [Proposal: Less Error-Prone Loop Variable Scoping](https://go.googlesource.com/proposal/+/master/design/60078-loopvar.md)
