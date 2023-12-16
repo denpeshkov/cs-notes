@@ -34,9 +34,13 @@ func f(s []int) {
 }
 ```
 
-# Empty Vs `nil` Slice
+# Declaring Empty Slices
 
 We should prefer `nil` slices to empty slices
+
+When designing interfaces, avoid making a distinction between a `nil` slice and a non-nil, zero-length slice, as this can lead to subtle programming error
+
+Empty and `nil` slices have the [same memory footprint](Go%20Slices%20Internals.md)
 
 # Maps and Memory Leaks
 
@@ -52,3 +56,4 @@ There are a couple of solutions if we want to delete unused buckets:
 # References
 
 - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
+- [Go Code Review Comments - The Go Programming Language](https://go.dev/wiki/CodeReviewComments#declaring-empty-slices)

@@ -4,10 +4,19 @@ tags: Go
 
 # Representation
 
-A `string` is represented in memory as a 2-word structure containing:
+A `string` is represented by a `stringStruct` struct:
 
-- A pointer to an **immutable** byte sequence
-- The total number of bytes in this sequence
+```go
+type stringStruct struct {
+	str unsafe.Pointer
+	len int
+}
+```
+
+- `str` is a pointer to an **immutable** byte sequence
+- `len` is a total number of bytes in this sequence
+
+For example:
 
 ![string representation|200](string%20representation%20Go.png)
 
@@ -22,3 +31,4 @@ Because the underlying byte array is immutable, casting `[]byte` to `string` and
 
 - [research!rsc: Go Data Structures](https://research.swtch.com/godata)
 - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
+- [Source code: string.go](https://github.com/golang/go/blob/master/src/runtime/string.go#L232)

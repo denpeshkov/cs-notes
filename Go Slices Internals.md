@@ -4,7 +4,7 @@ tags: Go
 
 # Representation
 
-Slice is represented in Go as the following struct value (*slice header*):
+Slices are represented by a `slice` struct (*slice header*):
 
 ```go
 type slice struct {
@@ -13,6 +13,10 @@ type slice struct {
 	cap   int
 }
 ```
+
+- `array` is a pointer to the underlying array
+- `len` represents the length of a slice
+- `cap` indicates the capacity of the struct, which corresponds to the length of the underlying array
 
 Note that, slice is *not* a pointer to a struct
 
@@ -34,13 +38,13 @@ Empty slice is just a slice with `len` and `cap` equal to 0 and `array` pointing
 
 ```go
 slice {
-	array: addr,
+	array: unsafe.Pointer(&zerobase),
 	len:   0,
 	cap:   0,
 }
 ```
 
-Note that the `addr` of all empty slices can point to the same 0-sized memory value
+The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations
 
 # Invariance and Conversion
 
@@ -61,3 +65,4 @@ Another, is that memory layout of these two slices is different:
 - [Arrays, slices (and strings): The mechanics of 'append' - The Go Programming Language](https://go.dev/blog/slices)
 - [Go internals: invariance and memory layout of slices - Eli Bendersky's website](https://eli.thegreenplace.net/2021/go-internals-invariance-and-memory-layout-of-slices/)
 - [Source code: slice.go](https://github.com/golang/go/blob/master/src/runtime/slice.go)
+- [Source code: malloc.go](https://github.com/golang/go/blob/master/src/runtime/malloc.go)
