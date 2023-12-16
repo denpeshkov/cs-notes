@@ -30,7 +30,7 @@ slice {
 
 ## Empty Slice
 
-Empty slice is just a slice with `len` equal to 0:
+Empty slice is just a slice with `len` and `cap` equal to 0 and `array` pointing to 'zero-sized' array:
 
 ```go
 slice {
@@ -39,6 +39,8 @@ slice {
 	cap:   0,
 }
 ```
+
+Note that the `addr` of all empty slices can point to the same 0-sized memory value
 
 # Invariance and Conversion
 
@@ -58,3 +60,4 @@ Another, is that memory layout of these two slices is different:
 - [InterfaceSlice · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/InterfaceSlice)
 - [Arrays, slices (and strings): The mechanics of 'append' - The Go Programming Language](https://go.dev/blog/slices)
 - [Go internals: invariance and memory layout of slices - Eli Bendersky's website](https://eli.thegreenplace.net/2021/go-internals-invariance-and-memory-layout-of-slices/)
+- [Source code: slice.go](https://github.com/golang/go/blob/master/src/runtime/slice.go)

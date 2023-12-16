@@ -34,6 +34,10 @@ func f(s []int) {
 }
 ```
 
+# Empty Vs `nil` Slice
+
+We should prefer `nil` slices to empty slices
+
 # Maps and Memory Leaks
 
 The number of buckets in a map cannot shrink. Therefore, removing elements from a map doesn't impact the number of existing buckets; it just zeroes the slots in the buckets
