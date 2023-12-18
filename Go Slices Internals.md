@@ -46,13 +46,22 @@ slice {
 
 The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations
 
-# Invariance and Conversion
+# Invariance and Conversions
 
 Slices are invariant. This is one of the reasons why we can't convert `[]T` to an `[]interface{}`  
 Another, is that memory layout of these two slices is different:
 
 - Each `interface{}` takes up [two words](Go%20Interfaces%20Internals.md). As a consequence, a slice with length `N` and with type `[]interface{}` is backed by a chunk of data that is `N*2` words long
 - This is different than the chunk of data backing a slice with type `[]MyType` and the same length. Its chunk of data will be `N*sizeof(MyType)` words long
+
+---
+
+- Converting a slice to an *array* yields an array containing the elements of the underlying array of the slice
+- Converting a slice to an *array pointer* yields a pointer to the underlying array of the slice
+
+In both cases, if the length of the slice is less than the length of the array, a panic occurs
+
+Note that converting a `nil` slice to an array pointer yields a `nil` pointer, while converting an empty slice to an array pointer yields a non-`nil` pointer
 
 # References
 
@@ -65,3 +74,4 @@ Another, is that memory layout of these two slices is different:
 - [Go internals: invariance and memory layout of slices - Eli Bendersky's website](https://eli.thegreenplace.net/2021/go-internals-invariance-and-memory-layout-of-slices/)
 - [Source code: slice.go](https://github.com/golang/go/blob/master/src/runtime/slice.go)
 - [Source code: malloc.go](https://github.com/golang/go/blob/master/src/runtime/malloc.go)
+- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec)
