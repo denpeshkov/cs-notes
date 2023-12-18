@@ -22,6 +22,15 @@ In short, we should almost always use pointer receivers unless we have compellin
 
 If some of the methods of the type must have pointer receivers, the rest should too, so the method set is consistent regardless of how the type is used
 
+# Defer Arguments Evaluation
+
+Each time a `defer` statement executes, the function value and parameters to the call are **evaluated right-away** and saved anew but the actual function is not invoked  
+Deferred functions are invoked immediately before the surrounding function returns, in the reverse order they were deferred. That is, deferred functions are executed **after** any result parameters are set by that return statement but **before** the function returns to its caller  
+If a deferred function value evaluates to `nil`, execution panics when the function is invoked, not when the "defer" statement is executed  
+If the deferred function has any return values, they are discarded when the function completes
+
+If we want to evaluate arguments to `defer` during deferred function execution we call a closure as a `defer` statement. The arguments passed to a `defer` function are still evaluated right away. But the variables referenced by a `defer` closure are evaluated during the closure execution
+
 # References
 
 - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
@@ -29,3 +38,4 @@ If some of the methods of the type must have pointer receivers, the rest should 
 - [receivers | Dave Cheney](https://dave.cheney.net/tag/receivers)
 - [Frequently Asked Questions (FAQ) - The Go Programming Language](https://go.dev/doc/faq)
 - [Why not a mixture of value and pointer receiver?](https://groups.google.com/g/golang-nuts/c/xOsuXPe1IUo)
+- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec)

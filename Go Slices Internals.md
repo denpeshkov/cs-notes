@@ -16,7 +16,7 @@ type slice struct {
 
 - `array` is a pointer to the underlying array
 - `len` represents the length of a slice
-- `cap` indicates the capacity of the struct, which corresponds to the length of the underlying array
+- `cap` indicates the capacity of a slice
 
 Note that, slice is *not* a pointer to a struct
 
@@ -48,8 +48,7 @@ The value of the `array` is the address of the `runtime.zerobase`, the base addr
 
 # Invariance and Conversion
 
-Slices are invariant. This is one of the reasons why we can't convert `[]T` to an `[]interface{}`
-
+Slices are invariant. This is one of the reasons why we can't convert `[]T` to an `[]interface{}`  
 Another, is that memory layout of these two slices is different:
 
 - Each `interface{}` takes up [two words](Go%20Interfaces%20Internals.md). As a consequence, a slice with length `N` and with type `[]interface{}` is backed by a chunk of data that is `N*2` words long

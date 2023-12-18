@@ -1,5 +1,5 @@
 ---
-tags: Go TODO
+tags: Go
 ---
 
 # Range Loops
@@ -91,6 +91,13 @@ From this, we can note a couple of important details:
 - The variable `i` is a newly declared variable at each iteration
 - The variable `i` is a copy of the loop index's value
 
+# Map Iteration Guarantees
+
+- The iteration order over maps is not specified and is not guaranteed to be the same from one iteration to the next
+- If a map entry that has not yet been reached is removed during iteration, the corresponding iteration value will not be produced
+- If a map entry is created during iteration, that entry may be produced during the iteration or may be skipped. The choice may vary for each entry created and from one iteration to the next
+- If the map is `nil`, the number of iterations is 0
+
 # Defer in Loops
 
 The `defer` statement delays a call's execution until the surrounding function returns
@@ -140,7 +147,6 @@ func readFiles(ch <-chan string) error {
 
  - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
  - [Go Range Loop Internals](https://garbagecollected.org/2017/02/22/go-range-loop-internals/)
- - [The Go Programming Language Specification - Range Clause](https://go.dev/ref/spec#RangeClause)
  - [Range · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/Range)
  - [CommonMistakes · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/CommonMistakes)
  - [LoopvarExperiment · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/LoopvarExperiment)
@@ -148,3 +154,4 @@ func readFiles(ch <-chan string) error {
  - [CommonMistakes · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/CommonMistakes)
  - [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec#For_statements)
  - [Proposal: Less Error-Prone Loop Variable Scoping](https://go.googlesource.com/proposal/+/master/design/60078-loopvar.md)
+ - [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec)
