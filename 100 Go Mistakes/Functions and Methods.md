@@ -6,7 +6,8 @@ tags: Go
 
 A receiver should be a value:
 
-- If the receiver is a map, function, channel or slice that is not resliced/reallocated
+- If the receiver is a map, function or channel, because these types are already pointers
+- If the receiver is a slice that is not resliced/reallocated
 - If the receiver is a small array or struct that is naturally a value type without mutable fields, e.g. `time.Time`. A value receiver can reduce the amount of garbage that can be generated; if a value is passed to a value method, an on-stack copy can be used instead of allocating on the heap
 - If we have to enforce a receiver's immutability
 - If the receiver is a basic type
@@ -24,9 +25,12 @@ If some of the methods of the type must have pointer receivers, the rest should 
 
 # Defer Arguments Evaluation
 
-Each time a `defer` statement executes, the function value and parameters to the call are **evaluated right-away** and saved anew but the actual function is not invoked  
-Deferred functions are invoked immediately before the surrounding function returns, in the reverse order they were deferred. That is, deferred functions are executed **after** any result parameters are set by that return statement but **before** the function returns to its caller  
-If a deferred function value evaluates to `nil`, execution panics when the function is invoked, not when the "defer" statement is executed  
+Each time a `defer` statement executes, the function value and parameters to the call are **evaluated right-away** and saved anew but the actual function is not invoked
+
+Deferred functions are invoked immediately before the surrounding function returns, in the reverse order they were deferred. That is, deferred functions are executed **after** any result parameters are set by that return statement but **before** the function returns to its caller
+
+If a deferred function value evaluates to `nil`, execution panics when the function is invoked, not when the "defer" statement is executed
+
 If the deferred function has any return values, they are discarded when the function completes
 
 If we want to evaluate arguments to `defer` during deferred function execution we call a closure as a `defer` statement. The arguments passed to a `defer` function are still evaluated right away. But the variables referenced by a `defer` closure are evaluated during the closure execution

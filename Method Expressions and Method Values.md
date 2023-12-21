@@ -28,7 +28,7 @@ It is legal to derive a function value from a method of an interface type. The r
 
 If the expression `x` has static type `T` and `M` is in the [method set](https://go.dev/ref/spec#Method_sets) of type `T`, the **method value** `x.M` is a function value that is callable with the same arguments as a method call of `x.M`
 
-The expression `x` is evaluated and saved during the evaluation of the method value; the saved copy is then used as the receiver in any calls, which may be executed later
+The expression `x` is **evaluated and saved during the evaluation of the method value**; the saved copy is then used as the receiver in any calls, which may be executed later
 
 For example, given:
 
