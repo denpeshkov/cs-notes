@@ -20,9 +20,12 @@ type iface struct {
 - `tab` is a pointer to an **itable**, which contains information about the type of the interface, as well as the type of the data it points to
 - `data` is a pointer to the value (copy) held by the interface
 
-Note that `data` points to the **copy** of a value used in assignment. Copy is used because if a variable later changes the pointer should have the old value, not the new one
+Note that `data` points to the **copy** of a value used in the assignment. For example, copying an interface value (passing interface as a parameter) makes a copy of the thing stored in the interface value  
+A copy is used because if a variable later changes, the pointer should have the old value, not the new one
 
-For example, given:
+## Example
+
+Given:
 
 ```go
 type Stringer interface {
