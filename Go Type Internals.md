@@ -4,7 +4,7 @@ tags: Go
 
 # Representation
 
-At runtime, every type in Go is represented by a `Type` struct:
+At runtime, an `abi.Type` struct represents **type information** common for all data types:
 
 ```go
 // Type is the runtime representation of a Go type.
@@ -28,8 +28,27 @@ type Type struct {
 }
 ```
 
+Data types requiring additional information are represented by their respective structs: [slice](Go%20Slices%20Internals.md), struct, [interface](Go%20Interfaces%20Internals.md), [map](Go%20Maps%20Internals.md), etc.
+
+For example, `abi.UncommonType` stores information about methods defined on a type:
+
+```go
+// UncommonType is present only for defined types or types with methods
+// (if T is a defined type, the uncommonTypes for T and *T have methods).
+// Using a pointer to this struct reduces the overall size required
+// to describe a non-defined type with no methods.
+type UncommonType struct {
+	PkgPath NameOff // import path; empty for built-in types like int, string
+	Mcount uint16 // number of methods
+	Xcount uint16 // number of exported methods
+	Moff uint32 // offset from this uncommontype to [mcount]Method
+	_ uint32 // unused
+}
+```
+
 This structure contains all the information about the type needed at runtime. For example, `Equal` is used to check values for equality
 
 # References
 
 - [Source code: type.go](https://github.com/golang/go/blob/master/src/internal/abi/type.go)
+- [Internals of Interfaces in Golang | Intermediate level - YouTube](https://youtu.be/x87Cs9vU4Fk?si=xYrKUEtrWuPlMCTC)

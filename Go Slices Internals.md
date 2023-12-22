@@ -4,7 +4,7 @@ tags: Go
 
 # Representation
 
-Slices are represented by a `slice` struct (*slice header*):
+Slices are represented by a `runtime.slice` struct (*slice header*):
 
 ```go
 type slice struct {
@@ -45,6 +45,17 @@ slice {
 ```
 
 The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations
+
+# Type Information
+
+[Type information](Go%20Type%20Internals.md) about the slice data type is represented by an `abi.SliceType` struct:
+
+```go
+type SliceType struct {
+	Type
+	Elem *Type // slice element type
+}
+```
 
 # Invariance and Conversions
 

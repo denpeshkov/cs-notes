@@ -8,7 +8,7 @@ tags:
 
 # Interface Values Representation
 
-Interface values are represented by a struct `iface`:
+Interface values are represented by a struct `runtime.iface`:
 
 ```go
 type iface struct {
@@ -100,3 +100,4 @@ If the actual value fits in a one word, it is stored in the second word directly
 - [research!rsc: Go Data Structures: Interfaces](https://research.swtch.com/interfaces)
 - [Source code: runtime2.go](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L205)
 - [Chapter II: Interfaces - Go Internals](https://cmc.gitbook.io/go-internals/chapter-ii-interfaces#anatomy-of-an-interface)
+- [Internals of Interfaces in Golang | Intermediate level - YouTube](https://youtu.be/x87Cs9vU4Fk?si=xYrKUEtrWuPlMCTC)
