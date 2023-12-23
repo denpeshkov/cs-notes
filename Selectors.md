@@ -5,7 +5,7 @@ tags:
 
 # Defined Pointer Type
 
-If the type of `x` is a [defined](https://go.dev/ref/spec#Type_definitions) pointer type and `(*x).f` is a valid selector expression denoting a field (but not a method), `x.f` is shorthand for `(*x).f`
+If the type of `x` is a [defined](https://tip.golang.org/ref/spec#Type_definitions) pointer type and `(*x).f` is a valid selector expression denoting a field (but not a method), `x.f` is shorthand for `(*x).f`
 
 For example, given:
 
@@ -45,6 +45,6 @@ The call is illegal because the method set of `P` does not inherit any methods b
 
 # References
 
-- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec#Selectors)
+- [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#Selectors)
 - [Selectors in Go. Expression foo.bar can mean two things… | by Michał Łowicki | golangspec | Medium](https://medium.com/golangspec/selectors-in-go-c53a016702cf)
-- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec#Type_definitions)
+- [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#Type_definitions)

@@ -152,6 +152,6 @@ func readFiles(ch <-chan string) error {
  - [LoopvarExperiment · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/LoopvarExperiment)
  - [Fixing For Loops in Go 1.22 - The Go Programming Language](https://go.dev/blog/loopvar-preview)
  - [CommonMistakes · golang/go Wiki · GitHub](https://github.com/golang/go/wiki/CommonMistakes)
- - [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec#For_statements)
+ - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#For_statements)
  - [Proposal: Less Error-Prone Loop Variable Scoping](https://go.googlesource.com/proposal/+/master/design/60078-loopvar.md)
- - [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec)
+ - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec)

@@ -5,7 +5,7 @@ tags:
 
 # Method Expressions
 
-If `M` is in the [method set](https://go.dev/ref/spec#Method_sets) of type `T`, `T.M` is a function that is callable as a regular function with the same arguments as `M` prefixed by an additional argument that is the receiver of the method
+If `M` is in the [method set](https://tip.golang.org/ref/spec#Method_sets) of type `T`, `T.M` is a function that is callable as a regular function with the same arguments as `M` prefixed by an additional argument that is the receiver of the method
 
 For example, given:
 
@@ -26,7 +26,7 @@ It is legal to derive a function value from a method of an interface type. The r
 
 # Method Values
 
-If the expression `x` has static type `T` and `M` is in the [method set](https://go.dev/ref/spec#Method_sets) of type `T`, the **method value** `x.M` is a function value that is callable with the same arguments as a method call of `x.M`
+If the expression `x` has static type `T` and `M` is in the [method set](https://tip.golang.org/ref/spec#Method_sets) of type `T`, the **method value** `x.M` is a function value that is callable with the same arguments as a method call of `x.M`
 
 The expression `x` is **evaluated and saved during the evaluation of the method value**; the saved copy is then used as the receiver in any calls, which may be executed later
 
@@ -46,7 +46,7 @@ var pt *T
 - `t.Mv` yields a function value of type `func(int) int`
 - `pt.Mp` yields a function value of type `func(float32) float32`
 - `pt.Mv` is equivalent to `(*pt).Mv`
-- `t.Mp` is equivalent to `(&t).Mp` if `t` is [addressable](https://go.dev/ref/spec#Address_operators)
+- `t.Mp` is equivalent to `(&t).Mp` if `t` is [addressable](https://tip.golang.org/ref/spec#Address_operators)
 
 # Implementation
 
@@ -57,6 +57,6 @@ Function values are pointers that point to structs. These structs contain either
 
 # References
 
-- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec#Method_expressions)
-- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec#Method_values)
+- [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#Method_expressions)
+- [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#Method_values)
 - [What is a Go function variable? · Phil Pearl's Blog](https://philpearl.github.io/post/functionpointers/)

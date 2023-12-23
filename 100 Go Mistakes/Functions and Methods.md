@@ -42,4 +42,4 @@ If we want to evaluate arguments to `defer` during deferred function execution w
 - [receivers | Dave Cheney](https://dave.cheney.net/tag/receivers)
 - [Frequently Asked Questions (FAQ) - The Go Programming Language](https://go.dev/doc/faq)
 - [Why not a mixture of value and pointer receiver?](https://groups.google.com/g/golang-nuts/c/xOsuXPe1IUo)
-- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec)
+- [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec)

@@ -4,7 +4,7 @@ tags: Go
 
 # Representation
 
-At runtime, an `abi.Type` struct represents **type information** common for all data types:
+An `abi.Type` struct represents **type information** common for all data types:
 
 ```go
 // Type is the runtime representation of a Go type.
@@ -28,7 +28,7 @@ type Type struct {
 }
 ```
 
-Data types requiring additional information are represented by their respective structs: [slice](Go%20Slices%20Internals.md), struct, [interface](Go%20Interfaces%20Internals.md), [map](Go%20Maps%20Internals.md), etc.
+Data types requiring additional information are represented by their respective structs: [slice](Go%20Slices%20Internals.md), struct, [interface](Go%20Interfaces%20Internals.md), [map](Go%20Maps%20Internals.md), etc. All this structs embed the `abi.Type` struct and add additional fields
 
 For example, `abi.UncommonType` stores information about methods defined on a type:
 
@@ -46,7 +46,7 @@ type UncommonType struct {
 }
 ```
 
-This structure contains all the information about the type needed at runtime. For example, `Equal` is used to check values for equality
+It's important to note that type information structures are computed at **compile-time**
 
 # References
 

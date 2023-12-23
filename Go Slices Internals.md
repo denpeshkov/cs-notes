@@ -85,4 +85,4 @@ Note that converting a `nil` slice to an array pointer yields a `nil` pointer, w
 - [Go internals: invariance and memory layout of slices - Eli Bendersky's website](https://eli.thegreenplace.net/2021/go-internals-invariance-and-memory-layout-of-slices/)
 - [Source code: slice.go](https://github.com/golang/go/blob/master/src/runtime/slice.go)
 - [Source code: malloc.go](https://github.com/golang/go/blob/master/src/runtime/malloc.go)
-- [The Go Programming Language Specification - The Go Programming Language](https://go.dev/ref/spec)
+- [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec)
