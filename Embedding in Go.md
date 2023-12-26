@@ -41,6 +41,55 @@ Note that, we can use an anonymous wrapper struct:
 return io.Copy(struct{ io.Writer }{f}, r)
 ```
 
+# Method Interception
+
+We can define a struct with an embedded interface to intercept its method(s)  
+When such a struct is initialized with a proper value implementing the interface for the embedded field, it 'inherits' all the methods of that value  
+The key insight is that we can intercept any method we wish, leaving all the others intact
+
+For example, we can implement middleware to provide logging. To achieve this, we need to capture the HTTP status code from the handler:
+
+```go
+type statusRecorder struct {
+	http.ResponseWriter
+	status int
+}
+
+func (rec *statusRecorder) WriteHeader(code int) {
+	rec.status = code
+	rec.ResponseWriter.WriteHeader(code)
+}
+
+func logware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Initialize the status to 200 in case WriteHeader is not called
+		rec := statusRecorder{w, 200}
+
+		next.ServeHTTP(&rec, r)
+
+		log.Printf("response status: %v\n", rec.status)
+	})
+}
+```
+
+We can use the middleware as follows:
+
+```go
+func main() {
+	http.ListenAndServe(":8080",
+		logware(
+			http.HandlerFunc(handle),
+		),
+	)
+}
+
+func handle(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(201)
+	w.Write([]byte("Accepted"))
+}
+```
+
 # References
 
 - [Embedding in Go: Part 3 - interfaces in structs - Eli Bendersky's website](https://eli.thegreenplace.net/2020/embedding-in-go-part-3-interfaces-in-structs/)
+- [Golang Tip: Wrapping http.ResponseWriter for Middleware](https://upgear.io/blog/golang-tip-wrapping-http-response-writer-for-middleware/)
