@@ -60,15 +60,13 @@ func (rec *statusRecorder) WriteHeader(code int) {
 	rec.ResponseWriter.WriteHeader(code)
 }
 
-func logware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func logware(h http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		// Initialize the status to 200 in case WriteHeader is not called
 		rec := statusRecorder{w, 200}
-
-		next.ServeHTTP(&rec, r)
-
+		h.ServeHTTP(&rec, r)
 		log.Printf("response status: %v\n", rec.status)
-	})
+	}
 }
 ```
 

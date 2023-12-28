@@ -20,6 +20,8 @@
 
 #### 100 Go Mistakes and How to Avoid Them. Teiva Harsanyi
 
+#### Let's Go Further. Alex Edwards
+
 # Web
 
 #### CMU 15-418/15-618: Parallel Computer Architecture and Programming
