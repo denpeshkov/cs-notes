@@ -69,7 +69,7 @@ func logware(h http.HandlerFunc) http.HandlerFunc {
 	}
 }
 ```
-
+	
 We can use the middleware as follows:
 
 ```go
