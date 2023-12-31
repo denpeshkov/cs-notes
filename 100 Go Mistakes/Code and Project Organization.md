@@ -47,7 +47,7 @@ func Save(w io.Writer, doc *Document) error
 
 Note that interfaces sometimes can be used on the producer side. For example `encoding` package defined interfaces used by `encoding/json` and `encoding/binary`
 
-It's not a mistake because Go designers knew (not foresee) that creating these abstractions up front was valuable
+It's not a mistake because Go designers *knew* (not foresee) that creating these abstractions up front was valuable
 
 ## Returning Interfaces
 
