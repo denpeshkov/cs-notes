@@ -181,6 +181,7 @@ This approach also has downsides:
 
 - Client needs to pass an empty struct for a default configuration
 - If builder method returns an error, we can't chain calls together and need to delay validation in the `Build` method
+- Builder pattern allows the user to leave the object in an 'unfinished' state
 
 ## Functional Options Pattern
 
