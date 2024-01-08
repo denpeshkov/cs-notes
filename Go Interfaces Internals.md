@@ -95,7 +95,7 @@ Note that, both tables are sorted, so the mapping is found in $O(ni+nt)$ instead
 
 ## Optimizations
 
-If an interface has no method, itable is dropped and the first word points at the type directly. That is, `runtime.eface` is used instead of `runtime.iface`:
+If an interface has no methods, itable is dropped and the first word points at the type directly. That is, `runtime.eface` is used instead of `runtime.iface`:
 
 ```go
 type eface struct {
