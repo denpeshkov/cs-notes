@@ -67,7 +67,7 @@ for {
 This range loop:
 
 ```go
-for _, s := range exp {...}
+for i, v := range exp {...}
 ```
 
 after compilation is semantically equivalent to:
