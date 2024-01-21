@@ -113,7 +113,7 @@ func NewServer(addr string, cfg Config) (*http.Server, error) {...}
 
 However, this approach has some drawbacks:
 
-- It can't distinguish between port that is equal to 0 and port that isn't set. If Port isn't set it's default value is 0
+- It can't distinguish between port that is equal to 0 and port that isn't set.
 - Clients need to pass an empty struct for a default configuration
 
 We could use pointers:
@@ -131,14 +131,16 @@ That approach also has downsides:
 - Clients need to create a variable to pass it's address as a pointer
 - Clients need to pass an empty struct for a default configuration
 
-## Using Setters
+## Using Exported Fields Directly
 
-We could use setters to config the server after instantiation
+We could use directly exported fields (or setters) to config the server after instantiation. For example like an `http.Server` in the standard library
 
 That approach also has downsides:
 
 - The server may be in inconsistent state during configuration
 - It also precludes the possibility of making a type immutable
+
+But, ignoring this issues this approach is useful and the most simple one
 
 ## Builder Pattern
 

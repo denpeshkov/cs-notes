@@ -31,7 +31,7 @@ Use `%v` to obfuscate the underlying error. Callers will be unable to match it
 
 # Handle Errors Once
 
-Handling an error multiple times can cause situations where the same error is logged multiple times, making debugging harder (especially in concurrent execution)
+Handling an error multiple times can lead to situations in which we have multiple log lines for a single error, making debugging more challenging, especially in concurrent execution
 
 Therefore, in most situations, an error should be handled only once. You have to choose between logging or returning an error
 
