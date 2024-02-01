@@ -139,6 +139,7 @@ That approach also has downsides:
 
 - The server may be in inconsistent state during configuration
 - It also precludes the possibility of making a type immutable
+- No validation at the instantiation time. Need to use a separate `Valid` method
 
 But, ignoring this issues this approach is useful and the most simple one
 
