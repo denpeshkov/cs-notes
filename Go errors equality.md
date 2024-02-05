@@ -26,21 +26,14 @@ func main() {
 	e1 = errors.New(message)
 	e2 = errors.New(message)
 
-	fmt.Println(e1 == e2)
+	fmt.Println(e1 == e2) // false
 
 	// fmt.Errorf delegates its error creation to errors.New and so shares the same behaviour.
 	e1 = fmt.Errorf(message)
 	e2 = fmt.Errorf(message)
 
-	fmt.Println(e1 == e2)
+	fmt.Println(e1 == e2) //false
 }
-```
-
-This outputs:
-
-```go
-false
-false
 ```
 
 ## Custom Errors
@@ -60,27 +53,17 @@ func (ce CustomError) Error() string {
 	return ce.Message
 }
 
-const (
-	message1 = "Custom error message 1"
-	message2 = "Custom error message 2"
-)
+const message = "Custom error message 1"
 
 func main() {
 	var e1, e2 error
 
-	e1 = CustomError{Message: message1}
-	e2 = CustomError{Message: message1}
+	e1 = CustomError{Message: message}
+	e2 = CustomError{Message: message}
 
-	fmt.Println(e1 == e2)
-	fmt.Println(error(e1) == error(e2))
+	fmt.Println(e1 == e2) // true
+	fmt.Println(error(e1) == error(e2)) //true
 }
-```
-
-This outputs:
-
-```go
-true
-true
 ```
 
 # Explanation

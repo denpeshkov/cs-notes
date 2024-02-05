@@ -8,7 +8,7 @@ tags:
 
 # Interface Values Representation
 
-Interface values are represented by a struct `runtime.iface`:
+Interface values are represented as a two-word pair, defined by a struct `runtime.iface`:
 
 ```go
 type iface struct {
@@ -17,8 +17,9 @@ type iface struct {
 }
 ```
 
-- `tab` is a pointer to an **itable**, which contains information about the type of the interface, as well as the type of the data it points to
-- `data` is a pointer to the value (copy of the original) held by the interface
+The first word `tab` is a pointer to an **itable**, which contains information about the type of the interface, as well as the type of the data it points to
+
+The second word `data` is a pointer to the value (copy of the original) held by the interface. Values stored in interfaces might be arbitrarily large, but only one word is dedicated to holding the value in the interface structure, so the assignment allocates a chunk of memory on the heap and records the pointer in the `data` field (there is an [optimization](#Optimizations))
 
 Note that `data` points to the **copy of a value** used in the assignment. For example, copying an interface value (passing interface as a parameter) makes a copy of the value stored in the interface  
 A copy is used because if a variable later changes, the pointer should have the old value, not the new one
@@ -104,7 +105,7 @@ type eface struct {
 }
 ```
 
-If the actual value fits in a one word, it is stored in the second word directly without indirection
+If the actual value fits in a one word, it is stored in the second word directly without indirection or heap allocation
 
 # Heap Allocations and Escape Analysis
 
