@@ -96,7 +96,7 @@ There are couple of ways to deal with this configurations:
 
 1. Config struct
 2. Builder pattern
-3. Using setters
+3. Using setters or exported fields directly
 4. Functional options pattern
 
 ## Config Struct
@@ -131,7 +131,7 @@ That approach also has downsides:
 - Clients need to create a variable to pass it's address as a pointer
 - Clients need to pass an empty struct for a default configuration
 
-## Using Exported Fields Directly
+## Using Setters or Exported Fields Directly
 
 We could use directly exported fields (or setters) to config the server after instantiation. For example like an `http.Server` in the standard library
 
@@ -140,8 +140,9 @@ That approach also has downsides:
 - The server may be in inconsistent state during configuration
 - It also precludes the possibility of making a type immutable
 - No validation at the instantiation time. Need to use a separate `Valid` method
-
-But, ignoring this issues this approach is useful and the most simple one
+- We can't return a different instance depending on the provided configuration
+- Need setters to distinguish between port that is equal to 0 and port that isn't set
+- It can be inconvenient to configure an object after creation, e.g. creating a middleware
 
 ## Builder Pattern
 
