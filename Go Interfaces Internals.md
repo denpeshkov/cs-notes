@@ -19,7 +19,7 @@ type iface struct {
 
 The first word `tab` is a pointer to an **itable**, which contains information about the type of the interface, as well as the type of the data it points to
 
-The second word `data` is a pointer to the value (copy of the original) held by the interface. Values stored in interfaces might be arbitrarily large, but only one word is dedicated to holding the value in the interface structure, so the assignment allocates a chunk of memory on the heap and records the pointer in the `data` field (there is an [optimization](#Optimizations))
+The second word `data` is a pointer to the value (copy of the original) held by the interface. Values stored in interfaces might be arbitrarily large, but only one word is dedicated to holding the value in the interface structure, so the assignment allocates a chunk of memory on the heap and records the pointer in the `data` field
 
 Note that `data` points to the **copy of a value** used in the assignment. For example, copying an interface value (passing interface as a parameter) makes a copy of the value stored in the interface  
 A copy is used because if a variable later changes, the pointer should have the old value, not the new one
@@ -105,16 +105,15 @@ type eface struct {
 }
 ```
 
-### Data Inlining
+As an optimization, the Go runtime maintains an array of small integers. If an interface is instantiated from one of these small integers, it points to an element of this array, thereby preventing runtime allocation
 
-In Russ Cox [blog post](https://research.swtch.com/interfaces) it is stated that if the actual value fits in a single word, it is stored in the second word directly without indirection or heap allocation  
-However, this is no longer true, as it caused race conditions in concurrent GC and ambiguity about whether the data word holds a pointer or scalar
-
-#todo Elaborate
+In Russ Cox [blog post](https://research.swtch.com/interfaces) it is stated that if the actual value fits in a single word, it is stored in the second word directly without indirection or heap allocation. However, this is no longer true, as it caused race conditions in concurrent GC and ambiguity about whether the data word holds a pointer or scalar ( #todo elaborate further). So interfaces **always** store the pointer in the `data` field
 
 # Heap Allocations and Escape Analysis
 
-When invoking a method through an interface value (indirect call) an escape analysis can't prove that value doesn't escape and allocates on the heap even for scalar type (`int`s, `float`s, …)
+When a method is called via an interface value instead of directly through a struct, the compiler *generally* lacks knowledge of the method's implementation at compile time. Consequently, escape analysis cannot confirm that the value doesn't escape, leading to heap allocations (see [optimization](#Optimizations)) even for scalar types like `int`s and `float`s
+
+In some cases, the compiler can prove the concrete type of the value stored in the interface and **devirtualize** a method call, avoiding heap allocations
 
 # References
 
@@ -128,3 +127,4 @@ When invoking a method through an interface value (indirect call) an escape anal
 - [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)
 - [Lec08 Allocation Strategies - YouTube](https://youtu.be/s0j8U-NsbqQ?si=XkwGYR3xzurHEp_j)
 - [Lec09 Implicit Allocators Indirection And References - YouTube](https://youtu.be/GH7MGNAuwaQ?si=xxh8N3d80fmgN2qo)
+- [GopherCon Europe 2023: Jonathan Amsterdam - A Fast Structured Logging Package - YouTube](https://www.youtube.com/watch?v=tC4Jt3i62ns)
