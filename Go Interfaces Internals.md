@@ -105,16 +105,26 @@ type eface struct {
 }
 ```
 
-If the actual value fits in a one word, it is stored in the second word directly without indirection or heap allocation
+### Data Inlining
+
+In Russ Cox [blog post](https://research.swtch.com/interfaces) it is stated that if the actual value fits in a single word, it is stored in the second word directly without indirection or heap allocation  
+However, this is no longer true, as it caused race conditions in concurrent GC and ambiguity about whether the data word holds a pointer or scalar
+
+#todo Elaborate
 
 # Heap Allocations and Escape Analysis
 
-#TODO 
+When invoking a method through an interface value (indirect call) an escape analysis can't prove that value doesn't escape and allocates on the heap even for scalar type (`int`s, `float`s, …)
 
 # References
 
 - [research!rsc: Go Data Structures: Interfaces](https://research.swtch.com/interfaces)
 - [Source code: runtime2.go](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L205)
+- [Source code: iface.go](https://github.com/golang/go/blob/master/src/runtime/iface.go)
+- [How are interfaces implemented in Go? : r/golang](https://www.reddit.com/r/golang/comments/ehy75k/how_are_interfaces_implemented_in_go/)
 - [Chapter II: Interfaces - Go Internals](https://cmc.gitbook.io/go-internals/chapter-ii-interfaces#anatomy-of-an-interface)
 - [Internals of Interfaces in Golang | Intermediate level - YouTube](https://youtu.be/x87Cs9vU4Fk?si=xYrKUEtrWuPlMCTC)
 - [Source code: type.go](https://github.com/golang/go/blob/master/src/internal/abi/type.go#L478)
+- [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)
+- [Lec08 Allocation Strategies - YouTube](https://youtu.be/s0j8U-NsbqQ?si=XkwGYR3xzurHEp_j)
+- [Lec09 Implicit Allocators Indirection And References - YouTube](https://youtu.be/GH7MGNAuwaQ?si=xxh8N3d80fmgN2qo)
