@@ -44,7 +44,7 @@ slice {
 }
 ```
 
-The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations
+The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations. See [Go Zero-Sized Values](Go%20Zero-Sized%20Values.md)
 
 # Type Information
 

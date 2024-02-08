@@ -4,7 +4,7 @@ tags: Go
 
 # Allocation of Zero-Sized Values
 
-Instantiating an object of size 0 (such as `struct{}{}`) doesn't result in an allocation. It utilizes the address of `runtime.zerobase`, the base address for all 0-byte allocations
+Instantiating an object of size 0 (such as `struct{}{}`, `[42]struct{}`) doesn't result in an allocation. It utilizes the address of `runtime.zerobase`, the base address for all 0-byte allocations
 
 Note that Go specification states:
 
