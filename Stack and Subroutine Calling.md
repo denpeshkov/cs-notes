@@ -13,7 +13,7 @@ The stack is implemented by the CPU and is used to save the **return address**, 
 - On `x86-64`, up to 6 arguments are passed by registers; others are passed on the stack
 - Local variables are saved on the stack if no registers are left or if the address of the variable needs to be taken
 
-The stack grows toward lower addresses, and the [heap](Heap.md) grows towards higher addresses, allowing the use of as much space as possible before a collision occurs
+The stack grows toward lower addresses, and the [heap](Heap%20Memory.md) grows towards higher addresses, allowing the use of as much space as possible before a collision occurs
 
 The stack allows abstracting the subroutine implementation from the caller. Registers can be mutated by the subroutine, so without the stack, the caller has to prepare and be aware of subroutine interworking
 
