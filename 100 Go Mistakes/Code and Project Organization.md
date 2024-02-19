@@ -53,7 +53,7 @@ It's not a mistake because Go designers *knew* (not foresee) that creating these
 
 In most cases we should return concrete implementations, not interfaces
 
-Returning concrete types means that we can add new functionality without breaking compatibility. Also, clients can use all the methods of the type, not just the one defined in interface
+Returning concrete types means that we can add new functionality without [breaking compatibility](https://youtu.be/JhdL5AkH-AQ?si=Cs0TDV7SjeSYAEki&t=1430) . Also, clients can use all the methods of the type, not just the one defined in interface
 
 ---
 
@@ -250,3 +250,4 @@ For example, the `net/http` package does not have `client` and `server` pa
 - [Go Proverbs](https://go-proverbs.github.io)
 - [Uber Go Style Guide](https://github.com/uber-go/guide/blob/master/style.md)
 - [Avoid package names like base, util, or common | Dave Cheney](https://dave.cheney.net/2019/01/08/avoid-package-names-like-base-util-or-common)
+- [GopherCon 2019: Jonathan Amsterdam - Detecting Incompatible API Changes - YouTube](https://youtu.be/JhdL5AkH-AQ?si=SBWb9xaVFlDiBOhQ)

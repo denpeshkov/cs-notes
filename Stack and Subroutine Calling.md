@@ -10,7 +10,7 @@ tags:
 The stack is implemented by the CPU and is used to save the **return address**, **arguments**, and **local variables** prior to calling the subroutine
 
 - Return address is saved on the stack to support nested functions (e.g., recursion)
-- On `x86-64`, up to 6 arguments are passed by registers; others are passed on the stack
+- On `x86-64`, up to 6 arguments are passed by **registers**; others are passed on the stack
 - Local variables are saved on the stack if no registers are left or if the address of the variable needs to be taken
 
 The stack grows toward lower addresses, and the [heap](Heap%20Memory.md) grows towards higher addresses, allowing the use of as much space as possible before a collision occurs
@@ -19,7 +19,7 @@ The stack allows abstracting the subroutine implementation from the caller. Regi
 
 ![stack frame pointer.png|300](stack%20frame%20pointer.png)
 
-# `push` And `pop`
+# `push` And `pop` Assembler Instructions
 
 - `push V` pushes a copy of `V` onto the top of the stack
 - `pop Addr` pops the top element off the stack and places it in location `Addr`
@@ -34,7 +34,7 @@ The `SP` register stores the address of the last stack frame - the top of the st
 
 ## Frame (Base) Pointer
 
-On `x86-64`, `BP` is used only when the stack frame can be of variable size. On `IA32`, most compilers always used `BP`. Recent versions of `gcc` have dropped this convention
+On `x86-64`, `BP` is used only when the stack frame can be of variable size. On `IA32`, most compilers always used `BP`. Recent versions of `GCC` have dropped this convention
 
 `BP` is used to have a fixed point to reference variables on the stack. The old `BP` is saved because it's a **callee-saved** register
 

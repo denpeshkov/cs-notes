@@ -43,6 +43,8 @@ The number of exchanges used by insertion sort is equal to the number of inversi
 
 The number of compares is at least equal to the number of inversions and at most equal to the number of inversions plus the array size minus 1
 
+**Proof:** Every exchange involves two inverted adjacent entries and thus reduces the number of inversions by one, and the array is sorted when the number of inversions reaches zero. Every exchange corresponds to a compare, and an additional compare might happen for each value of `i` from 1 to `N-1` (when `a[i]` does not reach the left end of the array).
+
 # References
 
 - [Insertion sort - Wikipedia](https://en.wikipedia.org/wiki/Insertion_sort)
