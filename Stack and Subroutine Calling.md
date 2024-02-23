@@ -58,21 +58,6 @@ By convention:
 
 Old data on the stack from the previous call is usually not cleaned
 
-# Calling Conventions
-
-Describe the interface of the called code:
-
-- The order in which parameters are allocated
-- How parameters are passed (pushed on the stack, placed in registers, or a mix of both)
-- Which registers (if any) are used for parameters
-- Which register is used for the return value
-- Which registers the called function must preserve for the caller (also known as: callee-saved registers or non-volatile registers)
-- How the task of preparing the stack for, and restoring after, a function call is divided between the caller and the callee
-
-Most Unix systems use the [System V ABI](https://wiki.osdev.org/System_V_ABI), which specifies calling conventions, object file formats, executable file formats ([ELF](Executable%20File%20Format%20(ELF))), and more
-
-The calling convention of a program's language may differ from the calling convention of the underlying platform, OS, or library being linked to. The function declarations will include additional platform-specific keywords that indicate the calling convention to be used
-
 # References
 
 - [Calling Conventions - OSDev Wiki](https://wiki.osdev.org/Calling_Conventions)

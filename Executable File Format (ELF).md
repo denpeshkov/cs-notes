@@ -3,7 +3,8 @@ tags:
   - TODO
   - OS
   - Architecture
-  - C
+aliases:
+  - ELF
 ---
 
 # References

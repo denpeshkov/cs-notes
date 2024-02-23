@@ -44,7 +44,7 @@ gcc -o prog prog.c
 objdump prog.out
 ```
 
-The standard C library `libc.so` gets linked with every executable by `GCC` implicitly. Others libs need to use the `-l` option, e.g. `libmylib.so` or `libmylib.a`:
+[C Standard Library](C%20Standard%20Library.md) `libc.so` gets linked with every executable by `GCC` implicitly. Others libs need to use the `-l` option, e.g. `libmylib.so` or `libmylib.a`:
 
 ``` shell
 gcc -o prog prog.c -lmylib
