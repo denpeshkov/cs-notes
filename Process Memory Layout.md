@@ -4,4 +4,4 @@ tags: Architecture OS TODO
 
 # References
 
-- [Lec07 Vector Add Example - YouTube](https://youtu.be/CWR4wQTIlTQ?si=ucC_mO68es7jOwfu)
+- [CS24 Caltech Sp18 Lecture 7 - YouTube](https://youtu.be/CWR4wQTIlTQ?si=ucC_mO68es7jOwfu)
