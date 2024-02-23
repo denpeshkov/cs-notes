@@ -26,8 +26,8 @@
 
 #### CMU 15-418/15-618: Parallel Computer Architecture and Programming
 
-<https://www.cs.cmu.edu/>~418/
+https://www.cs.cmu.edu
 
 #### Caltech CS24-Sp18:Introduction-To-Computing-System - YouTube
 
-<https://youtube.com/playlist>?list=PL3swII2vlVoXiqUBV524pKEsP1iBN4UBU&si=UcUOZ4N9w5qvkvx9
+https://youtube.com/playlist?list=PL3swII2vlVoXiqUBV524pKEsP1iBN4UBU&si=ex_WTG8OTew1Kwqu

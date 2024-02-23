@@ -16,7 +16,7 @@ Space complexity auxiliary:
 | --- | --- | --- |
 | $\theta(1)$ | $\theta(1)$ | $\theta(1)$ |
 
-Stability: stable
+Stability: not stable
 
 Adaptivity: not-adaptive
 
