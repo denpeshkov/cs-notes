@@ -33,7 +33,18 @@ If a deferred function value evaluates to `nil`, execution panics when the fu
 
 If the deferred function has any return values, they are discarded when the function completes
 
-If we want to evaluate arguments to `defer` during deferred function execution we call a closure as a `defer` statement. The arguments passed to a `defer` function are still evaluated right away. But the variables referenced by a `defer` closure are evaluated during the closure execution
+If we want to evaluate arguments to `defer` **during** deferred function execution we call a closure as a `defer` statement. The arguments passed to a `defer` function are still evaluated right away. But the variables referenced by a `defer` closure are evaluated during the closure execution
+
+For example:
+
+```go
+var v int
+defer func() {
+	f(v) // initial deffered function call
+}()
+```
+
+Here, we wrap the call to both `f` within a closure. This closure references the `v` from outside its body. Therefore, `v` is evaluated once the closure is executed, not when we call `defer`
 
 # References
 

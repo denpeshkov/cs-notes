@@ -22,6 +22,8 @@
 
 #### Let's Go Further. Alex Edwards
 
+#### Concurrency in Go. Katherine Cox-Buday
+
 # Web
 
 #### CMU 15-418/15-618: Parallel Computer Architecture and Programming
