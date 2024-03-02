@@ -23,7 +23,7 @@ For example:
 Strings are **immutable**, so there is no need for a capacity (you can't grow them)  
 
 It is safe for multiple strings to share the same storage, so slicing `s` results in a new 2-word structure with a potentially different pointer and length that still refers to the same byte sequence  
-This means that slicing can be done without allocation or copying, making string slices as efficient as passing around explicit indexes
+This means that slicing can be done **without allocation** or copying, making string slices as efficient as passing around explicit indexes
 
 # Casting and Memory Allocation
 

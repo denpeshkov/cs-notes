@@ -7,8 +7,8 @@ tags:
 
 # Overview
 
-A **memory consistency model** for a shared address space specifies constraints on the order in which memory operations must appear to be performed (to become visible to the CPU) with respect to one another
-This includes operations to the same locations or to different locations and by the same process or different processes. In this sense, memory consistency subsumes [coherence](Cache%20Coherency.md).
+A **memory consistency model** for a shared address space specifies constraints on the order in which memory operations must appear to be performed (to become visible to the CPU) with respect to one another  
+This includes operations to the same locations or to different locations and by the same process or different processes. In this sense, memory consistency subsumes [coherence](Cache%20Coherency.md)
 
 # Sequential Consistency (SC)
 
@@ -32,6 +32,8 @@ Synchronization is needed if we want to preserve **atomicity** (mutual exclusion
 The keyword `volatile` prevents the variable from being **register-allocated** or any memory operation on the variable from being reordered with respect to operations before or after it in program order
 
 FIXME #TODO
+
+## Cache coherence and registers #todo
 
 # References
 
