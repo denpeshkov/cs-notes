@@ -155,3 +155,4 @@ func readFiles(ch <-chan string) error {
  - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#For_statements)
  - [Proposal: Less Error-Prone Loop Variable Scoping](https://go.googlesource.com/proposal/+/master/design/60078-loopvar.md)
  - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec)
+ - [Go internals: capturing loop variables in closures - Eli Bendersky's website](https://eli.thegreenplace.net/2019/go-internals-capturing-loop-variables-in-closures/)

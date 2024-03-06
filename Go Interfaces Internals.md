@@ -74,7 +74,7 @@ type InterfaceType struct {
 
 Note that, the itable corresponds to the *interface type*, not the dynamic type. In our example, it contains pointer only to `String` method, not `Get`
 
-To check a type of the actual value an interface points to, compiler generates the code equivalent to `s.tab->type`
+To check a type of the actual value an interface points to, compiler generates the code equivalent to `s.tab->_type`
 
 To call `s.String()`, compiler generates the code equivalent to `s.tab->fun[0](s.data)`  
 Note that, the function in itable is being passed the pointer, not the actual value. Thus the function pointer in our example is `(*Binary).String` not `Binary.String`
@@ -111,9 +111,45 @@ In Russ Cox [blog post](https://research.swtch.com/interfaces) it is stated that
 
 # Heap Allocations and Escape Analysis
 
-When a method is called via an interface value instead of directly through a struct, the compiler *generally* lacks knowledge of the method's implementation at compile time. Consequently, escape analysis cannot confirm that the value doesn't escape, leading to heap allocations (see [optimization](#Optimizations)) even for scalar types like `int`s and `float`s
+When a method is called via an interface value instead of directly through a struct, the compiler **generally** lacks knowledge of the method's implementation at compile time. Consequently, escape analysis cannot confirm that the value doesn't escape, leading to heap allocations (there are [optimizations](#Optimizations)) even for scalar types like `int`s, `float`s, `string`s
 
 In some cases, the compiler can prove the concrete type of the value stored in the interface and **devirtualize** a method call, avoiding heap allocations
+
+## Context Key
+
+There are couple of ways to avoid allocation when assigning context key to `any` in `WithValue` call:
+
+```go
+type keyInt int // because small ints are shared by runtime, most of the keys won't cause allocation
+const (
+	k1 = keyInt(iota + 1)
+	k2
+)
+
+type keyString string // strings are not shared by runtime
+// use const to avoid allocations
+const (
+	k3 = keyString("k3")
+	k4 = "k4"
+)
+
+type keyStruct struct {
+	str string
+}
+// use pointers to avoid allocation
+var (
+	k5 = &keyStruct{"k5"}
+	k6 = &keyStruct{"k6"}
+)
+
+// use interface to avoid allocation
+type keyInter any
+var (
+	k7 = keyInter("k7")
+	k8 = keyInter("k8")
+)
+
+```
 
 # References
 
