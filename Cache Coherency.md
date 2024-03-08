@@ -1,7 +1,6 @@
 ---
 tags:
-  - Architecture
-  - OS
+  - OS_Arch
   - Concurrency
   - Distributed_Systems
 ---

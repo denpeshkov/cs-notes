@@ -1,9 +1,9 @@
 ---
 tags:
-  - OS
-  - Architecture
-  - #TODO
+  - OS_Arch
+  - TODO
 ---
+
 # References
 
 - Computer Systems A Programmers Perspective 3rd

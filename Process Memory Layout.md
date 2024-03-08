@@ -1,5 +1,5 @@
 ---
-tags: Architecture OS TODO
+tags: OS_Arch TODO
 ---
 
 # References

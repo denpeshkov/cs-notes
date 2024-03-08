@@ -1,5 +1,5 @@
 ---
-tags: Linux OS
+tags: OS_Arch
 ---
 
 # Terminal

@@ -1,6 +1,6 @@
 ---
 tags:
-  - Architecture
+  - OS_Arch
   - Math
 ---
 
@@ -19,6 +19,7 @@ It uses the notation $b_mb_{m-1}\ldots b_1b_0.b_{-1}b_{-2}\ldots b_{-n+1}b_{-n}$
 It can represent numbers of similar magnitudes with the same precision. For example, numbers with 4 digits after the decimal point have precision up to $1/2^4 = 1/16$
 
 It can **only** exactly represent numbers of the form $x \cdot 2^y$. Other rational numbers have repeating bit representations
+
 The binary point has a fixed position, so a lot of digits are needed to represent very small or very large numbers
 
 # Floating Point (IEEE-754)
@@ -36,13 +37,17 @@ The bit representation is divided into three fields to encode these values:
 ## Normalized Values
 
 $exp$ is neither all zeros nor all ones
+
 $E = exp - Bias$ where $Bias=2^{k-1}-1$
+
 $M = 1.frac$
 
 ## Denormalized Numbers
 
 $exp$ is all zeros
+
 $E = 1 - Bias$ where $Bias=2^{k-1}-1$
+
 $M = 0.frac$
 
 These are used to represent $\pm 0$ and numbers close to zero

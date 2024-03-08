@@ -1,7 +1,6 @@
 ---
 tags:
-  - Architecture
-  - OS
+  - OS_Arch
 ---
 
 # I/O Devices Diagram
@@ -23,6 +22,7 @@ Such instructions are privileged and can be used only by the OS
 ## Memory-Mapped I/O (MMIO)
 
 I/O devices use the same address space as [main memory](Random%20Access%20Memory.md)
+
 The memory and registers of the I/O device are mapped to address values, so a memory address may refer to either a portion of [RAM](RAM) or to memory and [registers](#Memory%20Mapped%20Registers) of the device
 
 Uses the same CPU instructions to access both RAM and devices `mov`

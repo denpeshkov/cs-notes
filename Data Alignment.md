@@ -1,8 +1,6 @@
 ---
 tags:
-  - OS
-  - Architecture
-  - C
+  - OS_Arch
 ---
 
 # Alignment Requirement

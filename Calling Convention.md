@@ -1,5 +1,5 @@
 ---
-tags: OS Architecture
+tags: OS_Arch
 ---
 
 # Overview

@@ -1,7 +1,6 @@
 ---
 tags:
-  - Architecture
-  - OS
+  - OS_Arch
   - Concurrency
 ---
 
@@ -15,6 +14,7 @@ There are two types of threads:
 # Hyper-threading
 
 Hyper-threading is a form of **SMT** that allows one **physical core** to appear as multiple **logical cores**
+
 To achieve this, each core has multiple copies of registers, `PC`, but a single **ALU**
 
 # Context Switch

@@ -1,7 +1,7 @@
 ---
 tags:
   - Architecture
-  - OS
+  - OS_Arch
   - TODO
 ---
 

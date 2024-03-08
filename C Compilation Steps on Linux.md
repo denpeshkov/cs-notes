@@ -1,7 +1,6 @@
 ---
 tags:
-  - C
-  - Architecture
+  - OS_Arch
 ---
 
 # Steps

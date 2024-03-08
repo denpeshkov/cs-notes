@@ -1,8 +1,7 @@
 ---
 tags:
   - TODO
-  - OS
-  - Architecture
+  - OS_Arch
 aliases:
   - ELF
 ---

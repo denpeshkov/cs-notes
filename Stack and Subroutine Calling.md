@@ -1,8 +1,6 @@
 ---
 tags:
-  - Architecture
-  - OS
-  - C
+  - OS_Arch
 ---
 
 # Stack Usage
