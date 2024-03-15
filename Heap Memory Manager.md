@@ -1,6 +1,5 @@
 ---
 tags:
-  - Architecture
   - OS_Arch
   - TODO
 ---

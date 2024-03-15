@@ -1,6 +1,6 @@
 ---
 tags:
-  - OS_Arch
+  - OS_Arch TODO
 ---
 
 # Stack Usage
@@ -36,7 +36,7 @@ On `x86-64`, `BP` is used only when the stack frame can be of variable size. On 
 
 `BP` is used to have a fixed point to reference variables on the stack. The old `BP` is saved because it's a **callee-saved** register
 
-![stack frame pointer.png|300](stack%20frame%20pointer.png)
+![stack no frame pointer.png|300](stack%20no%20frame%20pointer.png)
 
 ---
 
