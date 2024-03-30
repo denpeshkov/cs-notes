@@ -46,6 +46,20 @@ slice {
 
 The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations. See [Go Zero-Sized Values](Go%20Zero-Sized%20Values.md)
 
+# Grow Factor
+
+The slices grow as follows:
+
+```
+if cap < threshold {
+	cap = cap*2
+} else {
+	cap = cap + (cap + 3*threshold) / 4
+}
+```
+
+So, the growth factor is roughly 2x for small slices and 1.25x for large slices, plus a constant for a smoother transition.
+
 # Type Information
 
 [Type information](Go%20Type%20Internals.md) about the slice data type is represented by an `abi.SliceType` struct:
@@ -85,4 +99,7 @@ Note that converting a `nil` slice to an array pointer yields a `nil` pointer, w
 - [Go internals: invariance and memory layout of slices - Eli Bendersky's website](https://eli.thegreenplace.net/2021/go-internals-invariance-and-memory-layout-of-slices/)
 - [Source code: slice.go](https://github.com/golang/go/blob/master/src/runtime/slice.go)
 - [Source code: malloc.go](https://github.com/golang/go/blob/master/src/runtime/malloc.go)
+- [Source code: ssa.go](https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssagen/ssa.go)
 - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec)
+- [slices: amortize allocations in Insert · golang/go@3de5b4d · GitHub](https://github.com/golang/go/commit/3de5b4da26b0062c9fd1b84849a0d4b7e78aaf5a?diff=unified&w=1)
+- [slices: amortize allocations in Insert · Issue #54948 · golang/go · GitHub](https://github.com/golang/go/issues/54948)

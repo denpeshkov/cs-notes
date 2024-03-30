@@ -137,9 +137,9 @@ We could use directly exported fields (or setters) to config the server after in
 
 That approach also has downsides:
 
+- No validation at the instantiation time. Need to use a separate `Valid` method
 - The server may be in inconsistent state during configuration
 - It also precludes the possibility of making a type immutable
-- No validation at the instantiation time. Need to use a separate `Valid` method
 - We can't return a different instance depending on the provided configuration
 - Need setters to distinguish between port that is equal to 0 and port that isn't set
 - It can be inconvenient to configure an object after creation, e.g. creating a middleware
