@@ -19,7 +19,7 @@ To achieve this, each core has multiple copies of registers, `PC`, but a single 
 
 # Context Switch
 
-A context switch involves saving and restoring the process control block (**PCB**), including:
+A [context switch](Context%20Switch.md) involves saving and restoring the process control block (**PCB**), including:
 
 - Registers
 - [Stack pointer](Stack%20and%20Subroutine%20Calling.md)

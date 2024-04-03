@@ -89,6 +89,12 @@ Two mechanisms can be used to satisfy **"write propagation"**:
 
 Write about false sharing #TODO
 
+See:
+
+- [False Sharing in Java](https://jenkov.com/tutorials/java-concurrency/false-sharing.html)
+- [5.4. Multithreading Problems](http://www.nic.uoregon.edu/~khuck/ts/acumem-report/manual_html/multithreading_problems.html)
+- [A Guide to False Sharing and @Contended | Baeldung](https://www.baeldung.com/java-false-sharing-contended)
+
 # References
 
 - [Cache coherence - Wikipedia](https://en.wikipedia.org/wiki/Cache_coherence)
