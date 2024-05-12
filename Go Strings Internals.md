@@ -31,10 +31,22 @@ Because the underlying byte array is immutable, casting `[]byte` to `string` and
 
 However, there are some optimizations that the compiler makes to avoid copies:
 
-- A conversion from `string` to `[]byte` which follows the `range` keyword in a range loop
-- A conversion from `[]byte]` to `string` which is used as a map key in map element retrieval indexing syntax
-- A conversion from `[]byte]` to `string` which is used in a comparison
-- A conversion from `[]byte]` to `string` which is used in a string concatenation, and at least one of concatenated string values is a non-blank string constant
+1. For a map `m` of type `map[string]T` and `[]byte b`, `m[string(b)]` doesn't allocate
+2. No allocation when converting a `string` into a `[]byte` for ranging over the bytes
+3. No allocation when converting a `[]byte` into a `string` for comparison purposes
+4. A conversion from `[]byte]` to `string` which is used in a string concatenation, and at least one of concatenated string values is a non-blank string constant
+
+# Substrings and Memory Leaks
+
+When performing a substring operation, the Go specification doesn't specify whether the resulting string and the one involved in the substring operation should share the same data. However, the standard Go compiler does allow them share the same backing array
+
+Thus, there can be memory leaks, as the string returned by a substring operation will be backed by the same byte array. The solution is to make a copy of the string:
+
+```go
+string([]byte(s[:ind]))
+// or
+strings.Clone(s[:ind])
+```
 
 # References
 
@@ -42,3 +54,4 @@ However, there are some optimizations that the compiler makes to avoid copies:
 - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
 - [Source code: string.go](https://github.com/golang/go/blob/master/src/runtime/string.go#L232)
 - [Strings in Go -Go 101](https://go101.org/article/string.html)
+- [Go Wiki: Compiler And Runtime Optimizations - The Go Programming Language](https://go.dev/wiki/CompilerOptimizations)

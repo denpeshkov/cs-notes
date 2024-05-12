@@ -19,7 +19,7 @@ What happens during execution of the statement `int x = 10`:
 10. Another cache or memory decides it must respond (let's assume it's memory)
 11. Memory request sent to memory controller
 12. Memory controller is itself a scheduler
-13. Memory controller checks active row in [DRAM row buffer](Random%20Access%20Memory.md). (May need to activate new DRAM row. Let's assume it does.)
+13. Memory controller checks active row in [DRAM row buffer](Main%20Memory.md). (May need to activate new DRAM row. Let's assume it does.)
 14. DRAM reads values into row buffer
 15. Memory arbitrates for data bus
 16. Memory wins bus
@@ -32,4 +32,6 @@ This list is certainly not complete
 
 # References
 
-- [CMU 15-418/15-618 Parallel Computer Architecture and Programming](References.md#CMU%2015-418/15-618%20Parallel%20Computer%20Architecture%20and%20Programming)
+- [Snooping-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopcoherence)
+- [Directory-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/dircoherence)
+- [A Basic Snooping-Based Multi-Processor Implementation: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopimpl)

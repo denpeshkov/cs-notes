@@ -5,9 +5,9 @@ tags:
 
 # Steps
 
-![compilation steps](compilation%20steps.png)
 
-# Pre-compilation
+
+## Pre-processing
 
 Expand compiler directives e.g. `#define`, `#include`
 
@@ -15,7 +15,7 @@ Expand compiler directives e.g. `#define`, `#include`
 gcc -E > out
 ```
 
-# Compilation
+## Compilation
 
 Compiles the `.c` source code file to a `.s` assembly code file
 
@@ -23,7 +23,7 @@ Compiles the `.c` source code file to a `.s` assembly code file
 gcc -S prog.c
 ```
 
-# Assembly
+## Assembly
 
 Converts the `.s` assembly code file to a `.o` relocatable binary object code file. `gcc` on Unix and Linux produces [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format) object files
 
@@ -32,7 +32,7 @@ gcc -c prog.c
 objdump -d prog.o
 ```
 
-# Linking
+## Linking
 
 Links the `.o` files together along with `.a` and `.so` library files to create a `.out` executable file  
 The `.o` files inside the `.a` **static library** archive get embedded inside the resulting `.out` file  
@@ -49,7 +49,7 @@ objdump prog.out
 gcc -o prog prog.c -lmylib
 ```
 
-# Runtime Linking
+### Runtime Linking
 
 Performs dynamic linking of `.so` library files during the execution of `.out` file  
 The `ldd` utility lists an executable file's shared object dependencies:

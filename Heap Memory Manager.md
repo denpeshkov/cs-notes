@@ -16,4 +16,4 @@ tags:
 
 # References
 
-- [Caltech CS24-Sp18 Introduction-To-Computing-System - YouTube](References.md#Caltech%20CS24-Sp18%20Introduction-To-Computing-System%20-%20YouTube)
+- [CS24-Sp18-Introduction-To-Computing-System - YouTube](https://youtube.com/playlist?list=PL3swII2vlVoXiqUBV524pKEsP1iBN4UBU&si=B_w5UOwuIXVU-pq_)

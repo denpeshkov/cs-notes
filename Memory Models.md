@@ -17,7 +17,7 @@ A hardware memory model specifies hardware guarantees for a programmer writing a
 
 A multiprocessor is **sequentially consistent** if the result of **any** execution is the same as if the operations of all the CPUs were executed in some sequential order, and the operations of each individual CPU occur in this sequence in the **program order**
 
-Every process appears to issue and complete [memory](Random%20Access%20Memory.md) operations one at a time and **atomically** in **program order**. It should appear globally as if one operation in the consistent **interleaved order** executes and completes before the next one begins
+Every process appears to issue and complete [memory](Main%20Memory.md) operations one at a time and **atomically** in **program order**. It should appear globally as if one operation in the consistent **interleaved order** executes and completes before the next one begins
 
 Two constraints:
 
@@ -38,7 +38,7 @@ Synchronization is needed if we want to preserve **atomicity** (mutual exclusion
 
 ## Total Store Order (x86-TSO)
 
-All the CPUs are still connected to a single shared memory, but each CPU queues writes to the [memory](Random%20Access%20Memory.md) in a local **write queue**. The CPU continues executing new instructions while the writes make their way out to the shared memory. A memory read on one CPU consults the local write queue before consulting main memory, but it cannot see the write queues on other CPUs. The effect is that a CPU sees its own writes before others do
+All the CPUs are still connected to a single shared memory, but each CPU queues writes to the [memory](Main%20Memory.md) in a local **write queue**. The CPU continues executing new instructions while the writes make their way out to the shared memory. A memory read on one CPU consults the local write queue before consulting main memory, but it cannot see the write queues on other CPUs. The effect is that a CPU sees its own writes before others do
 
 All the CPUs agree on the **total order** in which writes reach the shared memory. At the moment that a write reaches shared memory, any future read on any CPU will see it and use that value (until it is overwritten by a later write, or perhaps by a buffered write from another CPU)
 

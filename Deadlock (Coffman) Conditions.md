@@ -2,7 +2,7 @@
 tags: Concurrency 
 ---
 
-# Overview
+# Coffman Conditions
 
 Conditions that must be present for deadlock to arise:
 

@@ -13,7 +13,7 @@ I/O devices are connected to the CPU via **I/O bus**
 
 ## Port-Mapped I/O (PMIO)
 
-I/O devices use a separate address space from [main memory](Random%20Access%20Memory.md), either accomplished by an extra I/O pin on the CPU, or an entire bus dedicated to I/O
+I/O devices use a separate address space from [main memory](Main%20Memory.md), either accomplished by an extra I/O pin on the CPU, or an entire bus dedicated to I/O
 
 Uses explicit CPU instructions to perform I/O `in`/`out`
 
@@ -21,9 +21,9 @@ Such instructions are privileged and can be used only by the OS
 
 ## Memory-Mapped I/O (MMIO)
 
-I/O devices use the same address space as [main memory](Random%20Access%20Memory.md)
+I/O devices use the same address space as [main memory](Main%20Memory.md)
 
-The memory and registers of the I/O device are mapped to address values, so a memory address may refer to either a portion of [RAM](RAM) or to memory and [registers](#Memory%20Mapped%20Registers) of the device
+The memory and registers of the I/O device are mapped to address values, so a memory address may refer to either a portion of [RAM](Main%20Memory.md) or to memory and [registers](#Memory%20Mapped%20Registers) of the device
 
 Uses the same CPU instructions to access both RAM and devices `mov`
 
@@ -49,7 +49,7 @@ Each data item transfer is initiated by an instruction in the program, involving
 
 1. Issue read/write command to I/O device
 2. Repeatedly check (poll) status register until the device is ready
-3. Perform read/write request between the device and [RAM](Random%20Access%20Memory.md)
+3. Perform read/write request between the device and [RAM](Main%20Memory.md)
 4. If there is more data, repeat with step 1
 
 Inefficient because it spends a lot of time polling and moving data, waisting CPU resources
@@ -57,7 +57,7 @@ Inefficient because it spends a lot of time polling and moving data, waisting CP
 ### Interrupt-driven
 
 1. Issue read/write command to I/O device
-2. On [interrupt](Exceptional%20Control%20Flow.md), perform read/write request between the device and [RAM](Random%20Access%20Memory.md)
+2. On [interrupt](Exceptional%20Control%20Flow.md), perform read/write request between the device and [RAM](Main%20Memory.md)
 3. If there is more data, repeat with step 1
 
 Inefficient because it spends a lot of time moving data, waisting CPU resources
@@ -95,4 +95,3 @@ Write about network I/O #TODO
 - [Programmed input–output - Wikipedia](https://en.wikipedia.org/wiki/Programmed_input–output)
 - [I/O Techniques - Overview](http://inputoutput5822.weebly.com)
 - [Operating Systems Three Easy Pieces. Remzi H Arpaci-Dusseau, Andrea C Arpaci-Dusseau](References.md#Operating%20Systems%20Three%20Easy%20Pieces.%20Remzi%20H%20Arpaci-Dusseau,%20Andrea%20C%20Arpaci-Dusseau)
-- [CMU 15-418/15-618 Parallel Computer Architecture and Programming](References.md#CMU%2015-418/15-618%20Parallel%20Computer%20Architecture%20and%20Programming)

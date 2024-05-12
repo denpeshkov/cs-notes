@@ -16,9 +16,9 @@ type iface struct {
 }
 ```
 
-The first word `tab` is a pointer to an **itable**, which contains information about the type of the interface, as well as the type of the data it points to
+The first word `tab` is a pointer to an **itable**, which contains information about the type of the interface, the type of the data it points to and a virtual method table
 
-The second word `data` is a pointer to the value (copy of the original) held by the interface. Values stored in interfaces might be arbitrarily large, but only one word is dedicated to holding the value in the interface structure, so the assignment allocates a chunk of memory on the heap and records the pointer in the `data` field
+The second word `data` is a pointer to the value (copy of the original) held by the interface. Values stored in interfaces might be arbitrarily large, but only one word is dedicated to holding the value in the interface structure, so the assignment allocates a chunk of memory on the [heap](Heap%20Memory.md) and records the pointer in the `data` field
 
 Note that `data` points to the **copy of a value** used in the assignment. For example, copying an interface value (passing interface as a parameter) makes a copy of the value stored in the interface  
 A copy is used because if a variable later changes, the pointer should have the old value, not the new one
@@ -106,26 +106,30 @@ type eface struct {
 
 As an optimization, the Go runtime maintains an array of small integers. If an interface is instantiated from one of these small integers, it points to an element of this array, thereby preventing runtime allocation
 
-In Russ Cox [blog post](https://research.swtch.com/interfaces) it is stated that if the actual value fits in a single word, it is stored in the second word directly without indirection or heap allocation. However, this is no longer true, as it caused race conditions in concurrent GC and ambiguity about whether the data word holds a pointer or scalar ( #todo elaborate further). So interfaces **always** store the pointer in the `data` field
+In Russ Cox [blog post](https://research.swtch.com/interfaces) it is stated that if the actual value fits in a single word, it is stored in the second word directly without indirection or [heap](Heap%20Memory.md) allocation. However, this is no longer true, as it caused race conditions in concurrent GC and ambiguity about whether the data word holds a pointer or scalar ( #todo elaborate further). So interfaces **always** store the pointer in the `data` field
 
 # Heap Allocations and Escape Analysis
 
-When a method is called via an interface value instead of directly through a struct, the compiler **generally** lacks knowledge of the method's implementation at compile time. Consequently, escape analysis cannot confirm that the value doesn't escape, leading to heap allocations (there are [optimizations](#Optimizations)) even for scalar types like `int`s, `float`s, `string`s
+When a method is called via an interface value instead of directly through a struct, the compiler **generally** lacks knowledge of the method's implementation at compile time. Consequently, escape analysis cannot confirm that the value doesn't escape, leading to [heap](Heap%20Memory.md) allocations (there are [optimizations](#Optimizations)) even for scalar types like `int`s, `float`s, `string`s
 
-In some cases, the compiler can prove the concrete type of the value stored in the interface and **devirtualize** a method call, avoiding heap allocations
+In some cases, the compiler can prove the concrete type of the value stored in the interface and **devirtualize** a method call, avoiding [heap](Heap%20Memory.md) allocations
 
-## Context Key
+Putting a [zero-width type](Go%20Zero-Sized%20Values.md), e.g. `struct{}`, in an interface value doesn't allocate
 
-There are couple of ways to avoid allocation when assigning context key to `any` in `WithValue` call:
+## Avoiding Allocation for Context Key
+
+There are couple of ways to avoid allocation when passing context key to `any` in `context.WithValue` call:
 
 ```go
-type keyInt int // because small ints are shared by runtime, most of the keys won't cause allocation
+// small ints are shared by runtime, most of the keys won't cause allocation
+type keyInt int
 const (
 	k1 = keyInt(iota + 1)
 	k2
 )
 
-type keyString string // strings are not shared by runtime
+// strings are not shared by runtime
+type keyString string
 // use const to avoid allocations
 const (
 	k3 = keyString("k3")
@@ -150,6 +154,16 @@ var (
 
 ```
 
+# Addressability
+
+The concrete value stored in an interface is not addressable (it's a copy), in the same way that a [map element is not addressable](Go%20Map%20Internals.md#Addressability)
+
+Therefore, when you call a method on an interface, it must either have an identical receiver type or it must be directly discernible from the concrete type: 
+
+- Pointer and value receiver methods can be called with pointers and values respectively
+- Value receiver methods can be called with pointer values because they can be dereferenced first
+- Pointer receiver methods cannot be called with values
+
 # References
 
 - [research!rsc: Go Data Structures: Interfaces](https://research.swtch.com/interfaces)
@@ -159,7 +173,10 @@ var (
 - [Chapter II: Interfaces - Go Internals](https://cmc.gitbook.io/go-internals/chapter-ii-interfaces#anatomy-of-an-interface)
 - [Internals of Interfaces in Golang | Intermediate level - YouTube](https://youtu.be/x87Cs9vU4Fk?si=xYrKUEtrWuPlMCTC)
 - [Source code: type.go](https://github.com/golang/go/blob/master/src/internal/abi/type.go#L478)
-- [Computer Systems A Programmer's Perspective, Global Edition (3rd ed). Randal E. Bryant, David R. O'Hallaron](References.md#Computer%20Systems%20A%20Programmer's%20Perspective,%20Global%20Edition%20(3rd%20ed).%20Randal%20E.%20Bryant,%20David%20R.%20O'Hallaron)
 - [Lec08 Allocation Strategies - YouTube](https://youtu.be/s0j8U-NsbqQ?si=XkwGYR3xzurHEp_j)
 - [Lec09 Implicit Allocators Indirection And References - YouTube](https://youtu.be/GH7MGNAuwaQ?si=xxh8N3d80fmgN2qo)
 - [GopherCon Europe 2023: Jonathan Amsterdam - A Fast Structured Logging Package - YouTube](https://www.youtube.com/watch?v=tC4Jt3i62ns)
+- [Generics can make your Go code slower](https://planetscale.com/blog/generics-can-make-your-go-code-slower)
+- [Go Wiki: Compiler And Runtime Optimizations](https://go.dev/wiki/CompilerOptimizations#zero-width-types-in-interface-values)
+- [Go Wiki: MethodSets - The Go Programming Language](https://go.dev/wiki/MethodSets)
+- [Fetching Title#t8ne](https://eli.thegreenplace.net/2022/interface-method-calls-with-the-go-register-abi/)

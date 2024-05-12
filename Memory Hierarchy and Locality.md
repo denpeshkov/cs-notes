@@ -9,7 +9,9 @@ tags:
 
 **Temporal locality** - A memory location that is referenced once is likely to be referenced again multiple times in the near future
 
-# Memory Hierarchy And Cache Management
+Memory locality means that to increase performance, accesses should be satisfied by upper memory layers
+
+# Memory Hierarchy And Management
 
 Upper layers [typically](Cache%20Memory.md#Cache%20Inclusion%20Policy) store smaller subsets of data from lower layers but have faster access. Due to locality, accesses are often satisfied by upper layers
 
@@ -21,10 +23,10 @@ Memory management:
 
 Data is always copied back and forth between level $k$ and level $k + 1$ in block-size transfer units:
 
-- From [cache](Cache%20Memory.md) to register in words
-- From lower [cache](Cache%20Memory.md) to higher cache in cache lines
-- From [RAM](Random%20Access%20Memory.md) to cache in cache lines
-- From [disk](Input-Output%20Devices.md) to [RAM](Random%20Access%20Memory.md) in disk blocks
+- From L1 [cache](Cache%20Memory.md) to registers in 64-bits words
+- From lower [cache](Cache%20Memory.md) to higher level cache in 64-bytes cache data blocks
+- From [RAM](Main%20Memory.md) to cache in 64-bytes cache data blocks
+- From [disk](Input-Output%20Devices.md) to [RAM](Main%20Memory.md) in disk blocks
 
 # References
 

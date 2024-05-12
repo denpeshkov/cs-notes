@@ -9,7 +9,7 @@ tags:
 
 All coherence-related activity is broadcasted to all cache controllers in the system
 
-The caches are all accessible via [broadcast interconnect](Interconnection%20Network.md) (e.g., [bus](Random%20Access%20Memory.md) or [network](Network.md)), and all cache controllers monitor or **snoop** the interconnect to determine whether or not they have a copy of a block that is requested
+The caches are all accessible via [broadcast interconnect](Interconnection%20Network.md) (e.g., [bus](Main%20Memory.md) or [network](Network.md)), and all cache controllers monitor or **snoop** the interconnect to determine whether or not they have a copy of a block that is requested
 
 Because the interconnect is shared, only one CPU can **acquire** medium access and have **exclusive** access for writing at a time. Medium arbitration and acquisition enforce [write serialization](Cache%20Coherency.md)
 
@@ -95,4 +95,6 @@ Allows sending dirty cache lines directly between caches instead of writing back
 - [False sharing - Wikipedia](https://en.wikipedia.org/wiki/False_sharing#:~:text=False%20sharing%20is%20an%20inherent,is%20limited%20to%20RAM%20caches.)
 - [High Performance Computer Architecture: Part 5 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPkr-vo9gKBTid_BWpWEfuXe&si=TH5JP0CVKX9_TSQJ)
 - [Computer Organization and Design RISC-V Edition The Hardware Software Interface (2nd ed). David A. Patterson, John L. Hennessy](References.md#Computer%20Organization%20and%20Design%20RISC-V%20Edition%20The%20Hardware%20Software%20Interface%20(2nd%20ed).%20David%20A.%20Patterson,%20John%20L.%20Hennessy)
-- [CMU 15-418/15-618 Parallel Computer Architecture and Programming](References.md#CMU%2015-418/15-618%20Parallel%20Computer%20Architecture%20and%20Programming)
+- [Snooping-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopcoherence)
+- [Directory-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/dircoherence)
+- [A Basic Snooping-Based Multi-Processor Implementation: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopimpl)

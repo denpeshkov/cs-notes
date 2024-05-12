@@ -4,7 +4,7 @@ tags: Go
 
 # Overview
 
-Use an unexported, zero-width, non-comparable field to prevent clients from comparing a `struct`:
+Use an unexported, [zero-width](Go%20Zero-Sized%20Values.md), non-comparable field to prevent clients from comparing a `struct`:
 
 ```go
 type S struct {

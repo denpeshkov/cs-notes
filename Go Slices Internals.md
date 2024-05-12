@@ -34,7 +34,7 @@ slice {
 
 ## Empty Slice
 
-Empty slice is just a slice with `len` and `cap` equal to 0 and `array` pointing to 'zero-sized' array:
+Empty slice is just a slice with `len` and `cap` equal to 0 and `array` pointing to [zero-sized](Go%20Zero-Sized%20Values.md) array:
 
 ```go
 slice {
@@ -44,13 +44,14 @@ slice {
 }
 ```
 
-The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations. See [Go Zero-Sized Values](Go%20Zero-Sized%20Values.md)
+The value of the `array` is the address of the `runtime.zerobase`, the base address for all 0-byte allocations
 
 # Grow Factor
 
 The slices grow as follows:
 
 ```
+const threshold = 256
 if cap < threshold {
 	cap = cap*2
 } else {

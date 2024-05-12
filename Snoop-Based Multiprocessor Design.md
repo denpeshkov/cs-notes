@@ -7,7 +7,7 @@ tags:
 
 # Overview
 
-This document explores techniques for implementing the basic [snooping protocol](Snooping%20Cache%20Coherence%20Protocols.md) using [single-level and multi-level](Memory%20Hierarchy%20and%20Locality.md) caches and shared atomic and non-atomic [buses](Random%20Access%20Memory.md)
+This document explores techniques for implementing the basic [snooping protocol](Snooping%20Cache%20Coherence%20Protocols.md) using [single-level and multi-level](Memory%20Hierarchy%20and%20Locality.md) caches and shared atomic and non-atomic [buses](Main%20Memory.md)
 
 # Single-Level Cache with Atomic Bus
 
@@ -35,7 +35,7 @@ Another approach is **dual-ported** RAM for the state and tags
 [MESI](Snooping%20Cache%20Coherence%20Protocols.md#MESI) relies on information from other caches:
 
 - If a line is in other CPUs caches, the line should transition to **S** state instead of **E**
-- If a line is in **M** state in any cache, [memory](Random%20Access%20Memory.md) should not respond
+- If a line is in **M** state in any cache, [memory](Main%20Memory.md) should not respond
 
 Three additional bus OR-lines are added:
 
@@ -380,7 +380,9 @@ Because a response cannot be blocked by another request (cache services respond 
 
 # References
 
-- [CMU 15-418/15-618 Parallel Computer Architecture and Programming](References.md#CMU%2015-418/15-618%20Parallel%20Computer%20Architecture%20and%20Programming)
 - [Parallel Computer Architecture A Hardware/Software Approach (1st ed). David Culler, Jaswinder Pal Singh, Anoop Gupta](References.md#Parallel%20Computer%20Architecture%20A%20Hardware/Software%20Approach%20(1st%20ed).%20David%20Culler,%20Jaswinder%20Pal%20Singh,%20Anoop%20Gupta)
 - [Computer Organization and Design RISC-V Edition The Hardware Software Interface (2nd ed). David A. Patterson, John L. Hennessy](References.md#Computer%20Organization%20and%20Design%20RISC-V%20Edition%20The%20Hardware%20Software%20Interface%20(2nd%20ed).%20David%20A.%20Patterson,%20John%20L.%20Hennessy)
 - [Cache inclusion policy - Wikipedia](https://en.wikipedia.org/wiki/Cache_inclusion_policy)
+- [Snooping-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopcoherence)
+- [Directory-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/dircoherence)
+- [A Basic Snooping-Based Multi-Processor Implementation: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopimpl)

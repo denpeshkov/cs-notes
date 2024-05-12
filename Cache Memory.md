@@ -3,34 +3,40 @@ tags:
   - OS_Arch
 ---
 
+# Cache Hierarchy
+
+![Intel Core i7 cache hierarchy.png|500](Intel%20Core%20i7%20cache%20hierarchy.png)
+
+The L1 cache is usually split into two parts: the instruction cache (L1i) and the data cache (L1d). This division allows for a better utilization of locality since instructions and data are handled separately
+
 # Cache Memory Organization
 
-Caches save a *subset* of data from a lower level. If we could save all the data, we wouldn't need caches
+Caches save a *subset* of data from a lower level
 
-| Parameter | Description |
-| --- | --- |
-| $S=2^s$ | Number of sets |
-| $s=\lg S$ | Number of set bits |
-| $E$ | Number of cache lines per set |
-| $B=2^b$ | Block size (bytes) |
-| $m=\lg M$ | Number of physical (main memory) address bits |
-| $b=\lg B$ | Number of block offset bits |
-| $t=m-(s+b)$ | Number of tag bits |
-| $C=B×E×S$ | Cache size (bytes), not including overhead such as the valid and tag bits |
+| Parameter   | Description                                                               |
+| ----------- | ------------------------------------------------------------------------- |
+| $S=2^s$     | Number of sets                                                            |
+| $s=\lg S$   | Number of set bits                                                        |
+| $E$         | Number of cache lines per set                                             |
+| $B=2^b$     | Block size (bytes)                                                        |
+| $m=\lg M$   | Number of physical (main memory) address bits                             |
+| $b=\lg B$   | Number of block offset bits                                               |
+| $t=m-(s+b)$ | Number of tag bits                                                        |
+| $C=B×E×S$   | Cache size (bytes), not including overhead such as the valid and tag bits |
 
 ![general organization of cache.png|700](general%20organization%20of%20cache.png)
 
-Middle bits are used for the index because it allows contiguous blocks to be mapped to different cache sets, optimizing locality
+Middle $s$ bits are used for the set index because it allows contiguous blocks to be spread more evenly among cache sets. Index­ing with the high­-order bits would cause contiguous memory blocks to all map to the same cache set, leaving the rest of the cache unused
 
-The cache stores and loads the whole **cache line** from/to lower levels. See: [Memory Hierarchy and Locality](Memory%20Hierarchy%20and%20Locality.md)
+The cache stores and loads the whole cache data block (cache line) from/to [lower levels](Memory%20Hierarchy%20and%20Locality.md)
 
----
+## Cache Data Block Starting Address
 
-See [Snoop-Based Multiprocessor Design](Snoop-Based%20Multiprocessor%20Design.md) for implementation details
+Cache data blocks are [$B$-bytes aligned](Data%20Alignment.md), for example, for a block of size $B$=64 bytes the starting address can be 0, 64, 128, etc
+
+Without this alignment requirement, set selection would be complex due to one cache data block spanning multiple set index bits. For example, if $B$=8, $S$=4, $E$=1, and block spans addresses $0x0002,\dotsc,0x000A$, then the block would occupy two set index bits: $0x00$ and $0x01$ #TODO
 
 # Request Processing
-
-The word $w$ refers to the memory location of the data we want to read or write (update)
 
 ## Set Selection
 
@@ -48,23 +54,23 @@ If the set is full, we need to **replace** (**evict**) some line based on the **
 
 ## Word Extraction
 
-Cache data block size is larger than $w$ size, so we need to determine where in a cache block the $w$ is contained
+Cache data block size $B$ is larger than word size, so we need to determine where in a cache block the word $w$ is contained
 
 # Direct-Mapped Cache Request Processing
 
-A cache with $E=1$ - one cache line per set
+A cache with one cache line per set: $E=1$
 
 ## Set Selection
 
-Set bits are interpreted as an unsigned integer that corresponds to a set number
+Set index bits in the address of $w$ are interpreted as an unsigned integer that corresponds to a set number
 
 ![direct-mapped cache set selection.png|600](direct-mapped%20cache%20set%20selection.png)
 
 ## Line Matching and Word Extraction
 
-$w$ is contained in the line if and only if the valid bit is set, and the tag bits in the cache line match the tag bits in $w$
+The word $w$ is contained in the line if and only if the valid bit is set, and the tag bits in the cache line match the tag bits in the address of $w$
 
-Block offset bits determine the offset of the **first byte** of the requested data
+Block offset bits in the address of $w$ determine the offset of the *first byte* in the word $w$
 
 ![direct-mapped cache line matching word extraction.png|600](direct-mapped%20cache%20line%20matching%20word%20extraction.png)
 
@@ -74,59 +80,55 @@ There is only one cache line per set, so the current line is replaced by the new
 
 # Set Associative Cache Request Processing
 
-A cache with $1 < E < \frac{C}{B}$ - several cache lines per set
+A cache with several cache lines per set: $1 < E < \frac{C}{B}$
 
 ## Set Selection
 
-Set bits are interpreted as an unsigned integer that corresponds to a set number
+Set index bits in the address of $w$ are interpreted as an unsigned integer that corresponds to a set number
 
 ![set associative cache set selection.png|600](set%20associative%20cache%20set%20selection.png)
 
 ## Line Matching and Word Extraction
 
-The requested word is contained in the line if and only if the valid bit is set, and the tag bits in the cache line match the tag bits in the address of the word
+The word $w$ is contained in the line if and only if the valid bit is set, and the tag bits in the cache line match the tag bits in the address of $w$
 
 Because there are multiple lines in the set, check each line in parallel. Circuitry becomes more complex
 
-Block offset bits determine the offset of the **first byte** of the requested data
+Block offset bits in the address of $w$ determine the offset of the *first byte* in the word $w$
 
 ![set associative cache line matching word extraction.png|600](set%20associative%20cache%20line%20matching%20word%20extraction.png)
 
 ### Line Replacement
 
-The line to be replaced is chosen by the replacement policy (**LRU**, **LFU**) among the lines in the set
-
-Need to store additional information to support replacement: access counters, age bits, etc.
+The line to be replaced is chosen by the replacement policy (**LRU**, **LFU**) among the lines in the set. Need to store additional information to support replacement: access counters, age bits, etc.
 
 # Fully Associative Cache Request Processing
 
-A cache with $E=\frac{C}{B}$ - one set containing all cache lines
+A cache with one set containing all cache lines: $E=\frac{C}{B}$
 
 ## Set Selection
 
-There is only one set and no set bits, so it is always selected
+There is only one set and no set bits in the address of $w$, so it is always selected
 
 ![fully associative cache set selection.png|600](fully%20associative%20cache%20set%20selection.png)
 
 ## Line Matching and Word Extraction
 
-The requested word is contained in the line if and only if the valid bit is set, and the tag bits in the cache line match the tag bits in the address of the word
+The word $w$ is contained in the line if and only if the valid bit is set, and the tag bits in the cache line match the tag bits in the address of $w$
 
 We need to check all cache lines in parallel. Circuitry becomes very complex
 
-Block offset bits determine the offset of the **first byte** in the requested word
+Block offset bits in the address of $w$ determine the offset of the *first byte* in the word $w$
 
 ![fully associative cache line matching word extraction.png|600](fully%20associative%20cache%20line%20matching%20word%20extraction.png)
 
 ### Line Replacement
 
-The line to be replaced is chosen by the replacement policy (**LRU**, **LFU**) among all the lines
-
-Need to store additional information to support replacement: access counters, age bits, etc.
+The line to be replaced is chosen by the replacement policy (**LRU**, **LFU**) among all the lines. Need to store additional information to support replacement: access counters, age bits, etc.
 
 # Write-Hit Policies
 
-When we write a word $w$ to the cache that already has its copy cached (**write hit**), we must update the copy of the data in the next lower level of the memory hierarchy
+When we write the word $w$ to the cache that already has its copy cached (**write hit**), we must update the copy of the data in the next lower level of the memory hierarchy
 
 ## Write-Through
 
@@ -157,7 +159,7 @@ The solution is a **write buffer**:
 
 # Write-Miss Policies
 
-When we write a word $w$ to the cache that doesn't have it cached (**write miss**), we must decide whether to load the data to the cache since no data is returned on write operations
+When we write the word $w$ to the cache that doesn't have it cached (**write miss**), we must decide whether to load the data to the cache since no data is returned on write operations
 
 ## Write Allocate
 
@@ -211,7 +213,7 @@ Instructions use [virtual addresses](Virtual%20Memory.md), caches can use virtua
 
 Use the physical address for both the index and the tag
 
-Simple but slow because the need to translate to a virtual address, which may involve a [TLB](Virtual%20Memory.md) miss and [RAM](Random%20Access%20Memory.md) access
+Simple but slow because the need to translate to a virtual address, which may involve a [TLB](Virtual%20Memory.md) miss and [RAM](Main%20Memory.md) access
 
 ## Virtually Indexed, Virtually Tagged (VIVT)
 
@@ -235,7 +237,7 @@ The advantage over VIVT is that since the tag has the physical address, the cach
 
 ## Physically Indexed, Virtually Tagged (PIVT)
 
-Useless
+Useless and not used in practice
 
 # Types of Misses
 
@@ -261,41 +263,12 @@ Misses due to [invalidations](Cache%20Coherency.md) when using [invalidation cac
 
 # Prefetching
 
-Write about CPU prefetching #TODO
+A technique used by CPU to boost execution performance by fetching instructions or data into caches before it is actually needed
 
-# Cache Hierarchy
+Cache prefetching can be accomplished either by hardware or by software:
 
-![Intel Core i7 cache hierarchy.png|500](Intel%20Core%20i7%20cache%20hierarchy.png)
-
-| Characteristic | Intel Core i7 |
-| --- | --- |
-| L1 cache organization | Split instruction and data caches |
-| L1 cache size | 32 KiB each for instructions/data per core |
-| L1 cache associativity | Eight-way (I), eight-way (D) set associative |
-| L1 replacement | Approximated LRU |
-| L1 block size | 64 bytes |
-| L1 write policy | Write-back, No-write-allocate |
-| L1 hit time (load-use) | 4 clock cycles, pipelined |
-| L2 cache organization | Unified (instruction and data) per core |
-| L2 cache size | 256 KiB |
-| L2 cache associativity | 4-way set associative |
-| L2 replacement | Approximated LRU |
-| L2 block size | 64 bytes |
-| L2 write policy | Write-back, Write-allocate |
-| L2 hit time | 12 clock cycles |
-| L3 cache organization | Unified (instruction and data) |
-| L3 cache size | 2 MiB/core shared |
-| L3 cache associativity | 16-way set associative |
-| L3 replacement | Approximated LRU |
-| L3 block size | 64 bytes |
-| L3 write policy | Write-back, Write-allocate |
-| L3 hit time | 44 clock cycles |
-
-## Data and Instruction Caches
-
-The L1 cache is usually split into two parts: the instruction cache (L1i) and the data cache (L1d)
-
-This division allows for a better utilization of locality since instructions and data are handled separately
+- **Hardware based prefetching** is accomplished by having a **prefetcher** in the CPU that watches the stream of instructions or data, recognizes the next few elements that the program might need based on this stream and prefetches into the cache
+- **Software based prefetching** is accomplished by inserting *prefetch instructions* in the program during compilation. For example, intrinsic function `__builtin_prefetch` in *GCCoco*
 
 # References
 
@@ -306,4 +279,10 @@ This division allows for a better utilization of locality since instructions and
 - [Cache (computing) - Wikipedia](https://en.wikipedia.org/wiki/Cache_(computing))
 - [Cache inclusion policy - Wikipedia](https://en.wikipedia.org/wiki/Cache_inclusion_policy)
 - [CPU cache - Wikipedia](https://en.wikipedia.org/wiki/CPU_cache)
-- [CMU 15-418/15-618 Parallel Computer Architecture and Programming](References.md#CMU%2015-418/15-618%20Parallel%20Computer%20Architecture%20and%20Programming)
+- [Snooping-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopcoherence)
+- [Directory-Based Cache Coherence: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/dircoherence)
+- [A Basic Snooping-Based Multi-Processor Implementation: CMU 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/lecture/snoopimpl)
+- [High Performance Computer Architecture: Part 3 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPnhRXZ6wuHnnclMLfg_yjHs&si=_V-bFdZZY_2ESA8Z)
+- [High Performance Computer Architecture: Part 4 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPn79fsplIuZG34KwbkYSedj&si=qiq0hc8ubwKI-j54)
+- [Cache prefetching - Wikipedia](https://en.wikipedia.org/wiki/Cache_prefetching)
+- [Cache Block Start Addr - Georgia Tech - HPCA: Part 3 - YouTube](https://www.youtube.com/watch?v=XPgT3arcoTg&list=PLAwxTw4SYaPnhRXZ6wuHnnclMLfg_yjHs&index=130)

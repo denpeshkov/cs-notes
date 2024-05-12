@@ -7,9 +7,9 @@ aliases:
 
 # Overview
 
-ABI describes how data structures or computational routines are accessed in machine code. ABI includes the following:
+ABI describes how data structures and computational routines are accessed in machine code. ABI includes the following:
 
-- CPU instruction set, with details like register file structure, [stack organization](Stack%20and%20Subroutine%20Calling.md), memory access types
+- CPU instruction set, with details like register file structure, [stack organization](Call%20Stack.md), memory access types
 - Sizes, layouts, and [alignments](Data%20Alignment.md) of basic data types that the CPU can directly access
 - [Calling convention](Calling%20Convention.md)
 - How an application should make [system calls](System%20Calls.md) to the OS

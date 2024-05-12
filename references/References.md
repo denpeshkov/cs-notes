@@ -26,10 +26,12 @@
 
 # Web
 
-#### CMU 15-418/15-618: Parallel Computer Architecture and Programming
-
-https://www.cs.cmu.edu
-
-#### Caltech CS24-Sp18:Introduction-To-Computing-System - YouTube
-
-https://youtube.com/playlist?list=PL3swII2vlVoXiqUBV524pKEsP1iBN4UBU&si=ex_WTG8OTew1Kwqu
+- [Parallel Computer Architecture and Programming : 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/home)
+- [ICS-CMU - YouTube](https://youtube.com/playlist?list=PLbY-cFJNzq7z_tQGq-rxtq_n2QQDf5vnM&si=Aho13d2mFipqoat-)
+- [CS24-Sp18-Introduction-To-Computing-System - YouTube](https://youtube.com/playlist?list=PL3swII2vlVoXiqUBV524pKEsP1iBN4UBU&si=W05Kq1ojsdqr1a9Q)
+- [High Performance Computer Architecture: Part 1 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPmqpjgrmf4-DGlaeV0om4iP&si=APuxrruiKg0IZgh6)
+- [High Performance Computer Architecture: Part 2 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPkNw98-MFodLzKgi6bYGjZs&si=DMJ5XtWJVKpxn8LU)
+- [High Performance Computer Architecture: Part 3 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPnhRXZ6wuHnnclMLfg_yjHs&si=OSnRMobAwO4ZGCyi)
+- [High Performance Computer Architecture: Part 4 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPn79fsplIuZG34KwbkYSedj&si=qY0J6O-SVuJREoLO)
+- [High Performance Computer Architecture: Part 5 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPkr-vo9gKBTid_BWpWEfuXe&si=6ObjEDr_Eep0fIJx)
+- [High Performance Computer Architecture: Part 6 - YouTube](https://youtube.com/playlist?list=PLAwxTw4SYaPndXEsI4kAa6BDSTRbkCKJN&si=1lZp9m--GsLft_40)
