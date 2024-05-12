@@ -1,5 +1,8 @@
 ---
-tags: AlgsDs Concurrency TODO
+tags:
+  - AlgsDs
+  - Concurrency
+  - TODO
 ---
 
 # References

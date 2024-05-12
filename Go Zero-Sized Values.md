@@ -1,5 +1,6 @@
 ---
-tags: Go
+tags:
+  - Go
 ---
 
 # Allocation of Zero-Sized Values

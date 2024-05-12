@@ -1,5 +1,7 @@
 ---
-tags: AlgsDs TODO 
+tags:
+  - AlgsDs
+  - TODO
 ---
 
 # References

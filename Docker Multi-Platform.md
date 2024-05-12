@@ -8,14 +8,17 @@ tags:
 ## [Emulation](https://docs.docker.com/build/guide/multi-platform/#build-using-emulation)
 
 Using **QEMU** which is provided with **Docker Desktop**.
+
 The image used in `FROM` must be available on the target platform.
 
 ## [Cross-compilation](https://docs.docker.com/build/guide/multi-platform/#build-using-cross-compilation)
 
 Using image provided capabilities to cross-compile.
+
 `GOOS` and `GOARCH` for Go `build` command #Go.
 
 Use [`ARG`s](https://docs.docker.com/engine/reference/builder/#automatic-platform-args-in-the-global-scope) provided by Docker:
+
 Set using `--platform` flag in `build` command.
 
 - `BUILDPLATFORM` - platform of the host running the build
@@ -28,6 +31,7 @@ Set using `--platform` flag in `build` command.
 # Examples
 
 `go` uses different `Dockerfile` for each arch/OS variant. See: [docker library/golang](https://github.com/docker-library/golang)
+
 `hello-world` uses the same approach: [docker-library/hello-world](https://github.com/docker-library/hello-world)
 
 # References

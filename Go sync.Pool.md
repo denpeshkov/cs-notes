@@ -1,5 +1,8 @@
 ---
-tags: Go Concurrency TODO
+tags:
+  - Go
+  - Concurrency
+  - TODO
 ---
 
 # References

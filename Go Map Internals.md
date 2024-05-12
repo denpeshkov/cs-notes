@@ -1,5 +1,7 @@
 ---
-tags: Go AlgsDs
+tags:
+  - Go
+  - AlgsDs
 ---
 
 # Data Structure Representation

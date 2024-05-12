@@ -1,5 +1,7 @@
 ---
-tags: Go TODO
+tags:
+  - Go
+  - TODO
 ---
 
 # Gist

@@ -1,5 +1,6 @@
 ---
-tags: AlgsDs
+tags:
+  - AlgsDs
 ---
 
 # Algorithm

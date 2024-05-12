@@ -1,5 +1,7 @@
 ---
-tags: Docker TODO
+tags:
+  - Docker
+  - TODO
 ---
 
 # Namespaces

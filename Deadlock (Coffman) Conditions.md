@@ -1,5 +1,6 @@
 ---
-tags: Concurrency 
+tags:
+  - Concurrency
 ---
 
 # Coffman Conditions

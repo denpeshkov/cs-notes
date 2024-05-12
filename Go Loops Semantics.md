@@ -1,5 +1,6 @@
 ---
-tags: Go
+tags:
+  - Go
 ---
 
 # Before Go1.22

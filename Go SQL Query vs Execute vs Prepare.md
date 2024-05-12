@@ -1,5 +1,7 @@
 ---
-tags: Go DB
+tags:
+  - Go
+  - DB
 ---
 
 # Using `DB.Exec`

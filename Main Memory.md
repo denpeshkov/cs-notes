@@ -8,7 +8,9 @@ aliases:
   - DDR
 ---
 
-# DDR4 SDRAM Organization
+# DDR4 SDRAM DIMM Organization
+
+![DIMM organization|500](DIMM%20organization.png)
 
 A **channel** is the physical connection between the memory controller and the DIMM, consisting of data and control/address buses. DDR4 DIMMs have a single channel, while DDR5 has two independent sub-channels per DIMM
 

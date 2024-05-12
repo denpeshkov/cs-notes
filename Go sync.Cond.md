@@ -1,5 +1,7 @@
 ---
-tags: Go Concurrency
+tags:
+  - Go
+  - Concurrency
 ---
 
 # Wait in a Loop

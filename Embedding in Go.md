@@ -1,5 +1,6 @@
 ---
-tags: Go
+tags:
+  - Go
 ---
 
 # Degrading Capability with a More Restrictive Interface
@@ -69,7 +70,7 @@ func logware(h http.HandlerFunc) http.HandlerFunc {
 	}
 }
 ```
-	
+
 We can use the middleware as follows:
 
 ```go
