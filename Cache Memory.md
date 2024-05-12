@@ -1,6 +1,6 @@
 ---
 tags:
-  - OS_Arch
+  - Arch
 ---
 
 # Cache Hierarchy

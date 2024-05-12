@@ -1,6 +1,6 @@
 ---
 tags:
-  - OS_Arch
+  - OS
 aliases:
   - libc
   - ISO C Library

@@ -1,5 +1,9 @@
 ---
-tags: Concurrency OS_Arch TODO 
+tags:
+  - Concurrency
+  - OS
+  - Arch
+  - TODO
 ---
 
 # References

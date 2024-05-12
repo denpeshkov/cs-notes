@@ -1,6 +1,6 @@
 ---
 tags:
-  - OS_Arch
+  - Arch
 ---
 
 # I/O Devices Diagram

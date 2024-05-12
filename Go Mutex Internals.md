@@ -1,5 +1,8 @@
 ---
-tags: Go Concurrency OS_Arch
+tags:
+  - Go
+  - Concurrency
+  - OS
 ---
 
 # Mutex Implementation

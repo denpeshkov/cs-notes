@@ -1,5 +1,9 @@
 ---
-tags: Go OS_Arch TODO Networking
+tags:
+  - Go
+  - OS
+  - TODO
+  - Networking
 ---
 
 # Overview

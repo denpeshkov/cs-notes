@@ -1,7 +1,8 @@
 ---
 tags:
-  - OS_Arch
+  - Arch
   - Concurrency
+  - OS
 ---
 
 # Threads

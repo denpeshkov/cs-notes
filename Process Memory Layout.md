@@ -1,5 +1,8 @@
 ---
-tags: OS_Arch TODO
+tags:
+  - Arch
+  - TODO
+  - OS
 ---
 
 # References

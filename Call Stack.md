@@ -1,6 +1,8 @@
 ---
 tags:
-  - OS_Arch TODO
+  - Arch
+  - TODO
+  - OS
 ---
 
 # Usage

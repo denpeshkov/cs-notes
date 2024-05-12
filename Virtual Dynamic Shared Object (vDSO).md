@@ -1,7 +1,7 @@
 ---
 tags:
-  - OS_Arch
   - TODO
+  - OS
 aliases:
   - vDSO
   - vdso

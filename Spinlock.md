@@ -1,5 +1,8 @@
 ---
-tags: OS_Arch Concurrency TODO 
+tags:
+  - OS
+  - Concurrency
+  - TODO
 ---
 
 # Implementation

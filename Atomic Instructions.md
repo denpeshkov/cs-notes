@@ -1,5 +1,8 @@
 ---
-tags: Concurrency OS_Arch TODO 
+tags:
+  - Concurrency
+  - Arch
+  - TODO
 ---
 
 # Compare-and-Swap (CAS)

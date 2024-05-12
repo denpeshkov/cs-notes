@@ -1,7 +1,7 @@
 ---
 tags:
   - Go
-  - OS_Arch
+  - OS
   - AlgsDs
 ---
 

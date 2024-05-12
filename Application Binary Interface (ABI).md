@@ -1,6 +1,7 @@
 ---
 tags:
-  - OS_Arch
+  - Arch
+  - OS
 aliases:
   - ABI
 ---

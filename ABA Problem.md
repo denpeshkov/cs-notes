@@ -1,5 +1,8 @@
 ---
-tags: OS_Arch Concurrency
+tags:
+  - OS
+  - Arch
+  - Concurrency
 ---
 
 # Overview
