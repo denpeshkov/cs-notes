@@ -68,7 +68,7 @@ That approach also has downsides:
 - Need setters to distinguish between port that is equal to 0 and port that isn't set
 - It can be inconvenient to configure an object after creation, e.g. creating a middleware
 
-## Builder Pattern
+# Builder Pattern
 
 We could use the Builder Pattern:
 

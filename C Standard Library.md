@@ -48,7 +48,7 @@ The combination of the Linux kernel system call interface and a C standard libra
 
 Linux API provides additional capabilities that are not part of POSIX. For example:
 
-- [`cgroups`](Docker%20Architecture%20on%20Linux.md) subsystem,
+- [`cgroups`](Docker%20Architecture.md) subsystem,
 - The system calls [`futex`](https://en.wikipedia.org/wiki/Futex), [`epoll`](https://en.wikipedia.org/wiki/Epoll), [`splice`](https://en.wikipedia.org/wiki/Splice_(system_call)), [`dnotify`](https://en.wikipedia.org/wiki/Dnotify), [`fanotify`](https://en.wikipedia.org/wiki/Fanotify), [`inotify`](https://en.wikipedia.org/wiki/Inotify)
 
 # References

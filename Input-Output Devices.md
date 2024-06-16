@@ -64,6 +64,8 @@ Inefficient because it spends a lot of time moving data, waisting CPU resources
 
 ## Direct Memory Access (DMA)
 
+#todo
+
 CPU first initiates the transfer, then it does other operations while the transfer is in progress, and it finally receives an [interrupt](Exceptional%20Control%20Flow.md) from the DMA controller (**DMAC**) when the operation is done
 
 1. Issue read/write command to I/O device using DMA

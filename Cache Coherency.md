@@ -95,6 +95,16 @@ See:
 - [5.4. Multithreading Problems](http://www.nic.uoregon.edu/~khuck/ts/acumem-report/manual_html/multithreading_problems.html)
 - [A Guide to False Sharing and @Contended | Baeldung](https://www.baeldung.com/java-false-sharing-contended)
 
+# Memory Barriers #todo
+
+See: [MESI protocol - Wikipedia](https://en.wikipedia.org/wiki/MESI_protocol#Invalidate_Queues)
+
+See: [Fetching Title#94da](https://stackoverflow.com/questions/30958375/memory-barriers-force-cache-coherency)
+
+## Store Buffer #todo
+
+## Invalidation Queues #todo
+
 # References
 
 - [Cache coherence - Wikipedia](https://en.wikipedia.org/wiki/Cache_coherence)

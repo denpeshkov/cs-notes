@@ -7,10 +7,10 @@ tags:
 
 # Usage
 
-The stack is implemented by the CPU and is used to save the **return address**, **arguments**, and **local variables** prior to calling the subroutine
+The call stack is implemented by the CPU and is used to save the state of the calling procedure, pass parameters to the called procedure, and store local variables for the currently executing procedure
 
 - Return address is saved on the stack to support nested functions (e.g., recursion)
-- On `x86-64`, up to 6 arguments are passed by **registers**; others are passed on the stack
+- On x86-64, up to 6 arguments are passed by registers; others are passed on the stack
 - Local variables are saved on the stack if no registers are left or if the address of the variable needs to be taken
 
 The stack grows toward lower addresses, and the [heap](Heap%20Memory.md) grows towards higher addresses, allowing the use of as much space as possible before a collision
@@ -19,40 +19,44 @@ The stack allows abstracting the subroutine implementation from the caller. Regi
 
 ![stack frame pointer.png|300](stack%20frame%20pointer.png)
 
-# `push` And `pop` Assembler Instructions
+# Kernel and User Stack
 
-- `push V` pushes a copy of `V` onto the top of the stack
-- `pop Addr` pops the top element off the stack and places it in location `Addr`
+[Kernel space and user space](Exceptional%20Control%20Flow.md) each have their own distinct call stacks. The OS switches between them when transferring control between kernel and user space, e.g. via [interrupts](Exceptional%20Control%20Flow.md). This stack switching is done to prevent privileged procedures from crashing due to insufficient stack space. It also prevents less privileged procedures from interfering with more privileged procedures by sharing the same stack
 
-Often, you can use `mov` instead of `push` and `pop`. For example, `sub SP` to store all values and use `mov` to store values using addresses directly
+# Stack Registers
 
-# Registers
+The stack pointer (contained in `RSP` register) stores the address of the last stack frame - the top of the stack (lowest address)
 
-## Stack Pointer
-
-The `SP` register stores the address of the last stack frame - the top of the stack (lowest address)
-
-## Frame (Base) Pointer
-
-On `x86-64`, `BP` is used only when the stack frame can be of variable size. On `IA32`, most compilers always used `BP`. Recent versions of `GCC` have dropped this convention. `BP` is not really necessary to support VLA but used as a convention. See: [Is BP register really necessary to support Variable-Size Stack Frames? - Stack Overflow](https://stackoverflow.com/a/37584112/15600693)
-
-`BP` is used to have a fixed point to reference variables on the stack. The old `BP` is saved because it's a [callee-saved](Calling%20Convention.md) register
+The stack-frame base pointer (contained in `RBP` register) identifies a fixed reference point within the stack frame for the called procedure. On x86-64 `RBP` is used only when the stack frame can be of variable size. On i386, most compilers always used `EBP`, but recent versions of `GCC` have dropped this convention. The old `RBP` is saved because it's a [callee-saved](Application%20Binary%20Interface%20(ABI).md) register
 
 ![stack no frame pointer.png|300](stack%20no%20frame%20pointer.png)
 
-# `call`, `ret`, `leave` Assembler Instructions
+# Stack Manipulation Instructions
 
-- `call` pushes the address of the next instruction (**return address**) onto the stack and sets `PC` to the address of the called subroutine
-- `ret` pops the **return address** from the stack and stores it into `PC`
-- `leave` deallocates the stack's frame space and restores the old `BP` value. Used only when `BP` is used
+Items are placed on the stack using the `PUSH` instruction and removed from the stack using the `POP` instruction:
+
+- `PUSH` decrements the stack pointer (contained in the `RSP` register), and copies the source operand to the top of stack
+- `POP` copies the value at the current top of stack (indicated by the `RBP` register) to the location specified with the destination operand. It then increments the `RBP` register to point to the new top of stack
+
+# Calling and Return from Procedure
+
+The `CALL` instruction is used to transfer control to the procedure:
+
+1. Pushes the current value of the `RIP` register on the stack
+2. Loads the offset of the called procedure in the `RIP` register
+3. Begins execution of the called procedure
+
+The `RET` instruction is used to return from the called procedure:
+
+1. Pops the top-of-stack value (the return instruction pointer) into the `RIP` register
+2. Resumes execution of the calling procedure
 
 By convention:
 
 - Once a function completes, the stack returns to the state it was in prior to the function call
 - The return value from a subroutine is stored in a register
-- Parameters that are passed on the stack are in reverse order. This allows sensible order - later parameters have bigger offsets from `BP`. It also allows access to fixed arguments (e.g., the number of arguments passed in) when using variadic functions
-
-Old data on the stack from the previous call is usually not cleaned
+- Parameters that are passed on the stack are in reverse order. This allows sensible order - later parameters have bigger offsets from `RBP`. It also allows access to fixed arguments (e.g., the number of arguments passed in) when using variadic functions
+- Old data on the stack from the previous call is usually not cleaned
 
 # Stack Memory Management
 

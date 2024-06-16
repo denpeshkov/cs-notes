@@ -155,7 +155,7 @@ Represents a scheduler itself. Contains a **global run-queue** `schedt.runq` pro
 
 If OS thread `m` itself is blocked, e.g. in a [system call](System%20Calls.md), the scheduler has to handoff `p` to other `m` in order to prevent CPU underutilization
 
-However, not all syscalls are blocking in practice, e.g. [vDSO](Virtual%20Dynamic%20Shared%20Object%20(vDSO).md). Having goroutines go through the full work of releasing their current `p` and then re-acquiring one for these system calls has two problems:
+However, not all system calls are blocking in practice, e.g. [vDSO](System%20Calls.md). Having goroutines go through the full work of releasing their current `p` and then re-acquiring one for these system calls has two problems:
 
 1. There's a bunch of overhead involved in locking (and releasing) all of the data structures involved
 2. If there's more runnable `g`s than `p`s, a `g` that makes a syscall won't be able to re-acquire a `p` and will have to park itself; the moment it released the `p`, something else was scheduled onto it
@@ -179,6 +179,8 @@ The scheduler uses following mechanisms to provide fairness at minimal cost. Fai
 Scheduler uses a 10ms time slice after which it preempts the current goroutine, enqueues it to global `schedt.runq` and schedules another goroutine
 
 To preempt a `g`, a scheduler spoofs `g`s stack limit by setting `g.stackguard0` to `stackPreempt` which causes stack overflow in function [prologue check code](#Goroutine%20Stack). At runtime (already in slow path) scheduler recognizes that actually there is enough stack and it was a preemption signal. This spoof technique is an optimization to reduce the overhead of checking the preemption status on each function invocation explicitly
+
+#todo this allows preemptable scheduler instead of cooperative scheduler used before, where `g`s could be preempted only in specific blocking cases (for example, channel send or receive, I/O, waiting to acquire a mutex)
 
 ### Loop Preemption
 
@@ -234,6 +236,8 @@ Polling used for global run queue is not applicable here, because checking the n
 
 # Goroutines Stack
 
+#todo See: [I don't know where goroutine stacks are allocated in virtual memory : r/golang](https://www.reddit.com/r/golang/comments/1d5jgcd/i_dont_know_where_goroutine_stacks_are_allocated/)
+
 A [traditional paging based stacks](Call%20Stack.md) can't be used:
 
 - Not enough address space to support millions of 1Gb stacks. Because we need to reserve the virtual memory for all the stacks at the program startup, and we have 48 bits address space on 64 bit CPU, we can support only 128000 stacks
@@ -270,3 +274,4 @@ The `p.mcache.stackcache` is a cache of small stacks
 - [HACKING.md](https://github.com/golang/go/blob/master/src/runtime/HACKING.md)
 - [GopherCon 2020: Austin Clements - Pardon the Interruption: Loop Preemption in Go 1.14 - YouTube](https://www.youtube.com/watch?v=1I1WmeSjRSw) #TODO 
 - [Chris's Wiki :: blog/programming/GoSchedulerAndSyscalls](https://utcc.utoronto.ca/~cks/space/blog/programming/GoSchedulerAndSyscalls)
+- [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)

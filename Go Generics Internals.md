@@ -19,3 +19,4 @@ tags:
 - [Faster sorting with Go generics - Eli Bendersky's website](https://eli.thegreenplace.net/2022/faster-sorting-with-go-generics/)
 - [Type Parameters Proposal](https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md)
 - [Generics can make your Go code slower](https://planetscale.com/blog/generics-can-make-your-go-code-slower)
+- [When To Use Generics - The Go Programming Language](https://go.dev/blog/when-generics)

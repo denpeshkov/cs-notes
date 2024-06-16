@@ -47,7 +47,7 @@ All the lines are essentially `OR` of results from all the CPUs
 
 ## Dealing with Write Backs
 
-A common optimization in [write-back cache](Cache%20Memory.md#Write-Back) is the use of a [write-back buffer](Cache%20Memory.md#Write%20Buffer)
+A common optimization in a [write-back cache](Cache%20Memory.md#Write-Back) is the use of a [write-back buffer](Cache%20Memory.md#Write%20Buffer)
 
 Because data can be in a write-back buffer, the snoop controller (not the cache) must check the write-back buffer in addition to a cache
 

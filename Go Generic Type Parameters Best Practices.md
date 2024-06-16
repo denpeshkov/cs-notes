@@ -28,7 +28,7 @@ If we use `Clone2` we get a compiler error:
 
 ```Go
 func PrintSorted(ms MySlice) string {
-    c := Clone1(ms)
+    c := Clone2(ms)
     slices.Sort(c)
     return c.String() // FAILS TO COMPILE
 }
@@ -42,13 +42,13 @@ In the case of `Reverse` functions we should also prefer `Reverse1`
 
 `Reverse` doesn't return the slice, so it works even with named slice types such as `MySlice`
 
-However, there is still a case where it makes a difference: When instantiating `Reverse1` you can only get a `func([]string)`, not a `func(MySlice)`. This matters when passing them to higher level functions:
+However, there is still a case where it makes a difference: when instantiating `Reverse1` you can only get a `func([]string)`, not a `func(MySlice)`. This matters when passing them to higher level functions:
 
 ```go
 func Apply(ms MySlice) {
-	Apply(ms, Reverse1) // Compiles
-	Apply(ms, Reverse2) // Does not compile
-	Apply[[]string](ms,Reverse2) // Compiles
+	apply(ms, Reverse1) // Compiles
+	apply(ms, Reverse2) // Does not compile
+	apply[[]string](ms,Reverse2) // Compiles
 }
 
 func apply[T any](v T, f func(T)) {
@@ -56,9 +56,9 @@ func apply[T any](v T, f func(T)) {
 }
 ```
 
-We have a compile error for the second call to `Apply`: type `func[E any](s []E)` of `Reverse2` does not match inferred type `func(MySlice)` for `func(T)`
+We have a compile error for the second call to `apply`: type `func[E any](s []E)` of `Reverse2` does not match inferred type `func(MySlice)` for `func(T)`
 
-To solve this issue we must provide the type explicitly: `Apply[[]string](ms,Reverse2)`
+To solve this issue we must provide the type explicitly: `apply[[]string](ms,Reverse2)`
 
 # References
 

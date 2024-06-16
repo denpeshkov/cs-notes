@@ -5,7 +5,7 @@ tags:
 
 # Method Expressions
 
-If `M` is in the [method set](https://tip.golang.org/ref/spec#Method_sets) of type `T`, `T.M` is a function that is callable as a regular function with the same arguments as `M` prefixed by an additional argument that is the receiver of the method
+For a type `T`, `T.M` is a function that is callable as a regular function with the same arguments as `M` prefixed by an additional argument that is the receiver of the method
 
 For example, given:
 
@@ -17,16 +17,16 @@ func (tv  T) Mv(a int) int         { return 0 }  // value receiver
 func (tp *T) Mp(f float32) float32 { return 1 }  // pointer receiver
 ```
 
-- `T.Mv` yields a function with signature `func(tv T, a int) int`
-- `(*T).Mp` yields a function with signature `func(tp *T, f float32) float32`
-- `(*T).Mv` yields a function with signature `func(tv *T, a int) int`. This function indirects through the receiver to create a value to pass as the receiver to the underlying method
+- `T.Mv` yields a function with the signature `func(tv T, a int) int`
+- `(*T).Mp` yields a function with the signature `func(tp *T, f float32) float32`
+- `(*T).Mv` yields a function with the signature `func(tv *T, a int) int`. This function indirects through the receiver to create a value to pass as the receiver to the underlying method
 - `T.Mp` is illegal, because pointer-receiver methods are not in the method set of the value type
 
 It is legal to derive a function value from a method of an interface type. The resulting function takes an explicit receiver of that interface type
 
 # Method Values
 
-If the expression `x` has static type `T` and `M` is in the [method set](https://tip.golang.org/ref/spec#Method_sets) of type `T`, the **method value** `x.M` is a function value that is callable with the same arguments as a method call of `x.M`
+If `x` has type `T`, the method value `x.M` is a function value that is callable with the same arguments as a method call of `x.M`
 
 The expression `x` is **evaluated and saved during the evaluation of the method value**; the saved copy is then used as the receiver in any calls, which may be executed later
 
@@ -73,10 +73,10 @@ func(a int) {
 becomes:
 
 ``` go
-func(byval int, &byref *int, a int) {
+func(byval int, byref *int, a int) {
 	println(byval)
-	(*&byref)++
-}(byval, &byref, 42)
+	(*byref)++
+}(byval, byref, 42)
 ```
 
 ## Function Values and Closure Object
@@ -90,7 +90,7 @@ For example, this closure:
 
 ```go
 func closure() func() *byte {
-    var b [4 * 1024]byte
+    var b [4096]byte
     return func() *byte {
         return &b[0]
     }
@@ -111,7 +111,7 @@ func closure_1(p *closure_1_obj) *byte {
 }
 
 func closure() *struct{ F uintptr } {
-	var b [4 * 1024]byte
+	var b [4096]byte
 	p := &closure_1_obj{
 		F: &closure_1,
 		b: &b,
@@ -129,3 +129,4 @@ func closure() *struct{ F uintptr } {
 - [go/src/cmd/compile/internal/walk/closure.go at master · golang/go · GitHub](https://github.com/golang/go/blob/master/src/cmd/compile/internal/walk/closure.go)
 - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#Method_values)
 - [What is a Go function variable? · Phil Pearl's Blog](https://philpearl.github.io/post/functionpointers/)
+- [Methods in Go - Go 101](https://go101.org/article/method.html)

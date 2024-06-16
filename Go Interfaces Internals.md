@@ -20,8 +20,14 @@ The first word `tab` is a pointer to an **itable**, which contains information
 
 The second word `data` is a pointer to the value (copy of the original) held by the interface. Values stored in interfaces might be arbitrarily large, but only one word is dedicated to holding the value in the interface structure, so the assignment allocates a chunk of memory on the [heap](Heap%20Memory.md) and records the pointer in the `data` field
 
-Note that `data` points to the **copy of a value** used in the assignment. For example, copying an interface value (passing interface as a parameter) makes a copy of the value stored in the interface  
-A copy is used because if a variable later changes, the pointer should have the old value, not the new one
+## Value Boxing
+
+When value of type `T` is assigned to an interface value:
+
+- If type `T` is a non-interface type, then the `data` field points to the **copy** of the `T` value. A copy is used because if the variable later changes, the pointer should have the old value, not the new one
+- If type `T` is also an interface type, then the `data` field points directly to the **same** value stored in `T`s `data` field
+
+Code example: [Go Playground - Value Boxing](https://go.dev/play/p/iRmYpYbEKo9)
 
 ## Example
 
@@ -179,4 +185,8 @@ Therefore, when you call a method on an interface, it must either have an identi
 - [Generics can make your Go code slower](https://planetscale.com/blog/generics-can-make-your-go-code-slower)
 - [Go Wiki: Compiler And Runtime Optimizations](https://go.dev/wiki/CompilerOptimizations#zero-width-types-in-interface-values)
 - [Go Wiki: MethodSets - The Go Programming Language](https://go.dev/wiki/MethodSets)
-- [Fetching Title#t8ne](https://eli.thegreenplace.net/2022/interface-method-calls-with-the-go-register-abi/)
+- [Interface method calls with the Go register ABI - Eli Bendersky's website](https://eli.thegreenplace.net/2022/interface-method-calls-with-the-go-register-abi/)
+- [Why is a value stored in an interface not addressable?: r/golang](https://www.reddit.com/r/golang/comments/7yswkn/why_is_a_value_stored_in_an_interface_not/)
+- [Frequently Asked Questions (FAQ) - The Go Programming Language](https://go.dev/doc/faq#pass_by_value)
+- [Interfaces in Go: Go 101](https://go101.org/article/interface.html)
+- [Ice cream makers and data races | Dave Cheney](https://dave.cheney.net/2014/06/27/ice-cream-makers-and-data-races)

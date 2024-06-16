@@ -5,7 +5,7 @@ tags:
 
 # Overview
 
-We can have an unexported struct with exported fields, For example, consider the following declaration:
+We can have an unexported struct with exported fields. For example, consider the following declaration:
 
 ```go
 package foo
@@ -31,9 +31,7 @@ func main() {
 }
 ```
 
----
-
-This technique is commonly used, for instance, when declaring structs in handlers for encoding/decoding to/from JSON
+This technique is commonly used, when declaring structs in handlers for encoding/decoding to/from JSON
 
 # References
 
