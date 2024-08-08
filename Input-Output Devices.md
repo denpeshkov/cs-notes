@@ -57,7 +57,7 @@ Inefficient because it spends a lot of time polling and moving data, waisting CP
 ### Interrupt-driven
 
 1. Issue read/write command to I/O device
-2. On [interrupt](Exceptional%20Control%20Flow.md), perform read/write request between the device and [RAM](Main%20Memory.md)
+2. On [interrupt](Interrupts%20and%20Exceptions.md), perform read/write request between the device and [RAM](Main%20Memory.md)
 3. If there is more data, repeat with step 1
 
 Inefficient because it spends a lot of time moving data, waisting CPU resources
@@ -66,7 +66,7 @@ Inefficient because it spends a lot of time moving data, waisting CPU resources
 
 #todo
 
-CPU first initiates the transfer, then it does other operations while the transfer is in progress, and it finally receives an [interrupt](Exceptional%20Control%20Flow.md) from the DMA controller (**DMAC**) when the operation is done
+CPU first initiates the transfer, then it does other operations while the transfer is in progress, and it finally receives an [interrupt](Interrupts%20and%20Exceptions.md) from the DMA controller (**DMAC**) when the operation is done
 
 1. Issue read/write command to I/O device using DMA
 
@@ -77,7 +77,7 @@ Example read request:
 	2. Indicates the logical block number that should be read
 	3. Indicates the main memory address where the contents of the disk sector should be stored
 2. The **disk controller** receives the read command, translates the logical block number to a sector address, reads the contents of the sector, and transfers the contents directly to main memory, without using the CPU
-3. The disk controller notifies the CPU by sending an [interrupt](Exceptional%20Control%20Flow.md) signal to the CPU
+3. The disk controller notifies the CPU by sending an [interrupt](Interrupts%20and%20Exceptions.md) signal to the CPU
 
 ### Virtual Memory
 

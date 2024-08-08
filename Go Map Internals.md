@@ -612,7 +612,7 @@ m[0] = v
 
 ---
 
-However, we can assign to a slice element because it is a [slice header](Go%20Slices%20Internals.md) containing a **pointer** to the underlying array:
+However, we can assign to a slice element because it is a [slice header](Go%20Slice%20Internals.md) containing a **pointer** to the underlying array:
 
 ``` go
 m := map[int][]int{}

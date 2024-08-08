@@ -8,7 +8,7 @@ tags:
 
 # Overview
 
-Netpoller sits in its **own** thread, receiving events from goroutines wishing to do network I/O. It uses `epoll` system call to do polling of network sockets (file descriptors)
+Netpoller sits in its own thread, receiving events from goroutines wishing to do [network](Network.md) I/O. It uses `epoll` [system call](System%20Calls.md) to do polling of network sockets (file descriptors)
 
 Whenever you `open` or `accept` a connection in Go, the file descriptor that backs it is set to non-blocking mode. This means that if you try to do I/O on it and the file descriptor isn't ready, it will return an error code saying so
 

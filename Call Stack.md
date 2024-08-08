@@ -21,7 +21,7 @@ The stack allows abstracting the subroutine implementation from the caller. Regi
 
 # Kernel and User Stack
 
-[Kernel space and user space](Exceptional%20Control%20Flow.md) each have their own distinct call stacks. The OS switches between them when transferring control between kernel and user space, e.g. via [interrupts](Exceptional%20Control%20Flow.md). This stack switching is done to prevent privileged procedures from crashing due to insufficient stack space. It also prevents less privileged procedures from interfering with more privileged procedures by sharing the same stack
+[Kernel space and user space](Interrupts%20and%20Exceptions.md) each have their own distinct call stacks. The OS switches between them when transferring control between kernel and user space, e.g. via [interrupts](Interrupts%20and%20Exceptions.md). This stack switching is done to prevent privileged procedures from crashing due to insufficient stack space. It also prevents less privileged procedures from interfering with more privileged procedures by sharing the same stack
 
 # Stack Registers
 
@@ -64,10 +64,10 @@ By convention:
 
 By default Linux user space stacks use 8Mb of [virtual address space](Virtual%20Memory.md), divided into 4Kb physical pages. Those pages are allocated lazily, so in reality only a subset of 8Mb address space is used
 
-There is a protected guard page at the end of the stack address space which causes a [trap](Exceptional%20Control%20Flow.md) and process termination on access, which prevents stack overflow
+There is a protected guard page at the end of the stack address space which causes a [trap](Interrupts%20and%20Exceptions.md) and process termination on access, which prevents stack overflow
 
 1. The OS allocates 8MB of virtual memory for a stack by setting up the [MMU](Virtual%20Memory.md)'s page tables for a thread. This requires very little [RAM](Main%20Memory.md) to hold the page table entries only
-2. When a thread runs and tries to access a [virtual address](Virtual%20Memory.md) on the stack that doesn't have a physical page assigned to it yet, a [page fault exception](Exceptional%20Control%20Flow.md) is triggered by the MMU
+2. When a thread runs and tries to access a [virtual address](Virtual%20Memory.md) on the stack that doesn't have a physical page assigned to it yet, a [page fault exception](Interrupts%20and%20Exceptions.md) is triggered by the MMU
 3. The CPU core responds to the page fault exception by switching to a privileged execution mode (which has its own stack) and calling the page fault exception handler function inside the kernel
 4. The kernel allocates a page of physical RAM to that virtual memory page and returns back to the user space thread
 

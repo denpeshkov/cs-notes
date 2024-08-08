@@ -29,7 +29,7 @@ type Type struct {
 }
 ```
 
-Data types requiring additional information are represented by their respective structs: [slice](Go%20Slices%20Internals.md), struct, [interface](Go%20Interfaces%20Internals.md), [map](Go%20Map%20Internals.md), etc. All this structs embed the `abi.Type` struct and add additional fields
+Data types requiring additional information are represented by their respective structs: [slice](Go%20Slice%20Internals.md), struct, [interface](Go%20Interfaces%20Internals.md), [map](Go%20Map%20Internals.md), etc. All this structs embed the `abi.Type` struct and add additional fields
 
 For example, `abi.UncommonType` stores information about methods defined on a type:
 

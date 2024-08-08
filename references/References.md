@@ -26,6 +26,8 @@
 
 #### Intel 64 and IA-32 Architectures Software Developer's Manual
 
+#### Computer Networking A Top Down Approach. James F. Kurose, Keith W. Ross
+
 # Web
 
 - [Parallel Computer Architecture and Programming : 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/home)

@@ -188,7 +188,7 @@ Above approach doesn't work for loops because, there are no function calls, henc
 
 Go uses signal-based preemption with conservative innermost frame scanning to preempt tight loops:
 
-1. Send [OS signal](Exceptional%20Control%20Flow.md) to preempt the goroutine
+1. Send [OS signal](Interrupts%20and%20Exceptions.md) to preempt the goroutine
 2. [Conservatively scan](Go%20Garbage%20Collector.md) the function stack: assume that anything that looks like a pointer is a pointer. Only needed for innermost frame
 3. Precisely scan the rest of the stack
 

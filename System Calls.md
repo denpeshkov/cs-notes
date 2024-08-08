@@ -8,7 +8,7 @@ tags:
 
 # x86-32 Legacy System Calls Using Interrupts
 
-Legacy Linux system calls on x86-32 are [interrupt-based](Exceptional%20Control%20Flow.md); the kernel registers the `0x80` interrupt number for a system call handler
+Legacy Linux system calls on x86-32 are [interrupt-based](Interrupts%20and%20Exceptions.md); the kernel registers the `0x80` interrupt number for a system call handler
 
 To make a system call, a program executes `INT 0x80` to issue an interrupt, with the system call number specified in the `EAX` register. The arguments for the system call are placed in the remaining general-purpose registers
 

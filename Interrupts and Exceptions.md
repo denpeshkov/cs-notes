@@ -14,7 +14,7 @@ The x86-64 CPU provides two mechanisms for interrupting program execution, inter
 
 Interrupts occur asynchronously as a result of signals from [I/O devices](Input-Output%20Devices.md) that are external to the CPU. Software can also generate interrupts by executing the `INT` instruction
 
-[I/O devices](Input-Output%20Devices.md) such as network adapters, disk controllers, and timer chips trigger interrupts by signaling a pin on the CPU chip and placing onto the system bus the exception number that identifies the device that caused the interrupt. CPU checks the interrupt pin after every instruction, reads the exception number from the system bus, and then calls the appropriate interrupt handler
+[I/O devices](Input-Output%20Devices.md) such as [network](Network.md) adapters, disk controllers, and timer chips trigger interrupts by signaling a pin on the CPU chip and placing onto the system bus the exception number that identifies the device that caused the interrupt. CPU checks the interrupt pin after every instruction, reads the exception number from the system bus, and then calls the appropriate interrupt handler
 
 ### The Interrupt Enable Flag
 
@@ -47,7 +47,7 @@ Most OSs use only two levels: level 0 for kernel mode and level 3 for user mode,
 On x86-64 each interrupt and exception are assigned a number, called a vector number. The x86-64 CPU supports 256 vector numbers from 0 to 255:
 
 - Vector numbers 0-31 are x86-64 defined exceptions and interrupts: divide by zero, page faults, memory access violations, breakpoints, general-protection exception etc.
-- Vector numbers 32-255 are defined by the OS kernel: system calls, signals from external I/O devices etc.
+- Vector numbers 32-255 are defined by the OS kernel: [system calls](System%20Calls.md), signals from external I/O devices etc.
 
 The x86-64 uses the Interrupt Descriptor Table (IDT) which associates each vector number with a gate descriptor for the interrupt/exception handler. Each gate descriptor is 16-bytes long and IDT is an array of 256 descriptors, one for each vector number
 

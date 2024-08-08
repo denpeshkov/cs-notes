@@ -1,6 +1,7 @@
 ---
 tags:
   - Arch
+  - TODO
 ---
 
 # Alignment Requirement
@@ -36,7 +37,9 @@ struct S {
 }
 ```
 
-Where `Tmax` is the size of the biggest type `T1`…`Tn`Compiler must ensure (by adding **paddings**) that:
+Where `Tmax` is the size of the biggest type `T1`…`Tn`
+
+Compiler must ensure (by adding **paddings**) that:
 
 - Any pointer `p` of type struct `S*` satisfies the alignment: `*p` is a multiple of `Tmax`
 - Each element `fi` satisfies the alignment: `&fi` is a multiple of `Ti`

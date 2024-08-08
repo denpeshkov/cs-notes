@@ -238,7 +238,7 @@ Relocation entry contains:
 
 # Program Loading
 
-![Linux x86-64 program memory layout|300](Linux%20x86-64%20program%20memory%20layout.png)
+![Linux x86-64 program memory layout|300](Linux%20x86-64%20process%20memory%20layout.png)
 
 Linux program runs in the context of a process with its own [virtual address space](Virtual%20Memory.md)
 

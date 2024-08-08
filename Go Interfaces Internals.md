@@ -110,55 +110,17 @@ type eface struct {
 }
 ```
 
-As an optimization, the Go runtime maintains an array of small integers. If an interface is instantiated from one of these small integers, it points to an element of this array, thereby preventing runtime allocation
-
 In Russ Cox [blog post](https://research.swtch.com/interfaces) it is stated that if the actual value fits in a single word, it is stored in the second word directly without indirection or [heap](Heap%20Memory.md) allocation. However, this is no longer true, as it caused race conditions in concurrent GC and ambiguity about whether the data word holds a pointer or scalar ( #todo elaborate further). So interfaces **always** store the pointer in the `data` field
 
 # Heap Allocations and Escape Analysis
 
-When a method is called via an interface value instead of directly through a struct, the compiler **generally** lacks knowledge of the method's implementation at compile time. Consequently, escape analysis cannot confirm that the value doesn't escape, leading to [heap](Heap%20Memory.md) allocations (there are [optimizations](#Optimizations)) even for scalar types like `int`s, `float`s, `string`s
+When a method is called via an interface value instead of directly through a struct, the compiler **generally** lacks knowledge of the method's implementation at compile time. Consequently, escape analysis cannot confirm that the value doesn't escape, leading to [heap](Heap%20Memory.md) allocations (there are optimizations) even for scalar types like `int`s, `float`s, `string`s
 
 In some cases, the compiler can prove the concrete type of the value stored in the interface and **devirtualize** a method call, avoiding [heap](Heap%20Memory.md) allocations
 
+The Go runtime has a [special static array](https://github.com/golang/go/blob/master/src/runtime/iface.go#L695) of the first 256 integers (0 to 255), and when it would normally have to allocate memory to store an integer on the heap as part of converting it to an interface, it first checks to see if it can just return a pointer to the appropriate element in the array instead
+
 Putting a [zero-width type](Go%20Zero-Sized%20Values.md), e.g. `struct{}`, in an interface value doesn't allocate
-
-## Avoiding Allocation for Context Key
-
-There are couple of ways to avoid allocation when passing context key to `any` in `context.WithValue` call:
-
-```go
-// small ints are shared by runtime, most of the keys won't cause allocation
-type keyInt int
-const (
-	k1 = keyInt(iota + 1)
-	k2
-)
-
-// strings are not shared by runtime
-type keyString string
-// use const to avoid allocations
-const (
-	k3 = keyString("k3")
-	k4 = "k4"
-)
-
-type keyStruct struct {
-	str string
-}
-// use pointers to avoid allocation
-var (
-	k5 = &keyStruct{"k5"}
-	k6 = &keyStruct{"k6"}
-)
-
-// use interface to avoid allocation
-type keyInter any
-var (
-	k7 = keyInter("k7")
-	k8 = keyInter("k8")
-)
-
-```
 
 # Addressability
 

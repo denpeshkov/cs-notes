@@ -3,6 +3,12 @@ tags:
   - Go
 ---
 
+# Overview
+
+A string is a read-only [slice](Go%20Slice%20Internals.md) of **arbitrary** bytes. It is not required to hold Unicode, UTF-8 text, or any other predefined format
+
+A string literal, absent byte-level escapes, always holds valid UTF-8 sequences
+
 # Representation
 
 A `string` is represented by a `stringStruct` struct:
@@ -56,3 +62,4 @@ strings.Clone(s[:ind])
 - [Source code: string.go](https://github.com/golang/go/blob/master/src/runtime/string.go#L232)
 - [Strings in Go -Go 101](https://go101.org/article/string.html)
 - [Go Wiki: Compiler And Runtime Optimizations - The Go Programming Language](https://go.dev/wiki/CompilerOptimizations)
+- [Strings, bytes, runes and characters in Go - The Go Programming Language](https://go.dev/blog/strings)

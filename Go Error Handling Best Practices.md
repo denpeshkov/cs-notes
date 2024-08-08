@@ -78,9 +78,15 @@ func (e *errorString) Error() string {
 
 An `errors.New` method returns a pointer to a new variable, irrespective of whether the string argument is the same as a previously supplied argument, and pointers are not equal unless they point to the same variable
 
+# Wrapping Errors
+
+When returning an error from a call, describe all relevant arguments, except those that were passed to a call from which the underlying error originated. This way we avoid duplicate redundant information from the error
+
 # References
 
 - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
 - [GitHub - uber-go/guide: The Uber Go Style Guide.](https://github.com/uber-go/guide/tree/master)
 - [Don’t just check errors, handle them gracefully | Dave Cheney](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
 - [Why are Go's identical errors not equal? · GitHub](https://gist.github.com/fospathi/1e6f5aea622abb52bddc9bcb1ffee858)
+- [go-experience-reports/errors.md at master · bcmills/go-experience-reports · GitHub](https://github.com/bcmills/go-experience-reports/blob/master/errors.md)
+- [GopherCon 2020: Jonathan Amsterdam - Working with Errors - YouTube](https://www.youtube.com/watch?v=IKoSsJFdRtI)
