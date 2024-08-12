@@ -1,0 +1,13 @@
+{
+  "readableLineLength": false,
+  "alwaysUpdateLinks": true,
+  "livePreview": true,
+  "propertiesInDocument": "source",
+  "strictLineBreaks": true,
+  "useMarkdownLinks": true,
+  "promptDelete": false,
+  "attachmentFolderPath": "attachments",
+  "showUnsupportedFiles": false,
+  "userIgnoreFilters": null,
+  "defaultViewMode": "source"
+}

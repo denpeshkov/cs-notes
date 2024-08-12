@@ -1,0 +1,10 @@
+{
+  "accentColor": "",
+  "cssTheme": "Minimal",
+  "theme": "moonstone",
+  "interfaceFontFamily": "Fira Code",
+  "textFontFamily": "Fira Code",
+  "monospaceFontFamily": "Fira Code",
+  "baseFontSize": 14,
+  "showViewHeader": true
+}

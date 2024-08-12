@@ -15,8 +15,7 @@ As a general rule:
 
 1. We should create an interface when we *need* it, not when we *foresee* that we could need it
 2. We should accept interfaces and return structs
-3. Interfaces should be as small as possible, because *the bigger the interface, the weaker the abstraction*
-4. We should return structs and accept interfaces
+3. Interfaces should be as small as possible, because the bigger the interface, the weaker the abstraction
 
 # Interface on the Producer Side Anti-Pattern
 
@@ -24,7 +23,7 @@ Interfaces generally should be created on the client side, not the producer side
 
 Defining the interface on the producer side forces clients to depend on all the methods of the interface. Instead, the client should define the interface with only the methods it needs. This relates to the concept of the [interface segregation principle](https://dave.cheney.net/2016/08/20/solid-go-design#Interface%20Segregation%20Principle), which states that no client should be forced to depend on methods it doesn't use
 
-Note that interfaces sometimes can be used on the producer side. For example `encoding` package defines interfaces used by `encoding/json` and `encoding/binary`. It's not a mistake because Go designers *knew* (not foresee) that creating these abstractions up front was valuable
+Note that interfaces sometimes can be used on the producer side. For example `encoding` package defines interfaces used by `encoding/json` and `encoding/binary`. It's not a mistake because Go designers knew (not foresee) that creating these abstractions up front was valuable
 
 # Returning Interface Anti-Pattern
 
@@ -32,7 +31,9 @@ In most cases we should return concrete implementations, not interfaces
 
 Returning concrete types means that we can add new methods without [breaking backward compatibility](https://youtu.be/JhdL5AkH-AQ?si=Cs0TDV7SjeSYAEki&t=1430). Also, clients can use all the methods of the type, not just the one defined in interface
 
-There are exceptions in standard library, for example `error` interface and `io.LimitReader` function that returns `io.Reader` instead of `io.LimitedReader`. Although, it seems, that returning `io.Reader` instead of a concrete `io.LimitReader` was a mistake by Go designers
+There are exceptions in the standard library, for example `error` interface and `io.LimitReader` function that returns `io.Reader` instead of `io.LimitedReader`. Although, it seems, that returning `io.Reader` instead of a concrete `io.LimitReader` was a mistake by Go designers
+
+Obviously, if a function needs to be able to return multiple implementations, it must return an interface
 
 # References
 
