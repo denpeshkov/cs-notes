@@ -5,6 +5,8 @@ tags:
 
 # Overview
 
+The noCopy convention is a way to tell linters, e.g. `go vet`, that a structure should not be copied
+
 Define a `noCopy` type that implements type `sync.Locker`:
 
 ```go
@@ -17,6 +19,16 @@ func (*noCopy) Lock()   {}
 func (*noCopy) Unlock() {}
 ```
 
+Add `noCopy` as a field to the struct that must no be copied:
+
+```go
+type S struct {
+	_ noCopy
+	...
+}
+```
+
 # References
 
 - [Source code: type.go](https://github.com/golang/go/blob/master/src/sync/atomic/type.go)
+- [noCopy convention - Unskilled](https://unskilled.blog/posts/nocopy-convention/)

@@ -94,6 +94,8 @@ See:
 - [False Sharing in Java](https://jenkov.com/tutorials/java-concurrency/false-sharing.html)
 - [5.4. Multithreading Problems](http://www.nic.uoregon.edu/~khuck/ts/acumem-report/manual_html/multithreading_problems.html)
 - [A Guide to False Sharing and @Contended | Baeldung](https://www.baeldung.com/java-false-sharing-contended)
+- [Let's dive: a tour of sync.Pool internals - Unskilled](https://unskilled.blog/posts/lets-dive-a-tour-of-sync.pool-internals/)
+- [This is your brain on false sharing - Unskilled](https://unskilled.blog/posts/this-is-your-brain-on-false-sharing/)
 
 # Memory Barriers #todo
 

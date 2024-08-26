@@ -54,14 +54,13 @@ Shared library (shared object) is an object file that, at either run time or loa
 Shared libraries are "shared" in two different ways:
 
 1. There is exactly one `.so` file for a particular library in a file system. The code and data in this `.so` file are shared by all of the executable object files that reference the library, as opposed to the contents of static libraries, which are copied and embedded in the executables that reference them
-2. A single copy of the `.text` section of a shared library in memory can be shared by different running processes
+2. A single copy of the `.text` section of a shared library in memory can be [shared](Virtual%20Memory.md) by different running processes
 
 Dynamic linking process:
 
 1. Loader [loads](#Program%20Loading) the partially linked executable
 2. Loader loads and runs the dynamic linker using the name from the `.interp` section
-3. Dynamic linker performs relocations for the executable file and its shared objects
-   Linker uses data in `.dynamic`, `.plt` and `.got` sections
+3. Dynamic linker performs relocations for the executable file and its shared objects. Linker uses data in `.dynamic`, `.plt` and `.got` sections
 4. Dynamic linker transfers control to the program
 
 In Linux dynamic linker is a shared object `ld-linux.so` and is loaded as position-independent code; the system creates its segments in the dynamic segment area used by `mmap`

@@ -28,6 +28,8 @@
 
 #### Computer Networking A Top Down Approach. James F. Kurose, Keith W. Ross
 
+#### Learning SQL - Generate, Manipulate, and Retrieve Data (3rd ed). Alan Beaulieu
+
 # Web
 
 - [Parallel Computer Architecture and Programming : 15-418/618 Spring 2016](http://15418.courses.cs.cmu.edu/spring2016/home)
