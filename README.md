@@ -1,18 +1,11 @@
-# Quartz v4
+# cs-notes
 
-> “[One] who works with the door open gets all kinds of interruptions, but [they] also occasionally gets clues as to what the world is and what might be important.” — Richard Hamming
+This repository is a personal collection of notes and resources that I am building as part of my public learning journey in computer science and software engineering
 
-Quartz is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
-Quartz v4 features a from-the-ground rewrite focusing on end-user extensibility and ease-of-use.
+This digital garden helps me:
 
-🔗 Read the documentation and get started: https://quartz.jzhao.xyz/
+- Organize and structure my learning process
+- Build connections between different topics I’m studying
+- Share my insights in ways that can benefit others
 
-[Join the Discord Community](https://discord.gg/cRFFHYye7t)
-
-## Sponsors
-
-<p align="center">
-  <a href="https://github.com/sponsors/jackyzha0">
-    <img src="https://cdn.jsdelivr.net/gh/jackyzha0/jackyzha0/sponsorkit/sponsors.svg" />
-  </a>
-</p>
+While it serves as my personal study hub, it’s also open for others to explore or contribute ideas
