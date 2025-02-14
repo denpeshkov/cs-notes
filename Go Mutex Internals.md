@@ -2,7 +2,8 @@
 tags:
   - Go
   - Concurrency
-  - OS
+  - OS-Architecture
+  - TODO
 ---
 
 # Mutex Implementation
@@ -203,3 +204,6 @@ As opposed to runtime mutex don't do passive spinning, because there can be work
 - [Semaphores in Plan 9](http://swtch.com/semaphore.pdf)
 - [Source code: sync.Mutex allow successive acquisition](https://github.com/golang/go/blob/dd2074c82acda9b50896bf29569ba290a0d13b03/src/pkg/sync/mutex.go)
 - [Source code: sync.Mutex add active spinning](https://github.com/golang/go/blob/edcad8639a902741dc49f77d000ed62b0cc6956f/src/sync/mutex.go)
+- [Let's Talk Locks! - InfoQ](https://www.infoq.com/presentations/go-locks/)
+- [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
+- [Mid-stack inlining in the Go compiler](https://docs.google.com/presentation/d/1Wcblp3jpfeKwA0Y4FOmj63PW52M_qmNqlQkNaLj0P5o/edit?usp=sharing)

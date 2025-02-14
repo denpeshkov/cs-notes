@@ -1,20 +1,20 @@
 ---
 tags:
-  - Arch
   - TODO
+  - OS-Architecture
 ---
 
 # Alignment Requirement
 
-A memory address $A$ is **$N$-byte aligned** when $A$ is a multiple of $N$ (where $N$ is a power of 2)  
-A data is **naturally aligned** when data's memory address is a multiple of the data size
+A memory address $A$ is $N$-byte aligned when $A$ is a multiple of $N$ (where $N$ is a power of 2)  
+A data is naturally aligned when data's memory address is a multiple of the data size
 
 The effects of performing an unaligned memory access vary from architecture to architecture:
 
 - On some architectures unaligned accesses may not be supported
 - Unaligned accesses may be [non-atomic](Atomic%20Instructions.md)
 - Accesses that cross a [cache line](Cache%20Memory.md) boundary may cause a performance penalty because multiple lines need to be fetched
-- Accesses that cross a [page](Virtual%20Memory.md) boundary may cause an even bigger performance penalty because multiple pages need to be fetched.
+- Accesses that cross a [page](Virtual%20Memory.md) boundary may cause an even bigger performance penalty because multiple pages need to be fetched
 - A DRAM typically supports only aligned [bursts](Main%20Memory.md)
 
 # Satisfying Alignment Requirements
@@ -26,7 +26,7 @@ Alignment is enforced by making sure that every data type is organized and alloc
 - Size of the object must be aligned to satisfy alignment for arrays of objects
 - Stack frame must be aligned
 
-For example, given this struct:
+For example, given the following struct:
 
 ```c
 struct S {
@@ -37,15 +37,13 @@ struct S {
 }
 ```
 
-Where `Tmax` is the size of the biggest type `T1`…`Tn`
+The compiler ensures alignment by inserting padding, so that:
 
-Compiler must ensure (by adding **paddings**) that:
+- Any pointer `p` of type `struct S*` points to an address that is a multiple of the size of the largest element type
+- Each field `fi` is aligned, meaning the address of `fi` is a multiple of the size of `Ti`
+- The total size of `struct S` is a multiple of the size of the largest element type, ensuring proper alignment for arrays of `S`
 
-- Any pointer `p` of type struct `S*` satisfies the alignment: `*p` is a multiple of `Tmax`
-- Each element `fi` satisfies the alignment: `&fi` is a multiple of `Ti`
-- Size of the `S` is a multiple of size of the biggest element's type
-
-The compiler places directives `.align` in the assembly code indicating the desired alignment for global data
+The compiler uses `.align` directives in the assembly code to enforce alignment for global data.
 
 # References
 
@@ -58,3 +56,4 @@ The compiler places directives `.align` in the assembly code indicating the desi
 - [Dive Into Systems A Gentle Introduction to Computer Systems. Suzanne J. Matthews, Tia Newhall, Kevin C. Webb](References.md#Dive%20Into%20Systems%20A%20Gentle%20Introduction%20to%20Computer%20Systems.%20Suzanne%20J.%20Matthews,%20Tia%20Newhall,%20Kevin%20C.%20Webb)
 - [c - CPU and Data alignment - Stack Overflow](https://stackoverflow.com/questions/3025125/cpu-and-data-alignment)
 - [x86 64 - Why do align access and non-align access have same performance? - Stack Overflow](https://stackoverflow.com/questions/70424501/why-do-align-access-and-non-align-access-have-same-performance)
+- [Unaligned Memory Accesses — The Linux Kernel documentation](https://docs.kernel.org/core-api/unaligned-memory-access.html)

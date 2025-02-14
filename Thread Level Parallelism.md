@@ -1,8 +1,7 @@
 ---
 tags:
-  - Arch
   - Concurrency
-  - OS
+  - OS-Architecture
 ---
 
 # Threads

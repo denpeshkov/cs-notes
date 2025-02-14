@@ -1,7 +1,7 @@
 ---
 tags:
   - Go
-  - AlgsDs
+  - Data-Structures-Algorithms
 ---
 
 # Data Structure Representation
@@ -47,8 +47,7 @@ type MapType struct {
 	Key    *Type
 	Elem   *Type
 	Bucket *Type // internal type representing a hash bucket
-	// function for hashing keys (ptr to key, seed) -> hash 
-	Hasher     func(unsafe.Pointer, uintptr) uintptr
+	Hasher     func(unsafe.Pointer, uintptr) uintptr // function for hashing keys (ptr to key, seed) -> hash 
 	KeySize    uint8  // size of key slot
 	ValueSize  uint8  // size of elem slot
 	BucketSize uint16 // size of bucket
@@ -72,6 +71,8 @@ A new `maptype` is only created for **every unique** (combination of key and val
 The `maptype` makes a `map` [generic](#Generic%20Map%20Implementation) for every combination of key and value types. By separating `maptype` from `hmap` every `map` with same key-value types combination reuses the same `maptype` instance
 
 ## The `bmap` Struct
+
+This struct describes a hash map bucket. A bucket is configured to store 8 key/value pairs
 
 ```go
 // A bucket for a Go map.
@@ -103,8 +104,6 @@ minTopHash     = 5 // minimum tophash for a normal filled cell.
 
 Following `tophash` is an array of bytes that stores the key/value pairs. The byte array packs all the keys and then all the values together for the respective bucket. Packing allows eliminating padding which would be needed to maintain proper [alignment boundaries](Data%20Alignment.md). For example, `map[int64]int8` would have needed an extra 7 bit padding per key/value pair. By using packing the padding only has to be appended to the end of the byte array and not in between
 
-A bucket is configured to store only 8 key/value pairs. If a 9th key needs to be added to a bucket that is full, an **overflow** bucket is created and referenced from inside the respective bucket
-
 The key and values are not directly represented in the `bmap` struct, because they can be of any type, the compiler can't know the size of the `bmap` struct in advance. For example:
 
 ```go
@@ -119,6 +118,10 @@ type bmap {
 	overflow *bmap
 }
 ```
+
+## Overflow Buckets
+
+When a bucket becomes full and a 9th key needs to be added, it would be inefficient to grow the map by doubling the number of buckets. Instead, Go creates an overflow bucket, linking it to the original one. The new key-value pair gets stored in this overflow bucket rather than forcing a full grow
 
 # Generic Behavior
 
@@ -146,13 +149,30 @@ func mapdelete(t *maptype, h *hmap, key unsafe.Pointer) {...}
 - `h` is a pointer to the `runtime.hmap` structure
 - `t` is a pointer to the `runtime.maptype` structure
 
-# Eviction #TODO
+# Eviction
 
-A `map` starts with one bucket. The map grows when buckets are about 80% full (load factor is 6.5). When `map` grows it allocates 2x number of buckets.
+#TODO See: [Go Maps Explained: How Key-Value Pairs Are Actually Stored](https://victoriametrics.com/blog/go-map/)
+
+#TODO See: [Go源码学习之map \| 极客熊生](https://www.kevinwu0904.top/blogs/golang-map/#map的扩容)
+
+A map in Go grows when one of two conditions is met: either there are too many overflow buckets, or the map is overloaded, meaning the load factor is too high.
+
+Because of these 2 conditions, there are also two kinds of growth:
+
+- One that doubles the size of the buckets (when overloaded)
+- One that keeps the same size but redistributes entries (when there are too many overflow buckets)
+
+If there are too many overflow buckets, it's better to redistribute the entries rather than just adding more memory.
+
+---
+
+When the buckets start getting 80% full (load factor is 6.5), the map will trigger a growth, which might double the number of buckets
+
+A `map` starts with one bucket. The map grows when buckets are about 80% full (load factor is 6.5). When `map` grows it allocates 2x number of buckets
 
 Growing starts with assigning a pointer called the "old bucket" pointer to the current bucket array. Then a new bucket array is allocated to hold twice the number of existing buckets. This could result in large allocations, but the memory is not initialized so the allocation is fast
 
-Once the memory for the new bucket array is available, the key/value pairs from the old bucket array can be moved or "**evacuated**" to the new bucket array. 
+Once the memory for the new bucket array is available, the key/value pairs from the old bucket array can be moved or "**evacuated**" to the new bucket array
 
 Evacuations happen **incrementally** as key/value pairs are added or removed from the map. This allows to amortize the cost of copying elements between multiple `map` operations. During evacuation `map` operation take longer because they need to check both old and new arrays
 
@@ -600,7 +620,7 @@ m[0] = S{0}
 m[0].s = 1 // cannot assign to struct field m[0].s in map
 ```
 
-Also, if the map is `nil` or does not contain an entry, `m[0]` would return the zero value. Therefore, attempting to assign to `m[0].s` would assign to a nonexistent 'zero value' element.
+Also, if the map is `nil` or does not contain an entry, `m[0]` would return the zero value. Therefore, attempting to assign to `m[0].s` would assign to a nonexistent zero value element
 
 To overcome this problem, we need to copy the element and reassign:
 
@@ -609,8 +629,6 @@ v := m[0]
 v.s = 1
 m[0] = v
 ```
-
----
 
 However, we can assign to a slice element because it is a [slice header](Go%20Slice%20Internals.md) containing a **pointer** to the underlying array:
 
@@ -636,4 +654,5 @@ m[0][0] = 1
 - [Internals of Maps in Golang - YouTube](https://youtu.be/ACQs6mdylxo?si=s3gHTZnxXz4rOR7y)
 - [Source code: map.go](https://github.com/golang/go/blob/master/src/runtime/map.go)
 - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
-- [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
+- [Go Maps Explained: How Key-Value Pairs Are Actually Stored](https://victoriametrics.com/blog/go-map/)
+- [Go源码学习之map \| 极客熊生](https://www.kevinwu0904.top/blogs/golang-map/#map的扩容)

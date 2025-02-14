@@ -1,7 +1,6 @@
 ---
 tags:
-  - Arch
-  - OS
+  - OS-Architecture
 ---
 
 # Memory Locality

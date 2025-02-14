@@ -1,8 +1,7 @@
 ---
 tags:
   - Concurrency
-  - OS
-  - Arch
+  - OS-Architecture
   - TODO
 ---
 

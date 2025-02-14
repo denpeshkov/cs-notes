@@ -5,5 +5,6 @@
 3. Install dotfiles and tools
 4. Make `fish` the login shell:
 	1. Add path to the `fish` to `/etc/shells`
-	2. `chsh -s fish`
+	2. `chsh -s /opt/homebrew/bin/fish`
 5. Copy `fish` history from `~/.local/share/fish/fish_history`
+6. To apply `bat` theme `bat cache --build`

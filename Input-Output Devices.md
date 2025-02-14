@@ -1,6 +1,8 @@
 ---
 tags:
-  - Arch
+  - OS-Architecture
+alias:
+  - I/O Devices
 ---
 
 # I/O Devices Diagram
@@ -64,8 +66,6 @@ Inefficient because it spends a lot of time moving data, waisting CPU resources
 
 ## Direct Memory Access (DMA)
 
-#todo
-
 CPU first initiates the transfer, then it does other operations while the transfer is in progress, and it finally receives an [interrupt](Interrupts%20and%20Exceptions.md) from the DMA controller (**DMAC**) when the operation is done
 
 1. Issue read/write command to I/O device using DMA
@@ -97,3 +97,4 @@ Write about network I/O #TODO
 - [Programmed input–output - Wikipedia](https://en.wikipedia.org/wiki/Programmed_input–output)
 - [I/O Techniques - Overview](http://inputoutput5822.weebly.com)
 - [Operating Systems Three Easy Pieces. Remzi H Arpaci-Dusseau, Andrea C Arpaci-Dusseau](References.md#Operating%20Systems%20Three%20Easy%20Pieces.%20Remzi%20H%20Arpaci-Dusseau,%20Andrea%20C%20Arpaci-Dusseau)
+- [Lec18 UNIX Operating System Calls Via x86 Traps - YouTube](https://www.youtube.com/watch?v=CQgut-goM3g&list=PL3swII2vlVoXiqUBV524pKEsP1iBN4UBU&index=19)

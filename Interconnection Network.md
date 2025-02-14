@@ -1,8 +1,8 @@
 ---
 tags:
-  - Arch
+  - OS-Architecture
   - Concurrency
-  - DistributedSystems
+  - Distributed-Systems
   - TODO
 ---
 

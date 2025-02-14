@@ -28,7 +28,17 @@ A foreign key constraint is a condition that ensures the referential integrity o
 
 Foreign keys can exist without constraints to reduce performance penalties due to constrain checks and possible cascading
 
+# What Every Developer Needs to Know
+
+#todo
+
+1. We can't create an index on every column because it will slow down the writes, as an index needs to be updated on every write
+2. An index can't be used when filtering on function (e.g. `WHERE YEAR(PURCAHSED_DATE) = 2013`), because a function results can have no correlation with data indexed. PostgreSQL supportQs functional indexes, but many databases not. We can create a generated column based on the result of the function. We can restructure or index `WHERE PURCHASED_DATE BETWEEN …`
+3. A full table scan is slower than full index scan, because index contains much fewer data, thus requires to load and walk less data in memory
+4. A composite index is searched from left to right (in order of definition) and stops on first missing column, or first inequality operator
+
 # References
 
 - [Introduction to indexes — MySQL for Developers — PlanetScale](https://planetscale.com/learn/courses/mysql-for-developers/indexes/introduction-to-indexes)
 - [Learning SQL - Generate, Manipulate, and Retrieve Data (3rd ed). Alan Beaulieu](References.md#Learning%20SQL%20-%20Generate,%20Manipulate,%20and%20Retrieve%20Data%20(3rd%20ed).%20Alan%20Beaulieu)
+- [Things every developer absolutely, positively needs to know about database indexing - Kai Sassnowski - YouTube](https://youtu.be/HubezKbFL7E?si=-JZ1MlNECztgGmLU)

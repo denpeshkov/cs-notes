@@ -52,7 +52,7 @@ This invariant is maintained by the write barrier by shading (marking grey) obje
 
 ### Mark Assist
 
-As stated above, in the preparation for the [mark phase](#Mark%20Phase) we enable mark assist. If the [GC Pacer](#GC%20Pacer) determines that it needs to slow down allocations, it will recruit the application goroutines to assist with the marking work. The amount of time any application goroutine will be placed in a mark assist is proportional to the amount of data it's adding to heap memory
+As stated above, in the preparation for the [mark phase](#Mark%20Phase) we enable mark assist. If the GC Pacer determines that it needs to slow down allocations, it will recruit the application goroutines to assist with the marking work. The amount of time any application goroutine will be placed in a mark assist is proportional to the amount of data it's adding to heap memory
 
 ## Mark Termination
 

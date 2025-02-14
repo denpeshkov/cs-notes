@@ -20,3 +20,4 @@ tags:
 - [Type Parameters Proposal](https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md)
 - [Generics can make your Go code slower](https://planetscale.com/blog/generics-can-make-your-go-code-slower)
 - [When To Use Generics - The Go Programming Language](https://go.dev/blog/when-generics)
+- [cmd/compile: use method expression closures to implement bound method calls](https://go-review.googlesource.com/c/go/+/385274)

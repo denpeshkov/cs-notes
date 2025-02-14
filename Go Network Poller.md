@@ -1,7 +1,7 @@
 ---
 tags:
   - Go
-  - OS
+  - OS-Architecture
   - TODO
   - Networking
 ---

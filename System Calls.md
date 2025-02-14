@@ -1,9 +1,6 @@
 ---
 tags:
-  - OS
-  - Arch
-  - vDSO
-  - vdso
+  - OS-Architecture
 ---
 
 # x86-32 Legacy System Calls Using Interrupts

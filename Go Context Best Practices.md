@@ -33,6 +33,7 @@ The following values can be used as context key values to avoid allocation when 
 - Constant value
 - Pointer value
 - [Interface value](Go%20Interfaces%20Internals.md)
+- Empty struct `struct{}`
 
 # References
 
@@ -40,3 +41,4 @@ The following values can be used as context key values to avoid allocation when 
 - [Why context.Context not in structs ?](https://groups.google.com/g/golang-nuts/c/xRbzq8yzKWI)
 - [context package - Go Packages](https://pkg.go.dev/context)
 - [Go Concurrency Patterns: Context - The Go Programming Language](https://go.dev/blog/context)
+- [context: relax recommendation against putting Contexts in structs · Issue #22602 · golang/go · GitHub](https://github.com/golang/go/issues/22602)

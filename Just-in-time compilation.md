@@ -1,8 +1,7 @@
 ---
 tags:
-  - Arch
   - TODO
-  - OS
+  - OS-Architecture
 aliases:
   - JIT
 ---

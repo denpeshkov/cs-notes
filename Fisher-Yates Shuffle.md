@@ -1,6 +1,6 @@
 ---
 tags:
-  - AlgsDs
+  - Data-Structures-Algorithms
 ---
 
 # Algorithm

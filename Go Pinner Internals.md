@@ -2,7 +2,7 @@
 tags:
   - Go
   - TODO
-  - OS
+  - OS-Architecture
 ---
 
 # References

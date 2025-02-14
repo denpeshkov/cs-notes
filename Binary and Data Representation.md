@@ -1,7 +1,7 @@
 ---
 tags:
-  - Arch
   - Math
+  - OS-Architecture
 ---
 
 # Two's Complement

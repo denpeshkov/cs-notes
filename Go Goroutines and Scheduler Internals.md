@@ -4,11 +4,11 @@ tags:
   - TODO
 ---
 
-# Gist
-
 # Internals
 
 ![Go scheduler|550](Go%20scheduler.png)
+
+	
 
 ## The `runtime.g` Struct
 
@@ -166,7 +166,7 @@ The pessimistic system call path implements the approach where `p` is handed off
 
 The optimistic system call path doesn't release the `p`; instead, it sets a special `p` state flag and just makes the system call. The `sysmon` goroutine periodically looks for `p`s that have been in this state for too long and hands them off `m`
 
-When `m` returns from a syscall the scheduler will check if the old `p` is available. If it is, the `m` will associate itself with it. If it is not, `m` will associate itself with any idle `p`. And if there are no idle `p`s, `g` will be diassociated from `m` and added to the `schedt.runq`
+When `m` returns from a syscall the scheduler will check if the old `p` is available. If it is, the `m` will associate itself with it. If it is not, `m` will associate itself with any idle `p`. And if there are no idle `p`s, `g` will be dissociated from `m` and added to the `schedt.runq`
 
 Thread `m` itself becomes idle, so we won't run more `g`s than our target parallelism level
 

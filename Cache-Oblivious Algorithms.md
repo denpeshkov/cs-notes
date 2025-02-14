@@ -1,8 +1,8 @@
 ---
 tags:
-  - Arch
-  - AlgsDs
+  - Data-Structures-Algorithms
   - TODO
+  - OS-Architecture
 ---
 
 # References

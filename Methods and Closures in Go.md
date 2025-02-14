@@ -120,6 +120,8 @@ func closure() *struct{ F uintptr } {
 }
 ```
 
+#TODO: [Go internal ABI specification](https://go.googlesource.com/go/+/refs/heads/dev.regabi/src/cmd/compile/internal-abi.md#closures)
+
 # References
 
 - [Go internals: capturing loop variables in closures - Eli Bendersky's website](https://eli.thegreenplace.net/2019/go-internals-capturing-loop-variables-in-closures/)
@@ -130,3 +132,4 @@ func closure() *struct{ F uintptr } {
 - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#Method_values)
 - [What is a Go function variable? · Phil Pearl's Blog](https://philpearl.github.io/post/functionpointers/)
 - [Methods in Go - Go 101](https://go101.org/article/method.html)
+- [Go internal ABI specification](https://go.googlesource.com/go/+/refs/heads/dev.regabi/src/cmd/compile/internal-abi.md#closures)

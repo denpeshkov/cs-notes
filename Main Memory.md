@@ -1,6 +1,6 @@
 ---
 tags:
-  - Arch
+  - OS-Architecture
 aliases:
   - RAM
   - DRAM

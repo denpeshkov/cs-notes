@@ -1,8 +1,8 @@
 ---
 tags:
-  - Arch
   - Concurrency
-  - DistributedSystems
+  - Distributed-Systems
+  - OS-Architecture
 ---
 
 # The Cache Coherence Problem

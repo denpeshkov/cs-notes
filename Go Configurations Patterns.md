@@ -66,7 +66,7 @@ Options structure is often preferred when some of the following apply:
 - A large number of callers need to provide many options
 - The options are shared between multiple functions that the user will call
 
-# Using Setters or Exported Fields Directly
+# Using Setters or Exported Fields
 
 We could use directly exported fields (or setters) to config the server after instantiation. For example like an `http.Server` in the standard library
 
@@ -76,51 +76,8 @@ That approach also has downsides:
 - The server may be in inconsistent state during configuration
 - It also precludes the possibility of making a type immutable
 - We can't return a different instance depending on the provided configuration
-- Need setters to distinguish between port that is equal to 0 and port that isn't set
 - It can be inconvenient to configure an object after creation, e.g. creating a middleware
-
-# Builder Pattern
-
-We could use the Builder Pattern:
-
-```go
-type Config struct {
-	Port int
-}
-
-type ConfigBuilder struct {
-	port *int
-}
-
-func (b *ConfigBuilder) Port(port int) *ConfigBuilder {
-	b.port = &port
-	return b
-}
-
-func (b *ConfigBuilder) Build() (Config, error) {
-	cfg := Config{}
-
-	if b.port == nil {
-		cfg.Port = defaultHTTPPort
-	} else {
-		if *b.port == 0 {
-			cfg.Port = randomPort()
-		} else if *b.port < 0 {
-			return Config{}, errors.New("port should be positive")
-		} else {
-			cfg.Port = *b.port
-		}
-	}
-
-	return cfg, nil
-}
-```
-
-This approach also has downsides:
-
-- Client needs to pass an empty struct for a default configuration
-- If builder method returns an error, we can't chain calls together and need to delay validation in the `Build` method
-- Builder pattern allows the user to leave the object in an 'unfinished' state
+- Our struct need to contain all the configuration options, even if they are used only during construction of the object. It makes the structure harder to understand with a lot of unnecessary fields, used only once
 
 # Functional Options Pattern
 
@@ -129,10 +86,6 @@ Using this pattern can provide a number of benefits:
 - Options take no space at a call-site when no configuration is needed
 - Options can accept multiple parameters (e.g. `cartesian.Translate(dx, dy int) TransformOption`)
 - Packages can allow (or prevent) third-party packages to define (or from defining) their own options
-
-The main idea is as follows:
-
-Each option is a function that takes as its parameters the values of the option (if any), and the returned closure accepts a mutable reference (usually a pointer to a struct type) that will be updated based on the inputs
 
 ```go
 type options struct {
@@ -153,9 +106,8 @@ func WithPort(port int) Option {
 
 func NewServer(addr string, opts ...Option) (*http.Server, error) {
 	var options options
-	for _, opt := range opts {
-		err := opt(&options)
-		if err != nil {
+	for _, o := range opts {
+		if err := o(&options); err != nil {
 			return nil, err
 		}
 	}
@@ -191,3 +143,4 @@ Functional Options Pattern is often preferred when many of the following apply:
 - [Functional options for friendly APIs | Dave Cheney](https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis)
 - [styleguide | Style guides for Google-originated open-source projects](https://google.github.io/styleguide/go/best-practices#function-argument-lists)
 - [GopherCon Europe 2023: Julien Cretel - Useful Functional-Options Tricks for Better Libraries - YouTube](https://www.youtube.com/watch?v=5uM6z7RnReE)
+- [The Go Object Lifecycle](https://www.gobeyond.dev/the-go-object-lifecycle/)

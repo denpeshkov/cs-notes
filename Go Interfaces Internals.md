@@ -1,8 +1,8 @@
 ---
 tags:
   - Go
-  - OS
-  - AlgsDs
+  - OS-Architecture
+  - Data-Structures-Algorithms
 ---
 
 # Interface Values Representation
@@ -16,7 +16,7 @@ type iface struct {
 }
 ```
 
-The first word `tab` is a pointer to an **itable**, which contains information about the type of the interface, the type of the data it points to and a virtual method table
+The first word `tab` is a pointer to an itable, which contains information about the type of the interface, the type of the data it points to and a virtual method table
 
 The second word `data` is a pointer to the value (copy of the original) held by the interface. Values stored in interfaces might be arbitrarily large, but only one word is dedicated to holding the value in the interface structure, so the assignment allocates a chunk of memory on the [heap](Heap%20Memory.md) and records the pointer in the `data` field
 
@@ -65,7 +65,7 @@ type itab struct {
 - `_type` describes the [type information](Go%20Type%20Internals.md) of the value an interface contains
 - `fun` is a variable-sized array of function pointers - the dispatch table of the interface
 
-[Type information](app://obsidian.md/Go%20Type%20Internals.md) about the interface data type is represented by an `runtime.interfacetype` which is an alias for `abi.InterfaceType` struct:
+[Type information](app://obsidian.md/Go%20Type%20Internals.md) about the interface data type is represented by `runtime.interfacetype` which is an alias for `abi.InterfaceType` struct:
 
 ```go
 type InterfaceType struct {
@@ -75,33 +75,27 @@ type InterfaceType struct {
 }
 ```
 
----
-
-Note that, the itable corresponds to the *interface type*, not the dynamic type. In our example, it contains pointer only to `String` method, not `Get`
+Note that, the `itab` corresponds to the interface type, not the dynamic type. In our example, it contains pointer only to `String` method, not `Get`
 
 To check a type of the actual value an interface points to, compiler generates the code equivalent to `s.tab->_type`
 
 To call `s.String()`, compiler generates the code equivalent to `s.tab->fun[0](s.data)`  
 Note that, the function in itable is being passed the pointer, not the actual value. Thus the function pointer in our example is `(*Binary).String` not `Binary.String`
 
-## Computing the Itable
+## Computing the `itab`
 
-The itable gets computed during the assignment (conversion) of the value to the interface variable: `s := any.(Stringer)`
+The `itab` gets computed during the assignment (conversion) of the value to the interface variable: `s := any.(Stringer)`
 
-There is a **compile-time** generated [type description](Go%20Type%20Internals.md) struct for each concrete type like `Binary`  
-Among other metadata, the type description struct contains a list of $nt$ methods implemented by that type
+There is a **compile-time** generated [type description](Go%20Type%20Internals.md) struct for each concrete type like `Binary`. Among other metadata, the type description struct contains a list of $nt$ methods implemented by that type
 
 Similarly, there is **compile-time** generated `abi.InterfaceType` struct for each interface type like `Stringer`  
 It too contains a list of $ni$ methods
 
-At **run-time** the itable is computed by looking for each method listed in the interface type's method table in the concrete type's method table  
-It then caches it, so the itable is computed only once
-
-Note that, both tables are sorted, so the mapping is found in $O(ni+nt)$ instead of naive $O(ni*nt)$
+At **run-time** the `itab` is computed by looking for each method listed in the interface type's method table in the concrete type's method table. It then caches it, so the `itab` is computed only once. Note that, both tables are sorted, so the mapping is found in $O(ni+nt)$ time
 
 ## Optimizations
 
-If an interface has no methods, itable is dropped and the first word points at the type directly. That is, `runtime.eface` is used instead of `runtime.iface`:
+If an interface has no methods, `itab` is dropped and the first word points at the type directly. That is, `runtime.eface` is used instead of `runtime.iface`:
 
 ```go
 type eface struct {
@@ -152,3 +146,6 @@ Therefore, when you call a method on an interface, it must either have an identi
 - [Frequently Asked Questions (FAQ) - The Go Programming Language](https://go.dev/doc/faq#pass_by_value)
 - [Interfaces in Go: Go 101](https://go101.org/article/interface.html)
 - [Ice cream makers and data races | Dave Cheney](https://dave.cheney.net/2014/06/27/ice-cream-makers-and-data-races)
+- [Go Optimizations 101. Tapir Liu](References.md#Go%20Optimizations%20101.%20Tapir%20Liu)
+- [GitHub - akutz/go-interface-values: When storing a value in a Go interface allocates memory on the heap.](https://github.com/akutz/go-interface-values/tree/main) #TODO 
+- [Interface Internals - Keith Randall - YouTube](https://youtu.be/7_h9iT672HQ?si=c9N3onot3jqsNeJM)

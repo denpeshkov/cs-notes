@@ -1,83 +1,161 @@
 ---
 tags:
-  - Arch
-  - OS
+  - OS-Architecture
 aliases:
   - ECF
 ---
 
-# Overview
-
-The x86-64 CPU provides two mechanisms for interrupting program execution, interrupts, and exceptions
-
-## Interrupts
-
-Interrupts occur asynchronously as a result of signals from [I/O devices](Input-Output%20Devices.md) that are external to the CPU. Software can also generate interrupts by executing the `INT` instruction
-
-[I/O devices](Input-Output%20Devices.md) such as [network](Network.md) adapters, disk controllers, and timer chips trigger interrupts by signaling a pin on the CPU chip and placing onto the system bus the exception number that identifies the device that caused the interrupt. CPU checks the interrupt pin after every instruction, reads the exception number from the system bus, and then calls the appropriate interrupt handler
-
-### The Interrupt Enable Flag
-
-The interrupt enable (`IF`) flag in the `RFLAGS` register controls whether maskable interrupts are served by the CPU. This flag can be set using `STI` instruction and cleared using `CLI` instruction
-
-## Exceptions
-
-### Traps
-
-Traps are intentional exceptions that occur as a result of executing an instruction. Trap handlers return control to the next instruction
-
-### Faults
-
-Faults result from error conditions that a handler might be able to correct. When a fault occurs, the CPU transfers control to the fault handler. If the handler is able to correct the error condition, it returns control to the faulting instruction, thereby re-executing it. Otherwise, the handler returns to an `abort` routine in the kernel that terminates the application program that caused the fault
-
-### Aborts
-
-Aborts result from unrecoverable fatal errors, typically hardware errors. Abort handlers never return control to the application program, the handler returns control to an `abort` routine that terminates the application program
-
 # CPU Privilege Levels
 
-The CPU uses privilege levels to prevent a program or task operating at a lesser privilege level from accessing a segment with a greater privilege, except under controlled situations. When the CPU detects a privilege level violation, it generates a general-protection exception
+The CPU uses privilege levels to prevent a program operating at a lesser privilege level from accessing a segment with a greater privilege level, except under controlled situations. When the CPU detects a privilege level violation, it generates a General Protection Fault
 
-The x86-64 recognizes four privilege levels (protection rings), numbered from 0 to 3, the greater number mean less privilege. Each privilege level has its own [stack](Call%20Stack.md).
+The x86-64 has four privilege levels (protection rings), numbered from 0 to 3, each having its own [stack](Call%20Stack.md). Most OSs, however, use only two levels: level 0 for kernel mode and level 3 for user mode, with [kernel and user stack](Call%20Stack.md) respectively
 
-Most OSs use only two levels: level 0 for kernel mode and level 3 for user mode, with [kernel and user stack](Call%20Stack.md) respectively
+Two bits in the code segment register `CS` indicate the current privilege level (**CPL**) of the program
 
-# Interrupt Descriptor Table
+## Privileged Registers
 
-On x86-64 each interrupt and exception are assigned a number, called a vector number. The x86-64 CPU supports 256 vector numbers from 0 to 255:
+This registers can be accessed or modified only in privileged mode (privilege level 0). Most notable are:
 
-- Vector numbers 0-31 are x86-64 defined exceptions and interrupts: divide by zero, page faults, memory access violations, breakpoints, general-protection exception etc.
-- Vector numbers 32-255 are defined by the OS kernel: [system calls](System%20Calls.md), signals from external I/O devices etc.
+- `RFLAGS` register. Contains system flags, most notable are:
+	- Interrupt enable flag `IF` - Controls the response of the CPU to maskable hardware interrupts
+	- I/O privilege level field `IOPL` - Indicates the I/O privilege level (IOPL) of the currently running program
+- Interrupt Descriptor Table Register `IDTR` - holds the base address for the Interrupt Descriptor Table (IDT)
+- Control registers:
+	- `CRO` - Controls operating mode of the CPU
+	- `CR2` - Contains the address from where execution will resume when a page fault occurs
+	- `CR3` - Contains an address pointing to the root of memory page directory, which is used to walk page tables to locate a memory page
+- Model-specific registers (MSRs). Control the debug extensions, the performance-monitoring counters, the machine-check architecture, and the memory type ranges
 
-The x86-64 uses the Interrupt Descriptor Table (IDT) which associates each vector number with a gate descriptor for the interrupt/exception handler. Each gate descriptor is 16-bytes long and IDT is an array of 256 descriptors, one for each vector number
+## Privileged Instructions
 
-The IDT resides in [RAM](Main%20Memory.md) and its address is stored in the `IDTR` register. At system boot time OS sets up IDT using `LIDT` and `SIDT` instructions to load and store the contents of the `IDTR` register. At run time, when an interrupt or exception with vector number N occurs, CPU retrieves the gate descriptor stored at the address 16N+`IDTR`, and uses it to invoke the handler
+Privileged instructions are instructions that can only be executed at CPL of 0 (privilege level 0)
+
+Most notable instructions:
+
+- `LIDT` - Load IDT register
+- `CLI`/`STI` - Clear and set `IF` flag
+
+# Interrupts and Exceptions
+
+There are generally three classes of interrupts on most platforms:
+
+1. A **hardware interrupt** is an asynchronous event triggered by **interrupt request** (**IRQ**) sent from external hardware device, e.g. an [I/O device](Input-Output%20Devices.md) or [Network](network) adapter
+2. A **software interrupt** is an asynchronous event triggered by application executing the `INT n` instruction
+3. An **exception** is a synchronous event that is generated when the CPU detects predefined conditions while executing an instruction. Exceptions are further classified as **faults**, **traps**, and **aborts**
+
+When an interrupt is received or an exception is detected, the currently running procedure is suspended while the CPU executes an interrupt or exception handler, also known as an **interrupt service routine** (**ISR**). The CPU accesses the handler through an entry in the **interrupt descriptor table** (**IDT**). When execution of the handler is complete, depending on the type of the handler:
+
+- Interrupt handler returns to the instruction after the interrupting instruction
+- Trap handler returns to the instruction after the trapping instruction
+- Fault handler returns to the faulting instruction, thereby re-executing it. If handler is not able to correct the fault condition, it returns to an `abort` routine in the kernel that terminates the application
+- Abort handler returns to an `abort` routine that terminates the application
+
+## Interrupt Enable Flag and Non-Maskable Interrupts
+
+There are situations when handler should not be interrupted, usually in some kind of a critical section
+
+The interrupt enable flag `IF` in the `RFLAGS` register controls whether maskable hardware interrupts are served by the CPU. This flag can be set using `STI` instruction and cleared using `CLI` instruction
+
+Software interrupts generated with `INT n` instruction cannot be masked by the `IF` flag
+
+The **non-maskable interrupt** (**NMI**) is a special interrupt than cannot be masked, and is often a result of a critical hardware failure. When the CPU receives a NMI, it handles it immediately by calling the NMI handler pointed to by vector 2 in the IDT. While an NMI handler is executing, the CPU blocks delivery of other interrupts, including NMI interrupts, until the next execution of the `IRET` instruction
+
+# Interrupt Descriptor Table (IDT)
+
+On x86-64 each interrupt and exception are assigned a number, called a **vector**. The x86-64 CPU supports 256 vectors from 0 to 255:
+
+- *Vectors 0-31* are x86-64 defined exceptions and NMI interrupt. For example:
+	- *Vector 0*: Divide Error
+	- *Vector 1*: Debug Exception
+	- *Vector 2*: Non-maskable external interrupt (NMI)
+	- *Vector 3*: Breakpoint, generated by `INT3` instruction
+	- *Vector 4*: Overflow, generated by `INT0` instruction
+	- *Vector 13*: General Protection Fault, e.g. segmentation fault
+	- *Vector 14*: Page Fault
+- *Vectors 32-255* are defined by the OS kernel: 
+	- A maskable hardware interrupts from [I/O devices](Input-Output%20Devices.md)
+	- Software interrupts. For example, *vector 128* used for a legacy `INT 80` [syscall](System%20Calls.md) interface
+
+The x86-64 uses the interrupt descriptor table (IDT) which associates each vector with a **gate descriptor** for the interrupt/exception handler. IDT is an array of 256 descriptors, one for each vector
+
+The IDT resides in [RAM](Main%20Memory.md) and its address is stored in the `IDTR` register. At system boot time OS sets up IDT using `LIDT` and `SIDT` instructions:
+
+- `LIDT` — Loads the IDT address and limit from memory into the `IDTR` register
+- `SIDT` — Stores the IDT base address and limit from the `IDTR` register into memory
+
+At run time, when an interrupt or exception occurs, CPU retrieves the corresponding gate descriptor for the vector, and uses it to invoke the handler
 
 ## IDT Gate Descriptors
 
-Code in lower privilege level can only access code operating at higher privilege level by means of a tightly controlled and protected interface called a gate. Attempts to access higher privilege levels without going through a gate and without having sufficient access rights causes a general-protection exception
+Code in lower privilege level can only access code operating at higher privilege level by means of a tightly controlled and protected interface called a gate. Attempts to access higher privilege levels without going through a gate and without having sufficient access rights causes a General Protection Fault
 
-The IDT may contain either an interrupt-gate descriptor or a trap-gate descriptor. If an interrupt or exception handler is called through an interrupt gate, the CPU clears the interrupt enable (`IF`) flag in the `RFLAGS` register to prevent subsequent interrupts from interfering with the execution of the handler. When a handler is called through a trap gate, the state of the `IF` flag is not changed
+The IDT may contain either an **interrupt-gate descriptor** or a **trap-gate descriptor**. If an interrupt or exception handler is called through an interrupt gate, the CPU clears the `IF` flag to prevent subsequent interrupts from interfering with the execution of the handler. When a handler is called through a trap gate, the state of the `IF` flag is not changed
 
-A gate descriptor is 16-bytes long and contains both a handler address and a descriptor privilege level (DPL) field, used to control access rights. The DPL field is a 2-bit value which defines the CPU privilege levels which are allowed to access this gate via the `INT` instruction. This restriction prevents programs running at user level from using a software interrupt to access critical exception handlers, such as the page-fault handler, providing that those handlers are placed in kernel space. For hardware-generated interrupts and processor-detected exceptions, the CPU ignores the DPL of interrupt and trap gates
+A gate descriptor is 16-bytes long and contains both a handler address and a **descriptor privilege level** (**DPL**) field, used to control access rights. The DPL field defines the CPU privilege levels which are allowed to access this gate via the `INT n` instruction. This restriction prevents programs running at user level from using a software interrupt to access critical exception handlers, such as the Page Fault handler, providing that those handlers are placed in kernel space. For hardware-generated interrupts and processor-detected exceptions, the CPU ignores the DPL of interrupt and trap gates
 
-# Calling and Return from Exceptions and Interrupts
+# Calling and Returning from Exceptions and Interrupts
 
-A call to an interrupt or exception handler is similar to a [procedure call](Call%20Stack.md):
+A call to an interrupt/exception handler is similar to a [procedure call](Call%20Stack.md). The CPU performs the following steps:
 
-1. Temporarily saves (internally) the current contents of the `RSP`, `RFLAGS` and `RIP` registers
-2. Loads the stack pointer for the kernel stack into `RSP` register and switches to the kernel stack
-3. Pushes the temporarily saved `RSP`, `RFLAGS`, `RIP` values onto the kernel stack
-4. Loads the new instruction pointer from the gate into the `RIP` register
-5. If the call is through an interrupt gate, clears the `IF` flag in the `RFLAGS` register
+1. Temporarily saves (internally) the current contents of the `RSP`, `RFLAGS` and `RIP` registers
+2. Loads the stack pointer for the [kernel stack](Call%20Stack.md) into `RSP` register and switches to the kernel stack 
+3. Pushes the temporarily saved `RSP`, `RFLAGS`, `RIP` values onto the kernel stack 
+4. Loads the new instruction pointer from the gate into the `RIP` register 
+5. If the call is through an interrupt gate, clears the `IF` flag in the `RFLAGS` register 
 6. Begins execution of the handler procedure in the kernel mode
 
-The `IRET` instruction is used to return from an interrupt or exception handler:
+The `IRET` instruction is used to return from the handler. The CPU performs the following steps:
 
 1. Performs a privilege check
-2. Restores `RIP`, `RFLAGS`
-3. Restores `RSP` register, resulting in a switch back to the user stack
+2. Restores `RIP` and `RFLAGS` registers from the kernel stack
+3. Restores `RSP` register, resulting in a switch back to the [user stack](Call%20Stack.md)
 4. Resumes execution of the interrupted procedure in the user mode
+
+# Advanced Programmable Interrupt Controller (APIC)
+
+![APIC|500](APIC.png)
+
+## Local APIC (LAPIC)
+
+The **Local Advanced Programmable Interrupt Controller** (**LAPIC**) performs two primary functions:
+
+- It receives interrupts from the CPU interrupt pins, internal sources and an external I/O APIC and sends these to the CPU core for handling
+- It sends and receives interprocessor interrupt (IPI) messages between logical CPUs on the system bus
+
+It receives interrupts from the following sources:
+
+- Locally connected [I/O Devices](Input-Output%20Devices.md): Devices connected directly to the CPU's local interrupt pins `LINT0` and `LINT1`
+- APIC timer
+- Externally connected [I/O Devices](Input-Output%20Devices.md): Devices connected to the interrupt input pins of an I/O APIC
+- IPIs: Allows one CPU to interrupt another CPU or group of CPUs on the system bus
+
+Interrupts from `LINT0`, `LINT1` and the APIC timer are delivered based on configurations set up through a group of [memory-mapped registers](Input-Output%20Devices.md) called **Local Vector Table** (**LVT**). Each local interrupt source has a dedicated register (table entry) that specifies its interrupt vector number and other setup information
+
+Interrupts from externally connected I/O devices and IPIs are handled by IPI messaging. In multi-processor systems, `LINT0` and `LINT1` are typically unused, as all interrupts are routed through the I/O APIC using IPI
+
+The **Interrupt Command Register (ICR)** is used by the LAPIC to send IPIs, specifying the target CPUs and interrupt vector number
+
+## I/O APIC
+
+The I/O APIC primary function is to receive external interrupts from the system and I/O devices and distribute them to the LAPICs of selected CPUs on the system bus
+
+Interrupts are delivered based on configurations set up through a group of [memory-mapped registers](Input-Output%20Devices.md) called **redirection table**. Each IRQ has a dedicated register (table entry) specifying its interrupt vector number, destination LAPIC and other setup information, which is used to route the interrupt from the external device to the LAPICs
+
+## Detection
+
+You can find all of the APICs on a system (both local and IO APICs) by parsing the [MADT](Advanced%20Configuration%20and%20Power%20Interface.md)
+
+# Message Signaled Interrupts (MSI)
+
+**Message signaled interrupts** (**MSI**) allows the PCI device to write an interrupt-describing data to a special [memory-mapped I/O](Input-Output%20Devices.md) address, and the chipset then delivers the corresponding interrupt to a CPU
+
+MSI provides the following benefits:
+
+- Eliminates the need for a dedicated interrupt line for each device
+- Supports a larger number of devices without requiring additional physical interrupt lines
+- Improves performance
+- Allows each device to signal interrupts independently, avoiding conflicts that can arise when multiple devices share the same interrupt line
 
 # References
 
@@ -85,3 +163,9 @@ The `IRET` instruction is used to return from an interrupt or exception handler:
 - [CMU 15-213: Exceptional Control Flow: Exceptions and Processes](https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d2759175-d59e-4f80-ab9e-24c2f15c8adb)
 - [Caltech CS24: Virtualization - YouTube](https://youtu.be/kdeLkd8-EdI?si=gtskw4sk3FE0CcGQ)
 - [Intel 64 and IA-32 Architectures Software Developer's Manual](References.md#Intel%2064%20and%20IA-32%20Architectures%20Software%20Developer's%20Manual)
+- [Interrupts — The Linux Kernel documentation](https://linux-kernel-labs.github.io/refs/heads/master/lectures/interrupts.html)
+- [cs.montana.edu/courses/spring2005/518/Hypertextbook/jim/media/interrupts\_on\_linux.pdf](https://www.cs.montana.edu/courses/spring2005/518/Hypertextbook/jim/media/interrupts_on_linux.pdf)
+- [Message Signaled Interrupts - Wikipedia](https://en.wikipedia.org/wiki/Message_Signaled_Interrupts)
+- [Advanced Programmable Interrupt Controller - Wikipedia](https://en.wikipedia.org/wiki/Advanced_Programmable_Interrupt_Controller)
+- [Inter-processor interrupt - Wikipedia](https://en.wikipedia.org/wiki/Inter-processor_interrupt)
+- [IOAPIC - OSDev Wiki](https://wiki.osdev.org/IOAPIC)

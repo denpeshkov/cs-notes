@@ -20,8 +20,8 @@ type stringStruct struct {
 }
 ```
 
-- `str` is a pointer to an **immutable** byte sequence
-- `len` is a total number of bytes in this sequence
+- `str` is a pointer to an **immutable** backing array of bytes
+- `len` is a total number of bytes in the backing array
 
 For example:
 
@@ -31,6 +31,8 @@ Strings are **immutable**, so there is no need for a capacity (you can't grow th
 
 It is safe for multiple strings to share the same storage, so slicing `s` results in a new 2-word structure with a potentially different pointer and length that still refers to the same byte sequence  
 This means that slicing can be done **without allocation** or copying, making string slices as efficient as passing around explicit indexes
+
+When a string is assigned to another string, the two word value is copied, resulting in two different string values both sharing the same backing array. The cost of copying a string is the same regardless of the size of a string, a two word copy
 
 # Casting and Memory Allocation
 
@@ -63,3 +65,4 @@ strings.Clone(s[:ind])
 - [Strings in Go -Go 101](https://go101.org/article/string.html)
 - [Go Wiki: Compiler And Runtime Optimizations - The Go Programming Language](https://go.dev/wiki/CompilerOptimizations)
 - [Strings, bytes, runes and characters in Go - The Go Programming Language](https://go.dev/blog/strings)
+- [Ultimate Go Notebook. William Kennedy, Hoanh An](References.md#Ultimate%20Go%20Notebook.%20William%20Kennedy,%20Hoanh%20An)

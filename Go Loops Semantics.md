@@ -3,7 +3,7 @@ tags:
   - Go
 ---
 
-# Before Go1.22
+# Before Go 1.22
 
 This range loop:
 
@@ -35,7 +35,7 @@ From this, we can note a couple of important details:
 - The variable `i` is a single variable that takes different values in each loop iteration
 - The variable `i` is a copy of the loop index's value
 
-# After Go1.22 (Loopvar Experiment)
+# After Go 1.22 (Loopvar Experiment)
 
 This 3-clause for loop:
 
@@ -102,3 +102,4 @@ From this, we can note a couple of important details:
 - [Go internals: capturing loop variables in closures - Eli Bendersky's website](https://eli.thegreenplace.net/2019/go-internals-capturing-loop-variables-in-closures/)
 - [Proposal: Less Error-Prone Loop Variable Scoping](https://go.googlesource.com/proposal/+/master/design/60078-loopvar.md)
 - [The Go Programming Language Specification - The Go Programming Language](https://tip.golang.org/ref/spec#For_statements)
+- [Data Race Patterns in Go | Uber Blog](https://www.uber.com/blog/data-race-patterns-in-go/)
