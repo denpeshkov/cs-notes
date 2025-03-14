@@ -68,7 +68,7 @@ func (mt *MapType) IndirectElem() bool {
 
 A new `maptype` is only created for **every unique** (combination of key and value types) `map` declaration in the program
 
-The `maptype` makes a `map` [generic](#Generic%20Map%20Implementation) for every combination of key and value types. By separating `maptype` from `hmap` every `map` with same key-value types combination reuses the same `maptype` instance
+The `maptype` is what makes a `map` [generic](#Generic%20Map%20Implementation) for every combination of key and value types. By separating `maptype` from `hmap` every `map` with same key-value types combination reuses the same `maptype` instance
 
 ## The `bmap` Struct
 
@@ -87,6 +87,8 @@ type bmap struct {
 	// Followed by an overflow pointer.
 }
 ```
+
+There is a large key/value optimization: if a key or value is over 128 bytes, it's allocated on the heap and a **pointer** to it is stored in the map bucket
 
 The `tophash` is an 8 element array containing the high order byte (**HOB**) of the hash value for each key in this bucket. This array is used to speed up key lookup: if two HOB values are different, we can skip full key comparison
 
@@ -145,24 +147,21 @@ func mapdelete(t *maptype, h *hmap, key unsafe.Pointer) {...}
 ...
 ```
 
-- `key` is a pointer to the key
-- `h` is a pointer to the `runtime.hmap` structure
-- `t` is a pointer to the `runtime.maptype` structure
-
 # Eviction
 
-#TODO See: [Go Maps Explained: How Key-Value Pairs Are Actually Stored](https://victoriametrics.com/blog/go-map/)
+## Same Size Growth
 
-#TODO See: [Go源码学习之map \| 极客熊生](https://www.kevinwu0904.top/blogs/golang-map/#map的扩容)
+##
 
-A map in Go grows when one of two conditions is met: either there are too many overflow buckets, or the map is overloaded, meaning the load factor is too high.
+A map in Go grows when one of two conditions are met: 
+
+1. There are too many overflow buckets
+2. The map is overloaded, meaning the load factor exceeds the threshold of 6.5
 
 Because of these 2 conditions, there are also two kinds of growth:
 
 - One that doubles the size of the buckets (when overloaded)
 - One that keeps the same size but redistributes entries (when there are too many overflow buckets)
-
-If there are too many overflow buckets, it's better to redistribute the entries rather than just adding more memory.
 
 ---
 
@@ -656,3 +655,4 @@ m[0][0] = 1
 - [100 Go Mistakes and How to Avoid Them. Teiva Harsanyi](References.md#100%20Go%20Mistakes%20and%20How%20to%20Avoid%20Them.%20Teiva%20Harsanyi)
 - [Go Maps Explained: How Key-Value Pairs Are Actually Stored](https://victoriametrics.com/blog/go-map/)
 - [Go源码学习之map \| 极客熊生](https://www.kevinwu0904.top/blogs/golang-map/#map的扩容)
+- [深度解密 Go 语言之 map \| qcrao 的博客](https://qcrao.com/post/dive-into-go-map/)

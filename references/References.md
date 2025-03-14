@@ -43,3 +43,7 @@
 #### Database Internals: A Deep Dive into How Distributed Data Systems Work. Alex Petrov
 
 #### Understanding Distributed Systems (2nd ed). Roberto Vitillo
+
+#### Database System Concepts (7th ed). Abraham Silberschatz, Henry F. Korth, S. Sudarshan
+
+#### PostgreSQL 14 Internals. Egor Rogov

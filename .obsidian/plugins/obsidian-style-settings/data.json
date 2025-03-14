@@ -4,5 +4,8 @@
   "minimal-style@@h3-font": "Fira Code",
   "minimal-style@@h4-font": "Fira Code",
   "minimal-style@@h5-font": "Fira Code",
-  "minimal-style@@h6-font": "Fira Code"
+  "minimal-style@@h6-font": "Fira Code",
+  "catppuccin-tag-styles@@ctp-tag-pill": true,
+  "minimal-style@@h1-variant": "normal",
+  "minimal-style@@h1-l": false
 }

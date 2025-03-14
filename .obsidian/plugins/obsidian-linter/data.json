@@ -77,7 +77,7 @@
       "enabled": false
     },
     "header-increment": {
-      "enabled": true,
+      "enabled": false,
       "start-at-h2": false
     },
     "headings-start-line": {

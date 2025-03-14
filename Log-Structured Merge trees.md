@@ -2,6 +2,8 @@
 tags:
   - DB
   - TODO
+alias:
+  - LSM
 ---
 
 # Overview
