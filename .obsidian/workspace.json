@@ -4,26 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "1efc057565d015f8",
+        "id": "d8491c8f6214ebb8",
         "type": "tabs",
         "children": [
           {
-            "id": "57adcae489d5c25d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Concurrency Control.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "Concurrency Control"
-            }
-          },
-          {
-            "id": "bec7fc26f9e6afec",
+            "id": "a6575950cefc97c0",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -36,39 +21,8 @@
               "icon": "lucide-file",
               "title": "PostgreSQL Internals"
             }
-          },
-          {
-            "id": "3d04d973ac010fb1",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Go Map Internals.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "Go Map Internals"
-            }
-          },
-          {
-            "id": "91d31989e6695e02",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Go Goroutines and Scheduler Internals.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": false
-              },
-              "icon": "lucide-file",
-              "title": "Go Goroutines and Scheduler Internals"
-            }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -125,7 +79,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 261
+    "width": 234.5
   },
   "right": {
     "id": "23afdf6c15db2a2b",
@@ -236,44 +190,45 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3d04d973ac010fb1",
+  "active": "a6575950cefc97c0",
   "lastOpenFiles": [
+    "Untitled.md",
+    "PostgreSQL Internals.md",
+    "attachments/PostgreSQL non-HOT update.png",
+    "Rate Limiting.md",
+    "Transactional Outbox Pattern.md",
+    "Redis Cluster.md",
     "Go Goroutines and Scheduler Internals.md",
+    "Go Map Internals.md",
+    "Kafka.md",
+    "Go Memory Allocator.md",
+    "Go Garbage Collector.md",
+    "Go Channels Internals.md",
+    "Go Slice Internals.md",
+    "attachments/PostgreSQL tuple update.png",
+    "attachments/PostgreSQL tuple structure.png",
+    "attachments/PostgreSQL tuple insertion.png",
+    "attachments/PostgreSQL tuple deletion.png",
+    "attachments/PostgreSQL clog.png",
+    "attachments/PostgreSQL VACUUM.png",
+    "attachments/PostgreSQL VACUUM FULL.png",
+    "Concurrency Control.md",
+    "attachments/PostgreSQL heap table file.png",
+    "attachments/PostgreSQL memory architecture.png",
+    "0001-updates.patch",
     "Go Interfaces Internals.md",
     "Worker Pool in Go.md",
-    "Go Map Internals.md",
-    "PostgreSQL Internals.md",
-    "Go Slice Internals.md",
     "Go Zero-Sized Values.md",
     "Compiling, Assembling, Linking and Loading.md",
     "System Calls.md",
     "Virtual Memory.md",
     "Graceful HTTP Server Shutdown.md",
-    "attachments/PostgreSQL memory architecture.png",
-    "attachments/PostgreSQL process architecture.png",
-    "attachments/PostgreSQL writing heap tuple.png",
-    "attachments/PostgreSQL heap table file.png",
-    "Concurrency Control.md",
     "Binary and Data Representation.md",
     "Consistent Hashing.md",
     "Consistency Models.md",
     "Causality and Happens-Before.md",
     "Binary Merge.md",
     "B+ tree.md",
-    "Cache Coherency.md",
-    "C Compilation Steps on Linux.md",
-    "templates/template.md",
-    "references/References.md",
-    "Log-Structured Merge trees.md",
-    "Distributed Cache.md",
-    "Distributed Lock.md",
-    "Compare-and-Swap.md",
-    "attachments/distributed lock fencing tokens.png",
-    "attachments/go map internals.png",
-    "attachments/distributed lock incorrect.png",
-    "attachments/Screenshot 2024-10-23 at 9.22.23 PM.png",
-    "attachments/Screenshot 2024-10-23 at 9.21.48 PM.png",
-    "smart-chats",
-    "attachments/APIC.png"
+    "smart-chats"
   ]
 }

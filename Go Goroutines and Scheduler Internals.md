@@ -8,8 +8,6 @@ tags:
 
 ![Go scheduler|550](Go%20scheduler.png)
 
-	
-
 ## The `runtime.g` Struct
 
 ``` go

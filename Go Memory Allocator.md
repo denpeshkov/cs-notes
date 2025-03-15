@@ -25,7 +25,7 @@ Allocations with size <= 32kB
 	2. If there are no free objects, fetch new objects from the central cache
 3. The central cache checks if it has free objects:
 	1. If there are free objects, return a bunch to the local cache
-	2. If there are no free objects, request a chunck of memory pages from the central heap, split it into objects for this size class and return them to the local cache
+	2. If there are no free objects, request a chunk of memory pages from the central heap, split it into objects for this size class and return them to the local cache
 
 ## Large Allocations
 
