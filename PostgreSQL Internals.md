@@ -117,7 +117,7 @@ A shared memory area is allocated by a PostgreSQL server when it starts up. This
 
 ### Nested Loop Join
 
-Nested loop join can be used in all join conditions
+Nested loop join can be used in all join conditions #TODO
 
 ### Merge Join
 
@@ -327,3 +327,5 @@ Yet there is an `Index Only Scan` operation in PostgreSQL—but that still nee
 - [README.HOT · postgres/postgres · GitHub](https://github.com/postgres/postgres/blob/master/src/backend/access/heap/README.HOT)
 - [PostgreSQL: Documentation: 17: 65.7. Heap-Only Tuples (HOT)](https://www.postgresql.org/docs/current/storage-hot.html)
 - [PostgreSQL 14 Internals. Egor Rogov](References.md#PostgreSQL%2014%20Internals.%20Egor%20Rogov)
+- [Учебный курс «DEV2. Разработка серверной части приложений PostgreSQL 12. Расширенный курс» - YouTube](https://youtube.com/playlist?list=PLaFqU3KCWw6K3AyBVcZGdXMtM2xvjHA1N&si=1LlNiLZbIOOf6J8B)
+- [Учебный курс «DEV1. Разработка серверной части приложений PostgreSQL 12. Базовый курс» - YouTube](https://youtube.com/playlist?list=PLaFqU3KCWw6JRuU5vpszIUDAVEBeI9XtS&si=sj-gbUCGbBPhKYHS)

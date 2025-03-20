@@ -40,5 +40,7 @@ Foreign keys can exist without constraints to reduce performance penalties due t
 # References
 
 - [Introduction to indexes — MySQL for Developers — PlanetScale](https://planetscale.com/learn/courses/mysql-for-developers/indexes/introduction-to-indexes)
-- [Learning SQL - Generate, Manipulate, and Retrieve Data (3rd ed). Alan Beaulieu](References.md#Learning%20SQL%20-%20Generate,%20Manipulate,%20and%20Retrieve%20Data%20(3rd%20ed).%20Alan%20Beaulieu)
 - [Things every developer absolutely, positively needs to know about database indexing - Kai Sassnowski - YouTube](https://youtu.be/HubezKbFL7E?si=-JZ1MlNECztgGmLU)
+- [07 - Tree Indexes I (CMU Databases Systems / Fall 2019) - YouTube](https://youtu.be/JHZFc4hMGhk?si=m2RTiG1Ys0dT53HF)
+- [08 - Tree Indexes II (CMU Databases Systems / Fall 2019) - YouTube](https://youtu.be/Y_h1bH2FJ7M?si=4I6yYMVW-WhufPvF)
+- [SQL Indexing and Tuning e-Book for developers: Use The Index, Luke covers Oracle, MySQL, PostgreSQL, SQL Server, ...](https://use-the-index-luke.com)

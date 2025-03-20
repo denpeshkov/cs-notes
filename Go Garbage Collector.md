@@ -31,7 +31,7 @@ Go uses non-generational non-compacting concurrent tri-color precise mark-and-sw
 1. Prepare for the mark phase by enabling the write barrier, enabling mutator assists, and enqueueing root mark jobs. No objects may be scanned until all [`p`s](Go%20Goroutines%20and%20Scheduler%20Internals.md) have enabled the write barrier, which is accomplished using STW
 2. **Start the world**. From this point, GC work is done by mark workers started by the [scheduler](Go%20Goroutines%20and%20Scheduler%20Internals.md) and by assists performed as part of allocation. The write barrier shades both the overwritten pointer and the new pointer value for any pointer writes. Newly allocated objects are immediately marked black
 3. GC performs root marking jobs. This includes scanning all [stacks](Call%20Stack.md), shading all globals, and shading any heap pointers in off-heap runtime data structures. Scanning a stack stops a goroutine, shades any pointers found on its stack, and then resumes the goroutine
-4. GC drains the [work queue](Go%20Goroutines%20and%20Scheduler%20Internals.md) of grey objects, scanning each grey object to black and shading all pointers found in the object (which in turn may add those pointers to the work queue)
+4. GC drains the work queue of grey objects, scanning each grey object to black and shading all pointers found in the object (which in turn may add those pointers to the work queue)
 5. Because GC work is spread across local caches, GC uses a distributed termination algorithm to detect when there are no more root marking jobs or grey objects. At this point, GC transitions to [mark termination](#Mark%20Termination)
 
 Go dedicates 25% of `GOMAXPROCS` CPUs to background marking
@@ -72,15 +72,17 @@ At the end of STW [mark termination](#Mark%20Termination) all [spans](Go%20Memor
 
 # GC Pacing
 
-GC has a **pacing algorithm** which determines when to start a collection. Pacing uses feedback loop to find the right time to trigger a GC cycle so that it hits the target [heap](Heap%20Memory.md) size goal.
+GC has a **pacing algorithm** which determines when to start a collection. Pacing uses feedback loop to find the right time to trigger a GC cycle so that it hits the target [heap](Heap%20Memory.md) size goal
 
 Next GC is after we've allocated an extra amount of memory proportional to the amount already in use. The proportion is controlled by `GOGC` environment variable (100 by default). 
 
 If `GOGC` is 100 and we're using 4M, we'll GC again when we get to 8M. This keeps the GC cost in linear proportion to the allocation cost. Adjusting `GOGC` just changes the linear constant (and also the amount of extra memory used).
 
+The `GOMEMLIMIT` variable sets a soft limit on a total amount of memory that the Go runtime can use. It is a soft limit and runtime undertakes several processes to try to respect this memory limit, including adjustments to the frequency of garbage collections and returning memory to the OS more aggressively
+
 # Optimizations
 
-Garbage collector does not scan underlying buffers of slices, channels and maps when element type does not contain pointers (both key and value for maps). This allows to hold large data sets in memory without paying high price during garbage collection
+Garbage collector does not scan underlying buffers of [slices](Go%20Slice%20Internals.md), [channels](Go%20Channels%20Internals.md) and [maps](Go%20Map%20Internals.md) when element type does not contain pointers (both key and value for maps). This allows to hold large data sets in memory without paying high price during garbage collection
 
 For example, the following map won't visibly affect GC time:
 
