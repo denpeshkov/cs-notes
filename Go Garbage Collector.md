@@ -13,72 +13,134 @@ Go uses non-generational non-compacting concurrent tri-color precise mark-and-sw
 - Non-generational: GC traverses the entire [heap](Heap%20Memory.md) when performing a collection pass, and its performance therefore degrades as the heap expands. The heap is not broken into generations based on objects age
 - Non-compacting: Objects are not relocated towards the beginning of the heap, thus heap can be fragmented
 - Concurrent: Most of the GC work proceeds concurrently with normal program execution, leading to minimal GC pause
-- Tri-color: Objects are categorized into three sets: white, grey, and black; representing objects that are unprocessed, currently being processed, and processed
+- Tri-color: Objects are categorized into three sets: white, grey, and black
 - Precise: Metadata `runtime.stackmap` tells GC exactly what is and isn't a pointer
 - Mark-Sweep: The process consists of a mark phase, where live objects are identified, followed by a sweep phase, where the memory of unreachable objects is reclaimed
 
-# Phases
+# When GC is Triggered
 
-![GC algorithm phases|600](GC%20algorithm%20phases.png)
+- Calls to `runtime.GC`
+- Inside calls to `malloc` when the heap size reaches a certain threshold
+- Forcefully triggered by the [`sysmon`](Go%20Goroutines%20and%20Scheduler%20Internals.md) every 2 minutes, to ensure periodic memory management even in low-allocation scenarios
+
+# GC Algorithm
+
+The GC algorithm starts with all nodes marked as white. During the marking phase, both collector goroutines and application goroutines (mutators) run concurrently to eventually mark all reachable objects as black. Any objects that remain white after marking are considered garbage
+
+The GC algorithm must have two properties:
+
+1. Termination guarantee: No object can become lighter during the marking phase. Ensures that a black object won't be scanned again, guaranteeing that the algorithm eventually scans all reachable objects and the marking phase terminates
+2. Tri-color invariant: Any white object pointed to by a black object must be reachable via a chain of white pointers from the grey object.
+
+To ensure this properties in concurrent GC, objects must be divided into three sets:
+
+1. White – Objects not yet visited (unmarked); potential garbage
+2. Grey – Objects discovered but not fully scanned for references to white objects
+3. Black – Objects completely scanned (marked); not candidates for collection
+
+In concurrent GC, three colors are needed instead of just two (marked and unmarked) because the collector and the mutator (application goroutines) run simultaneously. When a goroutine is about to create a pointer from a black object to a white one:
+
+1. The white target object cannot remain white, as this would break the tri-color invariant
+2. The black source object must remain black to guarantee termination
+3. The white target object cannot be directly marked black, as this could violate the tri-color invariant if it has any white successor objects
+
+# Write Barrier
+
+Because the collector runs concurrently with the application, application goroutines can create new objects (potentially with pointers to white objects) and modify pointers in existing objects. This can break the tri-color invariant by "hiding" objects from GC. To prevent this, Go uses write barriers
+
+The write barrier in Go is implemented as follows:
+
+```
+writePointer(slot, ptr):
+    shade(*slot)
+    if current stack is grey:
+        shade(ptr)
+    *slot = ptr
+
+// slot is the destination in Go code
+// ptr is the value that goes into the slot in Go code
+// shade(*slot) marks the object whose reference is being overwritten grey if it is not already grey or black
+// shade(ptr) mark the reference being installed grey if it is not already grey or black
+```
+
+Additionally, the write barrier requires that objects be allocated black
+
+Given implementation doesn't require stack re-scanning and prevents violation of a tri-color invariant:
+
+1. Allocating objects as black eliminates the possibility of a black object pointing to an unreachable white object
+2. `shade(*slot)` prevents a mutator from hiding an object by moving the sole pointer to it from the heap to its stack. If it attempts to unlink an object from the heap, this will shade it grey
+3. `shade(ptr)` prevents a mutator from hiding an object by moving the sole pointer to it from its stack into a black object in the heap. If it attempts to install the pointer into a black object, this will shade it grey
+4. Once a goroutine's stack is black, the `shade(ptr)` becomes unnecessary. `shade(ptr)` prevents hiding an object by moving it from the stack to the heap, but this requires first having a pointer hidden on the stack. Immediately after a stack is scanned, it only points to shaded objects, so it's not hiding anything, and the `shade(*slot)` prevents it from hiding any other pointers on its stack
+
+## Stack and Globals Writes
+
+The compiler omits write barriers for writes to the current [frame](Call%20Stack.md), but if a stack pointer has been passed down the call stack, the compiler will generate a write barrier for writes through that pointer (because it doesn't know it's not a heap pointer)
+
+The Go garbage collector requires write barriers when heap pointers are stored in globals, so that we don't have to rescan global during mark termination
+
+# GC Phases
 
 ## Sweep Termination
 
-1. **Stop the world** (**STW**). This causes all [`p`s](Go%20Goroutines%20and%20Scheduler%20Internals.md) to reach a GC safe-point
-2. Sweep any unswept [spans](Go%20Memory%20Allocator.md). There will only be unswept spans if this GC cycle was forced before the expected time
+GC not running; Sweeping in background; Write barrier disabled
+
+1. Stop the world. This causes all [`P`s](Go%20Goroutines%20and%20Scheduler%20Internals.md) to reach a GC safe-point
+2. Sweep any unswept spans, clear [`sync.Pool`s](Go%20sync.Pool.md) and caches
 
 ## Mark Phase
 
-1. Prepare for the mark phase by enabling the write barrier, enabling mutator assists, and enqueueing root mark jobs. No objects may be scanned until all [`p`s](Go%20Goroutines%20and%20Scheduler%20Internals.md) have enabled the write barrier, which is accomplished using STW
-2. **Start the world**. From this point, GC work is done by mark workers started by the [scheduler](Go%20Goroutines%20and%20Scheduler%20Internals.md) and by assists performed as part of allocation. The write barrier shades both the overwritten pointer and the new pointer value for any pointer writes. Newly allocated objects are immediately marked black
-3. GC performs root marking jobs. This includes scanning all [stacks](Call%20Stack.md), registers, shading all globals, and shading any heap pointers in off-heap runtime data structures. Scanning a stack stops a goroutine, shades any pointers found on its stack, and then resumes the goroutine
+GC marking; Write barrier enabled
+
+1. Prepare for the marking by enabling the write barrier and mutator assists, and enqueueing root mark jobs. No objects are scanned until every [`P`](Go%20Goroutines%20and%20Scheduler%20Internals.md) has the write barrier enabled, which is done using STW
+2. Start the world. From this point, GC is done by mark workers started by the [scheduler](Go%20Goroutines%20and%20Scheduler%20Internals.md) and by assists performed as part of allocation. The write barrier shades both the overwritten pointer and the new pointer value as grey. Newly allocated objects are immediately marked black
+3. GC marks roots by scanning stacks, globals, and heap pointers in off-heap structures. Scanning a stack stops a goroutine, shades any pointers found on its stack, and then resumes the goroutine
 4. GC drains the work queue of grey objects, scanning each grey object to black and shading all pointers found in the object (which in turn may add those pointers to the work queue)
-5. Because GC work is spread across local caches, GC uses a distributed termination algorithm to detect when there are no more root marking jobs or grey objects. At this point, GC transitions to [mark termination](#Mark%20Termination)
+5. When there are no more root marking jobs or grey objects, GC transitions to mark termination
 
-Go dedicates 25% of `GOMAXPROCS` CPUs to background marking
+Marking using tri-color marking algorithm
 
-### Tri-Color Marking
-
-Objects are divided into 3 sets:
-
-1. White set objects are not marked
-2. Grey set (shaded) objects are marked, but we have not yet scanned all their referents (pointers)
-3. Black set objects are marked along with all their referents (pointers)
-
-Compiler generates `runtime.stackmap`s metadata for each call site to tell the runtime exactly which stack bytes are pointers. Note that, GC also has a conservative stack scanning, treating any pointer-like value in the block as a pointer, used for [loop preemption](Go%20Scheduler%20WIP.md#Loop%20Preemption)
-
-GC must maintain a tri-color invariant: there are no direct pointers from black set objects to white set objects. It's because at the end of the mark phase all white set objects are considered unreachable and eligible for deletion. Having pointers to them from black set objects will cause dangling pointers
-
-This invariant is maintained by the write barrier by shading (marking grey) objects and pointers
+GC doesn't scan object that don't contain pointers
 
 ### Mark Assist
 
-As stated above, in the preparation for the [mark phase](#Mark%20Phase) we enable mark assist. If the GC Pacer determines that it needs to slow down allocations, it will recruit the application goroutines to assist with the marking work. The amount of time any application goroutine will be placed in a mark assist is proportional to the amount of data it's adding to heap memory
+If the GC pacer determines that it needs to slow down allocations, it will recruit the application goroutines to assist with the marking work. The amount of time any application goroutine will be placed in a mark assist is proportional to the amount of data it's adding to heap memory
+
+One goal of the GC is to eliminate the need for mark assists. If any given collection ends up requiring a lot of mark assist, the GC can start the next cycle earlier. This is done in an attempt to reduce the amount of mark assist that will be necessary on the next collection
 
 ## Mark Termination
 
-1. **Stop the world**
+GC mark termination; [`P`s](Go%20Goroutines%20and%20Scheduler%20Internals.md) help GC; Write barrier enabled
+
+1. Stop the world
 2. Disable workers and assists
-3. Perform housekeeping like flushing [memory caches](Go%20Memory%20Allocator.md)
+3. Perform housekeeping like flushing `mcaches`
+4. Calculate the next collection goal
+
+Newly allocated objects are black
 
 ## Sweep Phase
 
-1. Prepare for the sweep phase by setting up sweep state and disabling the write barrier
-2. **Start the world**. From this point on, newly allocated objects are white, and allocating sweeps spans before use if necessary
-3. GC does concurrent sweeping in the background and in response to allocation
+GC not running; Sweeping in background; Write barrier disabled
 
-The sweep phase proceeds concurrently with normal program execution. The heap is swept [span-by-span](Go%20Memory%20Allocator.md) both lazily (when a goroutine needs another [span](Go%20Memory%20Allocator.md)) and concurrently in a background goroutine (this helps programs that are not CPU bound)
+1. Start the world. From this point on, newly allocated objects are white, and allocating sweeps spans before use if necessary
+2. GC does concurrent sweeping in the background and in response to allocation
 
-At the end of STW [mark termination](#Mark%20Termination) all [spans](Go%20Memory%20Allocator.md) are marked as "needs sweeping"
+The sweep phase proceeds concurrently with normal program execution
 
-# GC Pacing
+The heap is swept both when a goroutine allocates a new memory (needs another span) and concurrently in a background sweeper goroutine. To avoid requesting more OS memory while there are unswept spans, when a goroutine needs another span, it first attempts to reclaim that much memory by sweeping
 
-GC has a **pacing algorithm** which determines when to start a collection. Pacing uses feedback loop to find the right time to trigger a GC cycle so that it hits the target [heap](Heap%20Memory.md) size goal
+# Pacing
 
-Next GC is after we've allocated an extra amount of memory proportional to the amount already in use. The proportion is controlled by `GOGC` environment variable (100 by default). 
+The Go GC uses a pacing algorithm to decide when to start a new collection cycle
 
-If `GOGC` is 100 and we're using 4M, we'll GC again when we get to 8M. This keeps the GC cost in linear proportion to the allocation cost. Adjusting `GOGC` just changes the linear constant (and also the amount of extra memory used).
+Its goal is to balance two factors:
 
-The `GOMEMLIMIT` variable sets a soft limit on a total amount of memory that the Go runtime can use. It is a soft limit and runtime undertakes several processes to try to respect this memory limit, including adjustments to the frequency of garbage collections and returning memory to the OS more aggressively
+1. Keeping the heap size proportional to the live [heap](Heap%20Memory.md) at the end of the last cycle, controlled by the `GOGC` variable
+2. Maintaining a mark phase utilization target of 25% of `GOMAXPROCS`
+
+The next GC cycle starts after allocating extra memory proportional to the amount already in use, controlled by `GOGC` variable. For example, if `GOGC` is 100 and 4MB in use, GC runs again at 8MB. This keeps GC cost proportional to allocation
+
+The `GOMEMLIMIT` variable sets a soft limit on total memory usage. It's a soft limit and runtime tries respect it by adjusting the frequency of GCs and returning memory to the OS more aggressively
 
 # Optimizations
 
