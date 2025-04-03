@@ -47,3 +47,5 @@
 #### Database System Concepts (7th ed). Abraham Silberschatz, Henry F. Korth, S. Sudarshan
 
 #### PostgreSQL 14 Internals. Egor Rogov
+
+#### Kafka The Definitive Guide (2nd ed). Gwen Shapira, Todd Palino, Rajini Sivaram, Krit Petty

@@ -4,6 +4,8 @@ tags:
   - TODO
 ---
 
+#todo: One leader **per partition**
+
 # Cluster
 
 Kafka cluster is a group of Kafka brokers. All brokers within a cluster share meta information of other brokers in the same cluster
@@ -27,6 +29,12 @@ Internally, a partition is further split into segments, which are stored as `.l
 Old log segments in Kafka are deleted based on a configurable retention policy. When the retention period for a Kafka topic expires, Kafka identifies and deletes entire segments that fall outside the retention window. This approach ensures that Kafka can efficiently reclaim disk space by removing entire segments rather than individual messages
 
 Partitions serve as the primary storage unit for Kafka events and enable parallelism, allowing multiple events to be produced simultaneously across different partitions. Consumers can also distribute their workload by having individual instances read from various partitions
+
+## The Number of Partitions
+
+Kafka only allows increasing the number of partitions but does not support decreasing them
+
+Since messages within a partition are always delivered in order, increasing the number of partitions can break this guarantee. To avoid this situation, you can intentionally over-partition from the start
 
 ## Replication
 
@@ -60,13 +68,21 @@ Messages are routed to partitions based on their key ([hash](Hash%20Map.md) of t
 
 If a message has no key, Kafka uses a round-robin mechanism to distribute messages across partitions
 
-## Acknowledgment
+## Acknowledgment `acks`
 
 The `acks` setting determines the number of acknowledgments the producer requires the leader to have received from replicas before considering a write successful:
 
 1. `acks=0`: The producer does not wait for any acknowledgment from the server
 2. `acks=1`: The leader will write the record to its local log but will respond without awaiting full acknowledgement from all replicas. If an acknowledgment is not received, the producer may retry the request
-3. `acks=all`: The leader will wait for the full set of in-sync replicas to acknowledge the record
+3. `acks=all`: The leader will wait for acknowledgement from all in-sync replicas (ISR). The number of ISRs is specified by `min.insync.replicas` setting. This can prevent data loss in scenarios where the leader acks a write, then suffers a failure and leadership is transferred to a replica that does not have a successful write
+
+## Batching
+
+The producer attempts to batch multiple records sent to the same partition. Requests sent to brokers will contain multiple batches, one for each partition
+
+The `batch.size` sets the maximum size (in bytes) of a batch per partition. When the batch is full, all the messages in the batch will be sent
+
+The `linger.ms` controls how long the producer waits for more messages before sending a batch. By default, messages are sent immediately if a sender thread is available, even if there's just one message in the batch. Setting `linger.ms` above 0 tells the producer to delay sending, allowing more messages to be added to the batch
 
 # Consumers
 
@@ -104,9 +120,12 @@ Rebalancing is the process by which Kafka redistributes partitions across consum
 
 - [Course | Apache Kafka Fundamentals - YouTube](https://www.youtube.com/playlist?list=PLa7VYi0yPIH2PelhRHoFR5iQgflg-y6JA)
 - [Intro to Apache Kafka: How Kafka Works](https://www.confluent.io/blog/apache-kafka-intro-how-kafka-works/)
-- [Apache Kafka Architecture Deep Dive: Introductory Concepts](https://developer.confluent.io/courses/architecture/get-started/)
 - [Kafka architecture](https://www.redpanda.com/guides/kafka-architecture)
 - [Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems. Martin Kleppmann](References.md#Designing%20Data-Intensive%20Applications%20The%20Big%20Ideas%20Behind%20Reliable,%20Scalable,%20and%20Maintainable%20Systems.%20Martin%20Kleppmann)
 - [Kafka Fundamentals | Learn Apache Kafka with Conduktor](https://learn.conduktor.io/kafka/kafka-fundamentals/)
 - [Kafka Advanced Concepts | Learn Apache Kafka with Conduktor](https://learn.conduktor.io/kafka/kafka-advanced-concepts/)
 - [Kafka Deep Dive w/ a Ex-Meta Staff Engineer - YouTube](https://youtu.be/DU8o-OTeoCc?si=DIzBqvrYmAUCYLrL)
+- [Ozon Tech Community C# Meetup - YouTube](https://www.youtube.com/live/ZlBOmdapuwA?si=yd55oSUzkHk9FY_b)
+- [Kafka The Definitive Guide (2nd ed). Gwen Shapira, Todd Palino, Rajini Sivaram, Krit Petty](References.md#Kafka%20The%20Definitive%20Guide%20(2nd%20ed).%20Gwen%20Shapira,%20Todd%20Palino,%20Rajini%20Sivaram,%20Krit%20Petty)
+- [Choose and Change the Partition Count \| Confluent Documentation](https://docs.confluent.io/kafka/operations-tools/partition-determination.html#id2)
+- [Apache Kafka Architecture Deep Dive: Introductory Concepts](https://developer.confluent.io/courses/architecture/get-started/)

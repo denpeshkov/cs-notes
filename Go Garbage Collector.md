@@ -30,7 +30,7 @@ Go uses non-generational non-compacting concurrent tri-color precise mark-and-sw
 
 1. Prepare for the mark phase by enabling the write barrier, enabling mutator assists, and enqueueing root mark jobs. No objects may be scanned until all [`p`s](Go%20Goroutines%20and%20Scheduler%20Internals.md) have enabled the write barrier, which is accomplished using STW
 2. **Start the world**. From this point, GC work is done by mark workers started by the [scheduler](Go%20Goroutines%20and%20Scheduler%20Internals.md) and by assists performed as part of allocation. The write barrier shades both the overwritten pointer and the new pointer value for any pointer writes. Newly allocated objects are immediately marked black
-3. GC performs root marking jobs. This includes scanning all [stacks](Call%20Stack.md), shading all globals, and shading any heap pointers in off-heap runtime data structures. Scanning a stack stops a goroutine, shades any pointers found on its stack, and then resumes the goroutine
+3. GC performs root marking jobs. This includes scanning all [stacks](Call%20Stack.md), registers, shading all globals, and shading any heap pointers in off-heap runtime data structures. Scanning a stack stops a goroutine, shades any pointers found on its stack, and then resumes the goroutine
 4. GC drains the work queue of grey objects, scanning each grey object to black and shading all pointers found in the object (which in turn may add those pointers to the work queue)
 5. Because GC work is spread across local caches, GC uses a distributed termination algorithm to detect when there are no more root marking jobs or grey objects. At this point, GC transitions to [mark termination](#Mark%20Termination)
 
@@ -98,11 +98,19 @@ m := make(map[Key]Value, 1e8)
 
 # References
 
-- [A Guide to the Go Garbage Collector - The Go Programming Language](https://tip.golang.org/doc/gc-guide) #todo
-- [Garbage Collection In Go : Part I - Semantics](https://www.ardanlabs.com/blog/2018/12/garbage-collection-in-go-part1-semantics.html) #todo
+- [A Guide to the Go Garbage Collector - The Go Programming Language](https://tip.golang.org/doc/gc-guide)
+- [Garbage Collection In Go : Part I - Semantics](https://www.ardanlabs.com/blog/2018/12/garbage-collection-in-go-part1-semantics.html)
 - [Go's garbage collector · agrim mittal](https://agrim123.github.io/posts/go-garbage-collector.html)
-- [Source code: mbarier.go](https://github.com/golang/go/blob/master/src/runtime/mbarrier.go) #todo
-- [Why golang garbage-collector not implement Generational and Compact gc?](https://groups.google.com/g/golang-nuts/c/KJiyv2mV2pU) #todo
-- [Source Code: mgc.go](https://github.com/golang/go/blob/master/src/runtime/mgc.go#L5-L127)
-- [Source code: mwbbuf.go](https://github.com/golang/go/blob/master/src/runtime/mwbbuf.go) #TODO 
+- [Why golang garbage-collector not implement Generational and Compact gc?](https://groups.google.com/g/golang-nuts/c/KJiyv2mV2pU) 
+- [go/src/runtime/mgc.go at master · golang/go · GitHub](https://github.com/golang/go/blob/master/src/runtime/mgc.go#L5-L127)
+- [go/src/runtime/mbarrier.go at master · golang/go · GitHub](https://github.com/golang/go/blob/master/src/runtime/mbarrier.go)
 - [Go Wiki: Compiler And Runtime Optimizations - The Go Programming Language](https://go.dev/wiki/CompilerOptimizations#non-scannable-objects)
+- [GopherCon 2015: Go GC: Solving the Latency Problem - Rick Hudson - YouTube](https://youtu.be/aiv1JOfMjm0?si=rbefmmOhxpQGB6wG)
+- [Golang UK Conference 2017 \| Will Sewell & Jim Fisher - Golang's Realtime GC in Theory and Practice - YouTube](https://youtu.be/bMujSVMarqY?si=St76bli8DhHGNTeY)
+- [Ozon Tech Go Meetup - YouTube](https://www.youtube.com/live/PB4vA5eId4c?si=eHToLE_jZSZu9ggR)
+- [Как устроен garbage collector в Go 1.9 - Андрей Дроздов, Avito - YouTube](https://youtu.be/CX4GSErFenI?si=TrZ2A3j9jduOuQRe)
+- [Tricolor Abstraction to build concurrent Garbage Collectors - YouTube](https://youtu.be/lhrRwjVPXPo?si=wrHi1hpYiEEEz0R3)
+- [On-the-Fly Garbage Collection: An Exercise in Cooperation. Dijkstra, Lamport](https://lamport.azurewebsites.net/pubs/garbage.pdf)
+- [Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the World \| by Vadim Inshakov \| Stackademic](https://blog.stackademic.com/basics-of-golang-gc-explained-tri-color-mark-and-sweep-and-stop-the-world-cc832f99164c)
+- [proposal/design/17503-eliminate-rescan.md at master · golang/proposal · GitHub](https://github.com/golang/proposal/blob/master/design/17503-eliminate-rescan.md)
+- [proposal/design/44167-gc-pacer-redesign.md at master · golang/proposal · GitHub](https://github.com/golang/proposal/blob/master/design/44167-gc-pacer-redesign.md)

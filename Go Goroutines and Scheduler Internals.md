@@ -255,7 +255,7 @@ The `p.mcache.stackcache` is a cache of small stacks
 # References
 
 - [Source code: proc.go](https://github.com/golang/go/blob/master/src/runtime/proc.go)
-- [Source code: runtime2.go](https://github.com/golang/go/blob/master/src/runtime/runtime2.go#L551)
+- [Source code: runtime2.go](https://github.com/golang/go/blob/master/src/runtime/runtime2.go)
 - [Source code: stack.go](https://github.com/golang/go/blob/master/src/runtime/stack.go)
 - [GopherCon 2018: Kavya Joshi - The Scheduler Saga - YouTube](https://youtu.be/YHRO5WQGh0k?si=ZHiNxNxG1GAOff9D)
 - [Dmitry Vyukov — Go scheduler: Implementing language with lightweight concurrency - YouTube](https://youtu.be/-K11rY57K7k?si=goeOdKxqd-cXBZE1)

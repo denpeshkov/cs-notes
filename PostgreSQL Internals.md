@@ -202,6 +202,10 @@ When PostgreSQL shuts down or whenever the checkpoint process runs, the data of 
 
 [VACUUM processing](#Vacuum%20Processing) regularly removes unnecessary old data, both the `clog` pages and files
 
+### Hint Bits
+
+#todo
+
 ## Transaction Snapshot
 
 A transaction snapshot stores information about which `txid`s are active at a certain point in time for an individual transaction. An active transaction means it is in progress or has not yet started

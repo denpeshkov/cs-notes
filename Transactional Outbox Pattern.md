@@ -1,6 +1,7 @@
 ---
 tags:
   - Distributed-Systems
+  - DB
 ---
 
 # Overview
@@ -21,7 +22,7 @@ There are a couple of different ways to implement a message relay:
 
 Message relay publishes messages by periodically polling the outbox table
 
-To prevent multiple relays from reading the same events, we use `SELECT FOR UPDATE` to lock the rows until the transaction is committed. The `SKIP LOCKED` option ensures that the relay doesn't block other transactions while they commit
+To prevent multiple relays from reading the same events, we use `SELECT FOR UPDATE` to lock the rows until the transaction is committed. To avoid waiting for other transactions to commit, we use `SKIP LOCKED`, which skips any rows that cannot be immediately locked
 
 Once the transaction is committed and the lock is released, other relays can select the processed records. To prevent this, we delete the processed rows from the outbox table within the transaction
 
@@ -29,21 +30,21 @@ Once the transaction is committed and the lock is released, other relays can sel
 BEGIN;
 
 DELETE FROM outbox
-WHERE id IN (SELECT o.id
-         FROM outbox o
-         ORDER BY id
-            FOR UPDATE SKIP LOCKED
-         LIMIT 10)
-RETURNING *;
+WHERE id IN (
+	SELECT o.id FOR UPDATE SKIP LOCKED
+	FROM outbox o
+	ORDER BY id
+	LIMIT 10
+) RETURNING *;
 
--- publish message here
+-- publish messages (batch) here
 
 COMMIT;
 ```
 
 ## Change Data Capture (CDC)
 
-Message relay can use [Change Data Capture (CDC)](CDC) to tails the events from the outbox table
+Message relay can use [Change Data Capture (CDC)](CDC) to tail the events from the outbox table
 
 # References
 

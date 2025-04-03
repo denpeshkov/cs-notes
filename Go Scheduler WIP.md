@@ -14,3 +14,7 @@ Function `schedule` schedules a goroutine. It calls `findRunnable` to find next 
 Local `p.runq` have a single producer but multiple consumers, because there can be multiple `p`s that steal work from our `p.runq`. Thus, when enqueueing to `p.runq` we can use [atomic store](Atomic%20Instructions.md  ) but when dequeueing we need to use [spinlocks](Spinlock.md) ([CAS](Atomic%20Instructions.md))
 
 Because `findRunnable` would starve `schedt.runq` if `p.runq` is always non empty, `schedule` tries to dequeue one `g` from `schedt.runq` in $1/61$ iteration of scheduling
+
+# The `gFree` List of Dead Goroutines
+
+#TODO 
